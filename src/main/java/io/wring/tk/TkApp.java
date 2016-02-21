@@ -140,9 +140,10 @@ public final class TkApp extends TkWrap {
             new FkAuthenticated(
                 new TkSecure(
                     new TkFork(
-                        new FkRegex("/", new TkIndex(base)),
+                        new FkRegex("/", new TkEvents(base)),
                         new FkRegex("/pipes", new TkPipes(base)),
-                        new FkRegex("/events", new TkEvents(base))
+                        new FkRegex("/pipe-add", new TkPipeAdd(base)),
+                        new FkRegex("/pipe-delete", new TkPipeDelete(base))
                     )
                 )
             )

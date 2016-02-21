@@ -15,12 +15,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.tk.pipes;
+package io.wring.tk;
 
 import io.wring.model.Base;
 import io.wring.model.Pipe;
 import io.wring.model.XePrint;
-import io.wring.tk.RqUser;
 import java.io.IOException;
 import org.takes.Request;
 import org.takes.Response;
@@ -36,7 +35,7 @@ import org.takes.rq.RqForm;
  * @version $Id$
  * @since 1.0
  */
-final class TkAdd implements Take {
+final class TkPipeAdd implements Take {
 
     /**
      * Base.
@@ -47,7 +46,7 @@ final class TkAdd implements Take {
      * Ctor.
      * @param bse Base
      */
-    TkAdd(final Base bse) {
+    TkPipeAdd(final Base bse) {
         this.base = bse;
     }
 

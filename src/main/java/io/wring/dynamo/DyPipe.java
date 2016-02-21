@@ -51,7 +51,7 @@ public final class DyPipe implements Pipe {
         return new Directives()
             .add("pipe")
             .add("id").set(this.item.get("id").getN()).up()
-            .add("text").set(this.item.get("text").getS()).up();
+            .add("yaml").set(this.item.get("yaml").getS()).up();
     }
 
     @Override

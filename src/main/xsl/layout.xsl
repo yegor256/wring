@@ -75,8 +75,25 @@
                     </article>
                     <footer>
                         <nav>
+                            <ul style="color:gray;">
+                                <li>
+                                    <xsl:text>v</xsl:text>
+                                    <xsl:value-of select="version/name"/>
+                                </li>
+                                <li>
+                                    <xsl:call-template name="millis">
+                                        <xsl:with-param name="millis" select="millis"/>
+                                    </xsl:call-template>
+                                </li>
+                            </ul>
+                        </nav>
+                        <nav>
                             <ul>
-                                <li>version</li>
+                                <li>
+                                    <a href="http://www.teamed.io">
+                                        <img src="http://img.teamed.io/btn.svg"/>
+                                    </a>
+                                </li>
                             </ul>
                         </nav>
                     </footer>
@@ -105,5 +122,25 @@
             </xsl:attribute>
             <xsl:value-of select="message"/>
         </p>
+    </xsl:template>
+    <xsl:template name="millis">
+        <xsl:param name="millis"/>
+        <xsl:choose>
+            <xsl:when test="not($millis)">
+                <xsl:text>?</xsl:text>
+            </xsl:when>
+            <xsl:when test="$millis &gt; 60000">
+                <xsl:value-of select="format-number($millis div 60000, '0')"/>
+                <xsl:text>min</xsl:text>
+            </xsl:when>
+            <xsl:when test="$millis &gt; 1000">
+                <xsl:value-of select="format-number($millis div 1000, '0.0')"/>
+                <xsl:text>s</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="format-number($millis, '0')"/>
+                <xsl:text>ms</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 </xsl:stylesheet>

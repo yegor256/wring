@@ -18,6 +18,7 @@
 package io.wring.dynamo;
 
 import com.google.common.collect.Iterables;
+import com.jcabi.dynamo.Attributes;
 import com.jcabi.dynamo.Conditions;
 import com.jcabi.dynamo.Item;
 import com.jcabi.dynamo.QueryValve;
@@ -70,12 +71,18 @@ public final class DyPipes implements Pipes {
                     DyPipes::asDirs
                 )
             )
-        );
+        ).up();
     }
 
     @Override
-    public Pipe add(final String yaml) {
-        throw new UnsupportedOperationException("#add()");
+    public Pipe add(final String yaml) throws IOException {
+        final Item item = this.table().put(
+            new Attributes()
+                .with("urn", this.urn)
+                .with("id", System.currentTimeMillis())
+                .with("yaml", yaml)
+        );
+        return new DyPipe(item);
     }
 
     @Override
@@ -98,8 +105,10 @@ public final class DyPipes implements Pipes {
     private static Iterable<Directive> asDirs(final Item item) {
         try {
             return new Directives()
-                .add("event")
-                .add("title").set(item.get("title").getS());
+                .add("pipe")
+                .add("id").set(item.get("id").getN()).up()
+                .add("yaml").set(item.get("yaml").getS()).up()
+                .up();
         } catch (final IOException ex) {
             throw new IllegalStateException(ex);
         }

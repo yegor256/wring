@@ -27,24 +27,28 @@
         </title>
     </xsl:template>
     <xsl:template match="page" mode="body">
-        <xsl:apply-templates select="pitch"/>
-        <form action="{links/link[@rel='post']/@href}" method="post">
-            <textarea name="text" style="width:100%;height:5em;">
+        <xsl:apply-templates select="pipes"/>
+        <form action="{links/link[@rel='add']/@href}" method="post">
+            <label for="yaml">YAML configuration of a new pipe:</label>
+            <textarea id="yaml" name="yaml" style="width:100%;height:8em;">
                 <xsl:text> </xsl:text>
             </textarea>
             <button type="submit">Add</button>
         </form>
-        <xsl:apply-templates select="pipes"/>
     </xsl:template>
     <xsl:template match="pipes">
         <xsl:apply-templates select="pipe"/>
     </xsl:template>
     <xsl:template match="pipe">
         <p>
+            <xsl:text>#</xsl:text>
+            <xsl:value-of select="id"/>
+            <xsl:text> (</xsl:text>
             <a href="{links/link[@rel='delete']/@href}">
                 <xsl:text>delete</xsl:text>
             </a>
-            <xsl:value-of select="yaml"/>
+            <xsl:text>):</xsl:text>
         </p>
+        <pre><xsl:value-of select="yaml"/></pre>
     </xsl:template>
 </xsl:stylesheet>

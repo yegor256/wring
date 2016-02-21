@@ -28,7 +28,13 @@
     </xsl:template>
     <xsl:template match="page" mode="body">
         <p>
-            <xsl:text>what's up?</xsl:text>
+            <xsl:text>What's up?</xsl:text>
+        </p>
+        <p>
+            <xsl:text>
+                This project is under construction.
+                If you don't know what is it, better stay away!
+            </xsl:text>
         </p>
     </xsl:template>
 </xsl:stylesheet>

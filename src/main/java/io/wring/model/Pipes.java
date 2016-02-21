@@ -41,7 +41,7 @@ public interface Pipes {
      * @param yaml YAML configuration
      * @return Pipe just added
      */
-    Pipe add(String yaml);
+    Pipe add(String yaml) throws IOException;
 
     /**
      * Find pipe by number.

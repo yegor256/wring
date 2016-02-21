@@ -78,7 +78,7 @@ public final class DyEvents implements Events {
                     DyEvents::asDirs
                 )
             )
-        );
+        ).up();
     }
 
     /**
@@ -90,7 +90,8 @@ public final class DyEvents implements Events {
         try {
             return new Directives()
                 .add("event")
-                .add("title").set(item.get("title").getS());
+                .add("title").set(item.get("title").getS()).up()
+                .up();
         } catch (final IOException ex) {
             throw new IllegalStateException(ex);
         }

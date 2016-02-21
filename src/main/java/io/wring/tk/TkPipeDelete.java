@@ -15,19 +15,18 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.tk.pipes;
+package io.wring.tk;
 
 import io.wring.model.Base;
 import io.wring.model.Pipe;
 import io.wring.model.XePrint;
-import io.wring.tk.RqUser;
 import java.io.IOException;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
 import org.takes.facets.flash.RsFlash;
 import org.takes.facets.forward.RsForward;
-import org.takes.rq.RqForm;
+import org.takes.rq.RqHref;
 
 /**
  * Delete pipe.
@@ -36,7 +35,7 @@ import org.takes.rq.RqForm;
  * @version $Id$
  * @since 1.0
  */
-final class TkDelete implements Take {
+final class TkPipeDelete implements Take {
 
     /**
      * Base.
@@ -47,7 +46,7 @@ final class TkDelete implements Take {
      * Ctor.
      * @param bse Base
      */
-    TkDelete(final Base bse) {
+    TkPipeDelete(final Base bse) {
         this.base = bse;
     }
 
@@ -55,7 +54,7 @@ final class TkDelete implements Take {
     public Response act(final Request req) throws IOException {
         final Pipe pipe = this.base.user(new RqUser(req).urn()).pipes().pipe(
             Long.parseLong(
-                new RqForm.Base(req).param("id").iterator().next()
+                new RqHref.Base(req).href().param("id").iterator().next()
             )
         );
         final String msg = new XePrint(pipe.asXembly()).text(

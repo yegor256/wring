@@ -23,6 +23,7 @@ import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
 import org.takes.rs.xe.XeDirectives;
+import org.takes.rs.xe.XeLink;
 
 /**
  * Pipes.
@@ -53,7 +54,8 @@ final class TkPipes implements Take {
             req,
             new XeDirectives(
                 this.base.user(new RqUser(req).urn()).pipes().asXembly()
-            )
+            ),
+            new XeLink("add", "/pipe-add")
         );
     }
 
