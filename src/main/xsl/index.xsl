@@ -43,10 +43,10 @@
             <xsl:text>What's up?</xsl:text>
         </p>
         <p>
-            <xsl:text>
-                This project is under construction.
-                If you don't know what is it, better stay away!
-            </xsl:text>
+            <xsl:text>This project is under construction.</xsl:text>
+        </p>
+        <p>
+            <xsl:text>Better come back in April 2016.</xsl:text>
         </p>
     </xsl:template>
 </xsl:stylesheet>
