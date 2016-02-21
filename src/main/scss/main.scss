@@ -1,0 +1,11 @@
+.logo {
+  height: 35px;
+}
+
+.flash {
+  &.SEVERE { color: red; }
+
+  &.INFO { color: green; }
+
+  &.WARNING { color: orange; }
+}

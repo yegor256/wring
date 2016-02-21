@@ -25,7 +25,6 @@
         <title>
             <xsl:text>wring</xsl:text>
         </title>
-        <link rel="stylesheet" href="/css/index.css?{version/revision}"/>
     </xsl:template>
     <xsl:template match="page" mode="body">
         <p>

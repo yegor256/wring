@@ -23,40 +23,63 @@
             <head>
                 <meta charset="UTF-8"/>
                 <link rel="shortcut icon" type="image/png" href="/images/icon.png"/>
+                <link rel="stylesheet" href="http://yegor256.github.io/tacit/tacit.min.css"/>
+                <link rel="stylesheet" href="/css/main.css"/>
                 <xsl:apply-templates select="." mode="head"/>
             </head>
             <body>
                 <section>
-                    <a href="{links/link[@rel='home']/@href}" class="logo">
-                        <img src="/images/logo.svg"/>
-                    </a>
-                    <xsl:apply-templates select="flash"/>
-                    <ul class="menu">
-                        <li>
-                            <xsl:if test="identity">
-                                <xsl:text>@</xsl:text>
-                                <xsl:value-of select="identity/name"/>
-                            </xsl:if>
-                            <xsl:if test="not(identity)">
-                                <a href="{links/link[@rel='takes:github']/@href}">
-                                    <xsl:text>login</xsl:text>
-                                </a>
-                            </xsl:if>
-                        </li>
-                        <li>
-                            <a href="{links/link[@rel='pipes']/@href}">
-                                <xsl:text>pipes</xsl:text>
-                            </a>
-                        </li>
-                        <xsl:if test="not(identity)">
-                            <li>
-                                <a href="{links/link[@rel='takes:logout']/@href}">
-                                    <xsl:text>exit</xsl:text>
-                                </a>
-                            </li>
-                        </xsl:if>
-                    </ul>
-                    <xsl:apply-templates select="." mode="body"/>
+                    <header>
+                        <nav>
+                            <ul>
+                                <li>
+                                    <a href="{links/link[@rel='home']/@href}">
+                                        <img src="/images/logo.svg" class="logo"/>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <nav>
+                            <ul class="menu">
+                                <li>
+                                    <xsl:if test="identity">
+                                        <xsl:text>@</xsl:text>
+                                        <xsl:value-of select="identity/name"/>
+                                    </xsl:if>
+                                    <xsl:if test="not(identity)">
+                                        <a href="{links/link[@rel='takes:github']/@href}">
+                                            <xsl:text>login</xsl:text>
+                                        </a>
+                                    </xsl:if>
+                                </li>
+                                <xsl:if test="identity">
+                                    <li>
+                                        <a href="{links/link[@rel='pipes']/@href}">
+                                            <xsl:text>pipes</xsl:text>
+                                        </a>
+                                    </li>
+                                </xsl:if>
+                                <xsl:if test="identity">
+                                    <li>
+                                        <a href="{links/link[@rel='takes:logout']/@href}">
+                                            <xsl:text>exit</xsl:text>
+                                        </a>
+                                    </li>
+                                </xsl:if>
+                            </ul>
+                        </nav>
+                        <xsl:apply-templates select="flash"/>
+                    </header>
+                    <article>
+                        <xsl:apply-templates select="." mode="body"/>
+                    </article>
+                    <footer>
+                        <nav>
+                            <ul>
+                                <li>version</li>
+                            </ul>
+                        </nav>
+                    </footer>
                 </section>
             </body>
         </html>

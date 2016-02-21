@@ -446,7 +446,7 @@
                                     <goal>java</goal>
                                 </goals>
                                 <configuration>
-                                    <mainClass>io.wring.Entry</mainClass>
+                                    <mainClass>io.wring.Entrance</mainClass>
                                     <classpathScope>test</classpathScope>
                                     <cleanupDaemonThreads>false</cleanupDaemonThreads>
                                     <arguments>

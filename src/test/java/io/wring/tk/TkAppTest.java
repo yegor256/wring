@@ -109,7 +109,7 @@ public final class TkAppTest {
             "/?x=y",
             "/robots.txt",
             "/xsl/layout.xsl",
-            "/css/index.css",
+            "/css/main.css",
             "/images/logo.svg",
         };
         for (final String uri : uris) {

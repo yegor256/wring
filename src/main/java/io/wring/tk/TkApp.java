@@ -129,7 +129,7 @@ public final class TkApp extends TkWrap {
                 "/images/[a-z]+\\.svg",
                 new TkWithType(
                     TkApp.refresh("./src/main/resources"),
-                    "text/css"
+                    "image/svg+xml"
                 )
             ),
             new FkAnonymous(

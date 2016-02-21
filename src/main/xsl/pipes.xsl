@@ -25,7 +25,6 @@
         <title>
             <xsl:text>pipes</xsl:text>
         </title>
-        <link rel="stylesheet" href="/css/pipes.css?{version/revision}"/>
     </xsl:template>
     <xsl:template match="page" mode="body">
         <xsl:apply-templates select="pitch"/>
