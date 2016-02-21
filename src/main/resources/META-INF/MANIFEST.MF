@@ -1,0 +1,8 @@
+Wring-Revision: BUILD
+Wring-Version: ${project.version}
+Wring-Date: ${timestamp}
+Wring-DynamoKey: ${dynamo.key}
+Wring-DynamoSecret: ${dynamo.secret}
+Wring-GithubId: ${github.id}
+Wring-GithubSecret: ${github.secret}
+Wring-SecurityKey: ${security.key}

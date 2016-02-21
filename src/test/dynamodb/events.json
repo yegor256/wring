@@ -1,0 +1,53 @@
+{
+    "AttributeDefinitions": [
+        {
+            "AttributeName": "urn",
+            "AttributeType": "S"
+        },
+        {
+            "AttributeName": "title",
+            "AttributeType": "S"
+        },
+        {
+            "AttributeName": "rank",
+            "AttributeType": "N"
+        }
+    ],
+    "KeySchema": [
+        {
+            "AttributeName": "urn",
+            "KeyType": "HASH"
+        },
+        {
+            "AttributeName": "title",
+            "KeyType": "RANGE"
+        }
+    ],
+    "ProvisionedThroughput": {
+        "ReadCapacityUnits": "1",
+        "WriteCapacityUnits": "1"
+    },
+    "TableName": "events",
+    "GlobalSecondaryIndexes": [
+        {
+            "IndexName": "top",
+            "KeySchema": [
+                {
+                    "AttributeName": "urn",
+                    "KeyType": "HASH"
+                },
+                {
+                    "AttributeName": "rank",
+                    "KeyType": "RANGE"
+                }
+            ],
+            "Projection": {
+                "ProjectionType": "ALL"
+            },
+            "ProvisionedThroughput": {
+                "ReadCapacityUnits": "1",
+                "WriteCapacityUnits": "1"
+            }
+        }
+    ]
+}

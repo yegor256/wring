@@ -1,0 +1,8 @@
+Wring-Revision: a1b2c3e
+Wring-Version: 1.0
+Wring-Date: ${timestamp}
+Wring-DynamoKey: ${failsafe.dynamo.key}
+Wring-DynamoSecret: ${failsafe.dynamo.secret}
+Wring-GithubId: ${failsafe.github.id}
+Wring-GithubSecret: ${failsafe.github.secret}
+Wring-SecurityKey: ${failsafe.security.key}
