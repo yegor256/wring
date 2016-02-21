@@ -49,7 +49,9 @@ import org.xembly.Directives;
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
  * @since 1.0
+ * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class DyEvents implements Events {
 
     /**
@@ -93,22 +95,6 @@ public final class DyEvents implements Events {
         ).up();
     }
 
-    /**
-     * Item into event.
-     * @param item Item from Dynamo
-     * @return Directives
-     */
-    private static Iterable<Directive> asDirs(final Item item) {
-        try {
-            return new Directives()
-                .add("event")
-                .add("title").set(item.get("title").getS()).up()
-                .up();
-        } catch (final IOException ex) {
-            throw new IllegalStateException(ex);
-        }
-    }
-
     @Override
     public Event post(final String title, final String text)
         throws IOException {
@@ -141,4 +127,21 @@ public final class DyEvents implements Events {
     private Table table() {
         return this.region.table("events");
     }
+
+    /**
+     * Item into event.
+     * @param item Item from Dynamo
+     * @return Directives
+     */
+    private static Iterable<Directive> asDirs(final Item item) {
+        try {
+            return new Directives()
+                .add("event")
+                .add("title").set(item.get("title").getS()).up()
+                .up();
+        } catch (final IOException ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
+
 }

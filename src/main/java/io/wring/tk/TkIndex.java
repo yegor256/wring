@@ -29,7 +29,6 @@
  */
 package io.wring.tk;
 
-import io.wring.model.Base;
 import java.io.IOException;
 import org.takes.Request;
 import org.takes.Response;
@@ -43,19 +42,6 @@ import org.takes.Take;
  * @since 1.0
  */
 final class TkIndex implements Take {
-
-    /**
-     * Base.
-     */
-    private final transient Base base;
-
-    /**
-     * Ctor.
-     * @param bse Base
-     */
-    TkIndex(final Base bse) {
-        this.base = bse;
-    }
 
     @Override
     public Response act(final Request req) throws IOException {

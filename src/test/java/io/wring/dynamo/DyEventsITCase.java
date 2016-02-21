@@ -27,46 +27,40 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.tk;
+package io.wring.dynamo;
 
+import com.jcabi.aspects.Tv;
 import com.jcabi.matchers.XhtmlMatchers;
+import io.wring.model.Events;
+import io.wring.model.User;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import org.takes.Take;
-import org.takes.rq.RqFake;
-import org.takes.rq.RqWithHeader;
-import org.takes.rs.RsPrint;
+import org.xembly.Xembler;
 
 /**
- * Test case for {@link TkIndex}.
+ * Integration case for {@link DyEvents}.
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
  * @since 1.0
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-public final class TkIndexTest {
+public final class DyEventsITCase {
 
     /**
-     * TkHome can render home page.
+     * DyEvents can add many events.
      * @throws Exception If some problem inside
      */
     @Test
-    public void rendersHomePage() throws Exception {
-        final Take take = new TkIndex();
+    public void addsManyEvents() throws Exception {
+        final User user = new DyUser(new Dynamo(), "william");
+        final Events events = user.events();
+        for (int idx = 0; idx < Tv.FIVE; ++idx) {
+            events.post(String.format("event #%d", idx), "some text");
+        }
         MatcherAssert.assertThat(
-            XhtmlMatchers.xhtml(
-                new RsPrint(
-                    take.act(
-                        new RqWithHeader(
-                            new RqFake("GET", "/"),
-                            "Accept",
-                            "text/xml"
-                        )
-                    )
-                ).printBody()
-            ),
+            new Xembler(events.asXembly("")).xml(),
             XhtmlMatchers.hasXPaths(
-                "/page/millis",
-                "/page/links/link[@rel='takes:github']"
+                "/events[count(event) = 5]"
             )
         );
     }

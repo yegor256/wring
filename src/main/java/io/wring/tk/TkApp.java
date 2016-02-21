@@ -146,7 +146,7 @@ public final class TkApp extends TkWrap {
             ),
             new FkAnonymous(
                 new TkFork(
-                    new FkRegex("/", new TkIndex(base))
+                    new FkRegex("/", new TkIndex())
                 )
             ),
             new FkAuthenticated(

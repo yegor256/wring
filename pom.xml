@@ -510,8 +510,10 @@
                     <plugin>
                         <groupId>com.qulice</groupId>
                         <artifactId>qulice-maven-plugin</artifactId>
+                        <version>0.16.2</version>
                         <configuration>
                             <excludes>
+                                <exclude>checkstyle:/src/main/resources/images/.*</exclude>
                                 <exclude>findbugs:.*</exclude>
                             </excludes>
                             <license>file:${basedir}/LICENSE.txt</license>
