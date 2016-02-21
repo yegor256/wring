@@ -22,7 +22,7 @@
         <html lang="en">
             <head>
                 <meta charset="UTF-8"/>
-                <link rel="shortcut icon" type="image/png" href="/images/icon.png"/>
+                <link rel="shortcut icon" type="image/png" href="/images/logo.png"/>
                 <link rel="stylesheet" href="http://yegor256.github.io/tacit/tacit.min.css"/>
                 <link rel="stylesheet" href="/css/main.css"/>
                 <xsl:apply-templates select="." mode="head"/>
