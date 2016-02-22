@@ -49,8 +49,10 @@
     </xsl:template>
     <xsl:template match="event">
         <p>
-            <a href="{links/link[@rel='see']/@href}">
-                <xsl:value-of select="title"/>
+            <xsl:value-of select="title"/>
+            <xsl:text> </xsl:text>
+            <a href="{links/link[@rel='delete']/@href}">
+                <xsl:text>delete</xsl:text>
             </a>
         </p>
         <pre><xsl:value-of select="text"/></pre>
