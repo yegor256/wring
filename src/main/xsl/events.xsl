@@ -39,17 +39,20 @@
         </title>
     </xsl:template>
     <xsl:template match="page" mode="body">
-        <xsl:apply-templates select="pitches"/>
+        <xsl:if test="not(events/event)">
+            <xsl:text>Inbox is empty.</xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="events"/>
     </xsl:template>
-    <xsl:template match="pitches">
-        <xsl:apply-templates select="pitch"/>
+    <xsl:template match="events">
+        <xsl:apply-templates select="event"/>
     </xsl:template>
-    <xsl:template match="pitch">
+    <xsl:template match="event">
         <p>
             <a href="{links/link[@rel='see']/@href}">
-                <xsl:value-of select="points"/>
+                <xsl:value-of select="title"/>
             </a>
-            <xsl:value-of select="text"/>
         </p>
+        <pre><xsl:value-of select="text"/></pre>
     </xsl:template>
 </xsl:stylesheet>
