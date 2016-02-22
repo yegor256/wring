@@ -94,13 +94,17 @@ public final class Routine implements Runnable, AutoCloseable {
     @Override
     public void run() {
         final Runnable cycle = new Cycle(this.base, this.pipes);
-        for (int thread = 0; thread < this.threads; ++thread) {
+        for (int thread = 0; thread < this.threads - 1; ++thread) {
             this.executor.scheduleWithFixedDelay(
                 cycle,
                 (long) Tv.HUNDRED, (long) Tv.HUNDRED,
                 TimeUnit.MILLISECONDS
             );
         }
+        this.executor.scheduleWithFixedDelay(
+            new Refill(this.base, this.pipes),
+            1L, 1L, TimeUnit.MINUTES
+        );
         Logger.info(this, "%d threads started", this.threads);
     }
 

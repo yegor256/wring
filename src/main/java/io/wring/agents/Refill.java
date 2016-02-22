@@ -29,23 +29,20 @@
  */
 package io.wring.agents;
 
-import com.jcabi.log.Logger;
+import com.google.common.collect.Lists;
 import io.wring.model.Base;
-import io.wring.model.Events;
 import io.wring.model.Pipe;
-import io.wring.model.XePrint;
-import java.io.IOException;
+import java.util.Collection;
 import java.util.Queue;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**
- * Single cycle.
+ * Refill the queue.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
  * @since 1.0
  */
-final class Cycle implements Runnable {
+final class Refill implements Runnable {
 
     /**
      * Base.
@@ -62,65 +59,16 @@ final class Cycle implements Runnable {
      * @param bse Base
      * @param queue List of them
      */
-    Cycle(final Base bse, final Queue<Pipe> queue) {
+    Refill(final Base bse, final Queue<Pipe> queue) {
         this.base = bse;
         this.pipes = queue;
     }
 
     @Override
     public void run() {
-        final Pipe pipe = this.pipes.poll();
-        if (pipe != null) {
-            try {
-                this.process(pipe);
-            } catch (final IOException ex) {
-                throw new IllegalStateException(ex);
-            }
-        }
-    }
-
-    /**
-     * Process a single pipe.
-     * @param pipe The pipe
-     * @throws IOException If fails
-     */
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    private void process(final Pipe pipe) throws IOException {
-        Cycle.process(
-            new JsonAgent(
-                new XePrint(pipe.asXembly()).text("{/pipe/json/text()}")
-            ),
-            this.base.user(
-                new XePrint(pipe.asXembly()).text("{/pipe/urn/text()}")
-            ).events()
-        );
-    }
-
-    /**
-     * Process a single pipe.
-     * @param agent The agent
-     * @param events User events
-     * @throws IOException If fails
-     */
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    private static void process(final Agent agent, final Events events)
-        throws IOException {
-        final long start = System.currentTimeMillis();
-        try {
-            agent.push(events);
-            events.post(
-                agent.toString(),
-                Logger.format(
-                    "all good, %[ms]s",
-                    System.currentTimeMillis() - start
-                )
-            );
-            // @checkstyle IllegalCatchCheck (1 line)
-        } catch (final Throwable ex) {
-            events.post(
-                agent.toString(),
-                ExceptionUtils.getStackTrace(ex)
-            );
+        if (this.pipes.isEmpty()) {
+            final Collection<Pipe> ext = Lists.newArrayList(this.base.pipes());
+            this.pipes.addAll(ext);
         }
     }
 
