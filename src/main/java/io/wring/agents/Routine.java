@@ -30,6 +30,7 @@
 package io.wring.agents;
 
 import com.jcabi.aspects.Tv;
+import com.jcabi.log.Logger;
 import com.jcabi.log.VerboseThreads;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
@@ -100,6 +101,7 @@ public final class Routine implements Runnable, AutoCloseable {
                 TimeUnit.MILLISECONDS
             );
         }
+        Logger.info(this, "%d threads started", this.threads);
     }
 
     @Override
