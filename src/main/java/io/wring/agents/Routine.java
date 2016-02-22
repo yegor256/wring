@@ -116,6 +116,7 @@ public final class Routine implements Runnable, AutoCloseable {
             Thread.currentThread().interrupt();
             throw new IllegalStateException(ex);
         }
+        Logger.info(this, "%d threads stopped", this.threads);
     }
 
 }
