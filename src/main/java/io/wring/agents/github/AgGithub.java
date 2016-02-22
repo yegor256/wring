@@ -94,7 +94,11 @@ public final class AgGithub implements Agent {
             }
             final JsonObject subject = event.getJsonObject("subject");
             events.post(
-                subject.getString("title"),
+                String.format(
+                    "[%s] %s",
+                    event.getJsonObject("repository").getString("full_name"),
+                    subject.getString("title")
+                ),
                 String.format(
                     "[see](%s)",
                     subject.getString("url").replace(
