@@ -31,6 +31,7 @@ package io.wring.dynamo;
 
 import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Tv;
+import io.wring.model.Event;
 import io.wring.model.Events;
 import io.wring.model.User;
 import org.hamcrest.MatcherAssert;
@@ -60,6 +61,22 @@ public final class DyEventsITCase {
         MatcherAssert.assertThat(
             Iterables.size(events.iterate()),
             Matchers.equalTo(Tv.FIVE)
+        );
+    }
+
+    /**
+     * DyEvents can delete events.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void deletesEvent() throws Exception {
+        final User user = new DyUser(new Dynamo(), "boris");
+        final Events events = user.events();
+        final Event event = events.post("subj", "body");
+        event.delete();
+        MatcherAssert.assertThat(
+            Iterables.size(events.iterate()),
+            Matchers.equalTo(0)
         );
     }
 

@@ -29,6 +29,7 @@
  */
 package io.wring.dynamo;
 
+import com.jcabi.dynamo.Attributes;
 import com.jcabi.dynamo.Item;
 import io.wring.model.Event;
 import java.io.IOException;
@@ -43,6 +44,7 @@ import org.xembly.Directives;
  * @since 1.0
  * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class DyEvent implements Event {
 
     /**
@@ -70,6 +72,10 @@ public final class DyEvent implements Event {
 
     @Override
     public void delete() throws IOException {
-        throw new UnsupportedOperationException("#delete()");
+        this.item.frame().table().delete(
+            new Attributes()
+                .with("urn", this.item.get("urn").getS())
+                .with("title", this.item.get("title").getS())
+        );
     }
 }
