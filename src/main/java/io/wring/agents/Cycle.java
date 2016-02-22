@@ -30,12 +30,14 @@
 package io.wring.agents;
 
 import com.google.common.collect.Lists;
+import com.jcabi.log.Logger;
 import io.wring.model.Base;
+import io.wring.model.Events;
 import io.wring.model.Pipe;
-import io.wring.model.User;
 import io.wring.model.XePrint;
 import java.io.IOException;
 import java.util.Queue;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**
  * Single cycle.
@@ -86,14 +88,44 @@ final class Cycle implements Runnable {
      * @param pipe The pipe
      * @throws IOException If fails
      */
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     private void process(final Pipe pipe) throws IOException {
-        final User user = this.base.user(
-            new XePrint(pipe.asXembly()).text("/pipe/urn/text()")
+        Cycle.process(
+            new JsonAgent(
+                new XePrint(pipe.asXembly()).text("/pipe/json/text()")
+            ),
+            this.base.user(
+                new XePrint(pipe.asXembly()).text("/pipe/urn/text()")
+            ).events()
         );
-        final Agent agent = new JsonAgent(
-            new XePrint(pipe.asXembly()).text("/pipe/json/text()")
-        );
-        agent.push(user.events());
+    }
+
+    /**
+     * Process a single pipe.
+     * @param agent The agent
+     * @param events User events
+     * @throws IOException If fails
+     */
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
+    private static void process(final Agent agent, final Events events)
+        throws IOException {
+        final long start = System.currentTimeMillis();
+        try {
+            agent.push(events);
+            events.post(
+                agent.getClass().getCanonicalName(),
+                Logger.format(
+                    "all good, %[ms]s",
+                    System.currentTimeMillis() - start
+                )
+            );
+            // @checkstyle IllegalCatchCheck (1 line)
+        } catch (final Throwable ex) {
+            events.post(
+                agent.getClass().getCanonicalName(),
+                ExceptionUtils.getStackTrace(ex)
+            );
+        }
     }
 
 }
