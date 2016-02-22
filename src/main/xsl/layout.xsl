@@ -66,7 +66,7 @@
                                 </li>
                                 <xsl:if test="identity">
                                     <li>
-                                        <a href="{links/link[@rel='takes:home']/@href}">
+                                        <a href="{links/link[@rel='home']/@href}">
                                             <xsl:text>inbox</xsl:text>
                                         </a>
                                     </li>
