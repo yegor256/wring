@@ -129,11 +129,12 @@ public final class RsPage extends RsWrap {
                 )
             )
         );
+        final String type = "text/xml";
         return new RsFork(
             req,
             new FkTypes(
-                "application/xml,text/xml",
-                new RsPrettyXML(new RsWithType(raw, "text/xml"))
+                type,
+                new RsPrettyXML(new RsWithType(raw, type))
             ),
             new FkTypes(
                 "*/*",
