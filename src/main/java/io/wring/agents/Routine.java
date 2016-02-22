@@ -33,8 +33,8 @@ import com.jcabi.aspects.Tv;
 import com.jcabi.log.VerboseThreads;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
-import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -84,7 +84,7 @@ public final class Routine implements Runnable, AutoCloseable {
     public Routine(final Base bse, final int total) {
         this.base = bse;
         this.threads = total;
-        this.pipes = new LinkedList<>();
+        this.pipes = new ConcurrentLinkedQueue<>();
         this.executor = Executors.newScheduledThreadPool(
             total, new VerboseThreads(Routine.class)
         );
