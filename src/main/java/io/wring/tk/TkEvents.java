@@ -64,7 +64,7 @@ final class TkEvents implements Take {
             "/xsl/events.xsl",
             req,
             new XeDirectives(
-                this.base.user(new RqUser(req).urn()).events().asXembly("")
+                this.base.user(new RqUser(req).urn()).events().asXembly()
             )
         );
     }

@@ -75,7 +75,7 @@ public final class DyEvents implements Events {
 
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public Iterable<Directive> asXembly(final String marker)
+    public Iterable<Directive> asXembly()
         throws IOException {
         final Iterable<Item> items = this.table()
             .frame()

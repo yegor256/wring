@@ -58,7 +58,7 @@ public final class DyEventsITCase {
             events.post(String.format("event #%d", idx), "some text");
         }
         MatcherAssert.assertThat(
-            new Xembler(events.asXembly("")).xml(),
+            new Xembler(events.asXembly()).xml(),
             XhtmlMatchers.hasXPaths(
                 "/events[count(event) = 5]"
             )

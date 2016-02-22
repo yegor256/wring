@@ -44,7 +44,7 @@ import org.xembly.Directive;
 public final class FkEvents implements Events {
 
     @Override
-    public Iterable<Directive> asXembly(final String marker) {
+    public Iterable<Directive> asXembly() {
         return Collections.emptyList();
     }
 

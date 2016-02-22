@@ -43,11 +43,10 @@ public interface Events {
 
     /**
      * Print as many as possible into xembly.
-     * @param marker Last seen marker or empty string
      * @return Xembly directives
      * @throws IOException If fails
      */
-    Iterable<Directive> asXembly(String marker) throws IOException;
+    Iterable<Directive> asXembly() throws IOException;
 
     /**
      * Add a new event.
