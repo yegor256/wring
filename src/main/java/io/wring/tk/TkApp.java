@@ -144,6 +144,13 @@ public final class TkApp extends TkWrap {
                     "image/svg+xml"
                 )
             ),
+            new FkRegex(
+                "/images/[a-z]+\\.png",
+                new TkWithType(
+                    TkApp.refresh("./src/main/resources"),
+                    "image/png"
+                )
+            ),
             new FkAnonymous(
                 new TkFork(
                     new FkRegex("/", new TkIndex())

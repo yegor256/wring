@@ -123,6 +123,7 @@ public final class TkAppTest {
             "/xsl/layout.xsl",
             "/css/main.css",
             "/images/logo.svg",
+            "/images/logo.png",
         };
         for (final String uri : uris) {
             MatcherAssert.assertThat(
