@@ -102,6 +102,9 @@
                                         <xsl:with-param name="millis" select="millis"/>
                                     </xsl:call-template>
                                 </li>
+                                <li>
+                                    <xsl:value-of select="@sla"/>
+                                </li>
                             </ul>
                         </nav>
                         <nav>
