@@ -29,6 +29,7 @@
  */
 package io.wring.dynamo;
 
+import com.amazonaws.services.dynamodbv2.model.Select;
 import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Tv;
 import com.jcabi.dynamo.Attributes;
@@ -81,6 +82,7 @@ public final class DyEvents implements Events {
                     new QueryValve()
                         .withLimit(Tv.TWENTY)
                         .withIndexName("top")
+                        .withSelect(Select.ALL_ATTRIBUTES)
                         .withScanIndexForward(false)
                         .withConsistentRead(false)
                 )

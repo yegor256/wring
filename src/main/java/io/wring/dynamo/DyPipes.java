@@ -29,7 +29,9 @@
  */
 package io.wring.dynamo;
 
+import com.amazonaws.services.dynamodbv2.model.Select;
 import com.google.common.collect.Iterables;
+import com.jcabi.aspects.Tv;
 import com.jcabi.dynamo.Attributes;
 import com.jcabi.dynamo.Conditions;
 import com.jcabi.dynamo.Item;
@@ -75,7 +77,11 @@ public final class DyPipes implements Pipes {
         return Iterables.transform(
             this.table()
                 .frame()
-                .through(new QueryValve())
+                .through(
+                    new QueryValve()
+                        .withSelect(Select.ALL_ATTRIBUTES)
+                        .withLimit(Tv.HUNDRED)
+                )
                 .where("urn", Conditions.equalTo(this.urn)),
             DyPipe::new
         );
