@@ -27,35 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.fake;
+package io.wring.agents;
 
-import io.wring.model.Pipe;
-import io.wring.model.Pipes;
-import java.util.Collections;
-import org.xembly.Directive;
+import io.wring.model.Events;
+import java.io.IOException;
 
 /**
- * Fake pipes.
+ * Agent.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
- * @version $Id$
+ * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
  * @since 1.0
  */
-public final class FkPipes implements Pipes {
+public interface Agent {
 
-    @Override
-    public Iterable<Directive> asXembly() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public Pipe add(final String json) {
-        return new FkPipe();
-    }
-
-    @Override
-    public Pipe pipe(final long number) {
-        return new FkPipe();
-    }
+    /**
+     * Push new events.
+     * @param events Where to push
+     * @throws IOException If fails
+     */
+    void push(Events events) throws IOException;
 
 }

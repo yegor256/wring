@@ -27,35 +27,32 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.fake;
+package io.wring.agents;
 
-import io.wring.model.Pipe;
-import io.wring.model.Pipes;
-import java.util.Collections;
-import org.xembly.Directive;
+import io.wring.model.Events;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
- * Fake pipes.
- *
+ * Test case for {@link JsonAgent}.
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
  * @since 1.0
  */
-public final class FkPipes implements Pipes {
+public final class JsonAgentTest {
 
-    @Override
-    public Iterable<Directive> asXembly() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public Pipe add(final String json) {
-        return new FkPipe();
-    }
-
-    @Override
-    public Pipe pipe(final long number) {
-        return new FkPipe();
+    /**
+     * AgentsTest can make an agent.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void makesAgent() throws Exception {
+        final Agent agent = new JsonAgent(
+            "{\"class\":\"io.wring.agents.FkAgent\"}"
+        );
+        final Events events = Mockito.mock(Events.class);
+        agent.push(events);
+        Mockito.verify(events).post(Mockito.anyString(), Mockito.anyString());
     }
 
 }

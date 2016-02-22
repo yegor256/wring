@@ -29,8 +29,12 @@
  */
 package io.wring.dynamo;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.jcabi.dynamo.Item;
 import com.jcabi.dynamo.Region;
 import io.wring.model.Base;
+import io.wring.model.Pipe;
 import io.wring.model.User;
 
 /**
@@ -66,4 +70,13 @@ public final class DyBase implements Base {
     public User user(final String name) {
         return new DyUser(this.region, name);
     }
+
+    @Override
+    public Iterable<Pipe> pipes() {
+        return Iterables.transform(
+            this.region.table("pipes").frame(),
+            (Function<Item, Pipe>) DyPipe::new
+        );
+    }
+
 }

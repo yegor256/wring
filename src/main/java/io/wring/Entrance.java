@@ -29,7 +29,9 @@
  */
 package io.wring;
 
+import io.wring.agents.Routine;
 import io.wring.dynamo.DyBase;
+import io.wring.model.Base;
 import io.wring.tk.TkApp;
 import java.io.IOException;
 import org.takes.http.Exit;
@@ -57,7 +59,11 @@ public final class Entrance {
      * @throws IOException If fails
      */
     public static void main(final String... args) throws IOException {
-        new FtCLI(new TkApp(new DyBase()), args).start(Exit.NEVER);
+        final Base base = new DyBase();
+        try (final Routine routine = new Routine(base)) {
+            routine.run();
+            new FtCLI(new TkApp(base), args).start(Exit.NEVER);
+        }
     }
 
 }

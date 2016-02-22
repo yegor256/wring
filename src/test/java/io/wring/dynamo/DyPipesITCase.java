@@ -59,7 +59,7 @@ public final class DyPipesITCase {
         MatcherAssert.assertThat(
             new Xembler(pipe.asXembly()).xml(),
             XhtmlMatchers.hasXPaths(
-                "/pipe/yaml",
+                "/pipe/json",
                 "/pipe/id"
             )
         );

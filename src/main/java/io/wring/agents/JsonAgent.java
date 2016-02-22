@@ -27,35 +27,70 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.fake;
+package io.wring.agents;
 
-import io.wring.model.Pipe;
-import io.wring.model.Pipes;
-import java.util.Collections;
-import org.xembly.Directive;
+import io.wring.model.Events;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import javax.json.Json;
+import javax.json.JsonObject;
+import org.apache.commons.io.IOUtils;
 
 /**
- * Fake pipes.
+ * Agent in JSON.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
- * @version $Id$
+ * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
  * @since 1.0
  */
-public final class FkPipes implements Pipes {
+final class JsonAgent implements Agent {
 
-    @Override
-    public Iterable<Directive> asXembly() {
-        return Collections.emptyList();
+    /**
+     * JSON config.
+     */
+    private final transient String json;
+
+    /**
+     * Ctor.
+     * @param cfg JSON config
+     */
+    JsonAgent(final String cfg) {
+        this.json = cfg;
     }
 
     @Override
-    public Pipe add(final String json) {
-        return new FkPipe();
+    public void push(final Events events) throws IOException {
+        this.agent().push(events);
     }
 
-    @Override
-    public Pipe pipe(final long number) {
-        return new FkPipe();
+    /**
+     * Make an agent.
+     * @return Agent
+     */
+    private Agent agent() {
+        final JsonObject obj = Json.createReader(
+            IOUtils.toInputStream(this.json)
+        ).readObject();
+        final Class<?> type;
+        try {
+            type = Class.forName(obj.getString("class"));
+        } catch (final ClassNotFoundException ex) {
+            throw new IllegalStateException(ex);
+        }
+        final Constructor<?> ctor;
+        try {
+            ctor = type.getConstructor(JsonObject.class);
+        } catch (final NoSuchMethodException ex) {
+            throw new IllegalStateException(ex);
+        }
+        try {
+            return Agent.class.cast(ctor.newInstance(obj));
+        } catch (final InstantiationException
+            | IllegalAccessException
+            | InvocationTargetException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
 }

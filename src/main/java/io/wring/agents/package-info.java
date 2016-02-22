@@ -27,35 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.fake;
-
-import io.wring.model.Pipe;
-import io.wring.model.Pipes;
-import java.util.Collections;
-import org.xembly.Directive;
 
 /**
- * Fake pipes.
+ * Agents.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
  * @since 1.0
  */
-public final class FkPipes implements Pipes {
-
-    @Override
-    public Iterable<Directive> asXembly() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public Pipe add(final String json) {
-        return new FkPipe();
-    }
-
-    @Override
-    public Pipe pipe(final long number) {
-        return new FkPipe();
-    }
-
-}
+package io.wring.agents;

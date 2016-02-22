@@ -45,4 +45,10 @@ public interface Base {
      */
     User user(String urn);
 
+    /**
+     * All pipes available now.
+     * @return All pipes
+     */
+    Iterable<Pipe> pipes();
+
 }

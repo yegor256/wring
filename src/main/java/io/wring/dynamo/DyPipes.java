@@ -88,12 +88,13 @@ public final class DyPipes implements Pipes {
     }
 
     @Override
-    public Pipe add(final String yaml) throws IOException {
+    public Pipe add(final String json) throws IOException {
         final Item item = this.table().put(
             new Attributes()
                 .with("urn", this.urn)
                 .with("id", System.currentTimeMillis())
-                .with("yaml", yaml)
+                .with("json", json)
+                .with("time", System.currentTimeMillis())
         );
         return new DyPipe(item);
     }
@@ -120,7 +121,7 @@ public final class DyPipes implements Pipes {
             return new Directives()
                 .add("pipe")
                 .add("id").set(item.get("id").getN()).up()
-                .add("yaml").set(item.get("yaml").getS()).up()
+                .add("json").set(item.get("json").getS()).up()
                 .up();
         } catch (final IOException ex) {
             throw new IllegalStateException(ex);

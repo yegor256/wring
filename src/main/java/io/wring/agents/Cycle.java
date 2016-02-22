@@ -27,35 +27,73 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.fake;
+package io.wring.agents;
 
+import com.google.common.collect.Lists;
+import io.wring.model.Base;
 import io.wring.model.Pipe;
-import io.wring.model.Pipes;
-import java.util.Collections;
-import org.xembly.Directive;
+import io.wring.model.User;
+import io.wring.model.XePrint;
+import java.io.IOException;
+import java.util.Queue;
 
 /**
- * Fake pipes.
+ * Single cycle.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
- * @version $Id$
+ * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
  * @since 1.0
  */
-public final class FkPipes implements Pipes {
+final class Cycle implements Runnable {
 
-    @Override
-    public Iterable<Directive> asXembly() {
-        return Collections.emptyList();
+    /**
+     * Base.
+     */
+    private final transient Base base;
+
+    /**
+     * Pipes to process.
+     */
+    private final transient Queue<Pipe> pipes;
+
+    /**
+     * Ctor.
+     * @param bse Base
+     * @param queue List of them
+     */
+    Cycle(final Base bse, final Queue<Pipe> queue) {
+        this.base = bse;
+        this.pipes = queue;
     }
 
     @Override
-    public Pipe add(final String json) {
-        return new FkPipe();
+    public void run() {
+        if (this.pipes.isEmpty()) {
+            this.pipes.addAll(Lists.newArrayList(this.base.pipes()));
+        }
+        final Pipe pipe = this.pipes.poll();
+        if (pipe != null) {
+            try {
+                this.process(pipe);
+            } catch (final IOException ex) {
+                throw new IllegalStateException(ex);
+            }
+        }
     }
 
-    @Override
-    public Pipe pipe(final long number) {
-        return new FkPipe();
+    /**
+     * Process a single pipe.
+     * @param pipe The pipe
+     * @throws IOException If fails
+     */
+    private void process(final Pipe pipe) throws IOException {
+        final User user = this.base.user(
+            new XePrint(pipe.asXembly()).text("/pipe/urn/text()")
+        );
+        final Agent agent = new JsonAgent(
+            new XePrint(pipe.asXembly()).text("/pipe/json/text()")
+        );
+        agent.push(user.events());
     }
 
 }

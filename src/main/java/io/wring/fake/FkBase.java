@@ -30,7 +30,9 @@
 package io.wring.fake;
 
 import io.wring.model.Base;
+import io.wring.model.Pipe;
 import io.wring.model.User;
+import java.util.Collections;
 
 /**
  * Fake Base.
@@ -44,6 +46,11 @@ public final class FkBase implements Base {
     @Override
     public User user(final String name) {
         return new FkUser();
+    }
+
+    @Override
+    public Iterable<Pipe> pipes() {
+        return Collections.emptyList();
     }
 
 }

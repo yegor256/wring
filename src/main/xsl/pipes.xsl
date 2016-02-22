@@ -41,8 +41,8 @@
     <xsl:template match="page" mode="body">
         <xsl:apply-templates select="pipes"/>
         <form action="{links/link[@rel='add']/@href}" method="post">
-            <label for="yaml">YAML configuration of a new pipe:</label>
-            <textarea id="yaml" name="yaml" style="width:100%;height:8em;">
+            <label for="json">JSON configuration of a new pipe:</label>
+            <textarea id="json" name="json" style="width:100%;height:8em;">
                 <xsl:text> </xsl:text>
             </textarea>
             <button type="submit">Add</button>
@@ -61,6 +61,6 @@
             </a>
             <xsl:text>):</xsl:text>
         </p>
-        <pre><xsl:value-of select="yaml"/></pre>
+        <pre><xsl:value-of select="json"/></pre>
     </xsl:template>
 </xsl:stylesheet>

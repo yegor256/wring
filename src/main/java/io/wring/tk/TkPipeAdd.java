@@ -65,7 +65,7 @@ final class TkPipeAdd implements Take {
     @Override
     public Response act(final Request req) throws IOException {
         final Pipe pipe = this.base.user(new RqUser(req).urn()).pipes().add(
-            new RqForm.Base(req).param("yaml").iterator().next()
+            new RqForm.Base(req).param("json").iterator().next()
         );
         return new RsForward(
             new RsFlash(

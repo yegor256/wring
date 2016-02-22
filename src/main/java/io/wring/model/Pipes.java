@@ -50,11 +50,11 @@ public interface Pipes {
 
     /**
      * Add new pipe.
-     * @param yaml YAML configuration
+     * @param json JSON configuration
      * @return Pipe just added
      * @throws IOException If fails
      */
-    Pipe add(String yaml) throws IOException;
+    Pipe add(String json) throws IOException;
 
     /**
      * Find pipe by number.

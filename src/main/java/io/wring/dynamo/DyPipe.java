@@ -44,6 +44,7 @@ import org.xembly.Directives;
  * @since 1.0
  * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class DyPipe implements Pipe {
 
     /**
@@ -63,8 +64,9 @@ public final class DyPipe implements Pipe {
     public Iterable<Directive> asXembly() throws IOException {
         return new Directives()
             .add("pipe")
+            .add("urn").set(this.item.get("urn").getS()).up()
             .add("id").set(this.item.get("id").getN()).up()
-            .add("yaml").set(this.item.get("yaml").getS()).up();
+            .add("json").set(this.item.get("json").getS()).up();
     }
 
     @Override
