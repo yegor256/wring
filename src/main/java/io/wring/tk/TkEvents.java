@@ -36,6 +36,7 @@ import java.io.IOException;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
+import org.takes.misc.Href;
 import org.takes.rs.xe.XeAppend;
 import org.takes.rs.xe.XeDirectives;
 import org.takes.rs.xe.XeLink;
@@ -94,8 +95,11 @@ final class TkEvents implements Take {
             new Directives().append(dirs).append(
                 new XeLink(
                     "delete",
-                    new XePrint(event.asXembly()).text(
-                        "/event-delete?title={/event/title/text()}"
+                    new Href("/event-delete").with(
+                        "title",
+                        new XePrint(event.asXembly()).text(
+                            "{/event/title/text()}"
+                        )
                     )
                 ).toXembly()
             )

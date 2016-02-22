@@ -70,7 +70,7 @@ final class TkEventDelete implements Take {
             new RqHref.Base(req).href().param("title").iterator().next()
         );
         final String msg = new XePrint(event.asXembly()).text(
-            "event \"#{/event/title/text()}\" deleted"
+            "event \"{/event/title/text()}\" deleted"
         );
         event.delete();
         return new RsForward(new RsFlash(msg));
