@@ -115,7 +115,7 @@ final class Cycle implements Runnable {
         try {
             agent.push(events);
             events.post(
-                agent.getClass().getCanonicalName(),
+                agent.toString(),
                 Logger.format(
                     "all good, %[ms]s",
                     System.currentTimeMillis() - start
