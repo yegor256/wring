@@ -97,7 +97,10 @@ public final class AgGithub implements Agent {
                 subject.getString("title"),
                 String.format(
                     "[see](%s)",
-                    subject.getString("url")
+                    subject.getString("url").replace(
+                        "https://api.github.com/repos/",
+                        "https://github.com/"
+                    )
                 )
             );
         }
