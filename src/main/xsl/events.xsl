@@ -49,12 +49,13 @@
     </xsl:template>
     <xsl:template match="event">
         <p>
+            <xsl:value-of select="rank"/>
             <xsl:value-of select="title"/>
             <xsl:text> </xsl:text>
             <a href="{links/link[@rel='delete']/@href}">
                 <xsl:text>delete</xsl:text>
             </a>
         </p>
-        <pre><xsl:value-of select="text"/></pre>
+        <pre><xsl:value-of select="html" disable-output-escaping="yes"/></pre>
     </xsl:template>
 </xsl:stylesheet>

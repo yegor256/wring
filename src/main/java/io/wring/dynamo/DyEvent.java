@@ -33,6 +33,8 @@ import com.jcabi.dynamo.Attributes;
 import com.jcabi.dynamo.Item;
 import io.wring.model.Event;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -62,12 +64,14 @@ public final class DyEvent implements Event {
 
     @Override
     public Iterable<Directive> asXembly() throws IOException {
+        final String text = this.item.get("text").getS();
         return new Directives()
             .add("event")
             .add("urn").set(this.item.get("urn").getS()).up()
             .add("rank").set(this.item.get("rank").getN()).up()
             .add("title").set(this.item.get("title").getS()).up()
-            .add("text").set(this.item.get("text").getS()).up();
+            .add("text").set(text).up()
+            .add("html").set(DyEvent.html(text)).up();
     }
 
     @Override
@@ -78,4 +82,27 @@ public final class DyEvent implements Event {
                 .with("title", this.item.get("title").getS())
         );
     }
+
+    /**
+     * To HTML.
+     * @param text Text in Markdown (simplified)
+     * @return HTML
+     */
+    private static String html(final CharSequence text) {
+        final Pattern ptn = Pattern.compile("\\[([^]]+)]\\(([^)]+)\\)");
+        final Matcher mtr = ptn.matcher(text);
+        final StringBuffer out = new StringBuffer(text.length());
+        while (mtr.find()) {
+            mtr.appendReplacement(
+                out,
+                String.format(
+                    "<a href='%s'>%s</a>",
+                    mtr.group(2), mtr.group(1)
+                )
+            );
+        }
+        mtr.appendTail(out);
+        return out.toString();
+    }
+
 }
