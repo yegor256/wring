@@ -29,6 +29,7 @@
  */
 package io.wring.dynamo;
 
+import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Tv;
 import com.jcabi.dynamo.Attributes;
 import com.jcabi.dynamo.Conditions;
@@ -39,8 +40,6 @@ import com.jcabi.dynamo.Table;
 import io.wring.model.Event;
 import io.wring.model.Events;
 import java.io.IOException;
-import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Dynamo events.
@@ -74,24 +73,20 @@ public final class DyEvents implements Events {
     }
 
     @Override
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public Iterable<Directive> asXembly()
-        throws IOException {
-        final Iterable<Item> items = this.table()
-            .frame()
-            .through(
-                new QueryValve()
-                    .withLimit(Tv.TWENTY)
-                    .withIndexName("top")
-                    .withScanIndexForward(false)
-                    .withConsistentRead(false)
-            )
-            .where("urn", Conditions.equalTo(this.urn));
-        final Directives dirs = new Directives().add("events");
-        for (final Item item : items) {
-            dirs.append(new DyEvent(item).asXembly());
-        }
-        return dirs.up();
+    public Iterable<Event> iterate() {
+        return Iterables.transform(
+            this.table()
+                .frame()
+                .through(
+                    new QueryValve()
+                        .withLimit(Tv.TWENTY)
+                        .withIndexName("top")
+                        .withScanIndexForward(false)
+                        .withConsistentRead(false)
+                )
+                .where("urn", Conditions.equalTo(this.urn)),
+            DyEvent::new
+        );
     }
 
     @Override

@@ -162,7 +162,8 @@ public final class TkApp extends TkWrap {
                         new FkRegex("/", new TkEvents(base)),
                         new FkRegex("/pipes", new TkPipes(base)),
                         new FkRegex("/pipe-add", new TkPipeAdd(base)),
-                        new FkRegex("/pipe-delete", new TkPipeDelete(base))
+                        new FkRegex("/pipe-delete", new TkPipeDelete(base)),
+                        new FkRegex("/event-delete", new TkEventDelete(base))
                     )
                 )
             )

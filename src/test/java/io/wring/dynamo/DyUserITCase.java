@@ -29,11 +29,10 @@
  */
 package io.wring.dynamo;
 
-import com.jcabi.matchers.XhtmlMatchers;
 import io.wring.model.User;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.xembly.Xembler;
 
 /**
  * Integration case for {@link DyUser}.
@@ -52,8 +51,8 @@ public final class DyUserITCase {
     public void rendersPipes() throws Exception {
         final User user = new DyUser(new Dynamo(), "jeff");
         MatcherAssert.assertThat(
-            new Xembler(user.pipes().asXembly()).xml(),
-            XhtmlMatchers.hasXPaths("/pipes")
+            user.pipes(),
+            Matchers.notNullValue()
         );
     }
 

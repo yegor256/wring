@@ -29,6 +29,7 @@
  */
 package io.wring.dynamo;
 
+import com.google.common.collect.Iterables;
 import com.jcabi.dynamo.Attributes;
 import com.jcabi.dynamo.Conditions;
 import com.jcabi.dynamo.Item;
@@ -38,8 +39,6 @@ import com.jcabi.dynamo.Table;
 import io.wring.model.Pipe;
 import io.wring.model.Pipes;
 import java.io.IOException;
-import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Dynamo Pitches.
@@ -72,17 +71,14 @@ public final class DyPipes implements Pipes {
     }
 
     @Override
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public Iterable<Directive> asXembly() throws IOException {
-        final Iterable<Item> items = this.table()
-            .frame()
-            .through(new QueryValve())
-            .where("urn", Conditions.equalTo(this.urn));
-        final Directives dirs = new Directives().add("pipes");
-        for (final Item item : items) {
-            dirs.append(new DyPipe(item).asXembly());
-        }
-        return dirs.up();
+    public Iterable<Pipe> iterate() {
+        return Iterables.transform(
+            this.table()
+                .frame()
+                .through(new QueryValve())
+                .where("urn", Conditions.equalTo(this.urn)),
+            DyPipe::new
+        );
     }
 
     @Override

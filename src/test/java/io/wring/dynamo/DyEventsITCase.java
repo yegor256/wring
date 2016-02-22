@@ -29,13 +29,13 @@
  */
 package io.wring.dynamo;
 
+import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Tv;
-import com.jcabi.matchers.XhtmlMatchers;
 import io.wring.model.Events;
 import io.wring.model.User;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.xembly.Xembler;
 
 /**
  * Integration case for {@link DyEvents}.
@@ -58,10 +58,8 @@ public final class DyEventsITCase {
             events.post(String.format("event #%d", idx), "some text");
         }
         MatcherAssert.assertThat(
-            new Xembler(events.asXembly()).xml(),
-            XhtmlMatchers.hasXPaths(
-                "/events[count(event) = 5]"
-            )
+            Iterables.size(events.iterate()),
+            Matchers.equalTo(Tv.FIVE)
         );
     }
 

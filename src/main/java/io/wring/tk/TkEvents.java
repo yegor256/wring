@@ -30,11 +30,19 @@
 package io.wring.tk;
 
 import io.wring.model.Base;
+import io.wring.model.Event;
+import io.wring.model.XePrint;
 import java.io.IOException;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
+import org.takes.rs.xe.XeAppend;
 import org.takes.rs.xe.XeDirectives;
+import org.takes.rs.xe.XeLink;
+import org.takes.rs.xe.XeSource;
+import org.takes.rs.xe.XeTransform;
+import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
  * List of events.
@@ -42,6 +50,7 @@ import org.takes.rs.xe.XeDirectives;
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
  * @since 1.0
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 final class TkEvents implements Take {
 
@@ -63,8 +72,32 @@ final class TkEvents implements Take {
         return new RsPage(
             "/xsl/events.xsl",
             req,
-            new XeDirectives(
-                this.base.user(new RqUser(req).urn()).events().asXembly()
+            new XeAppend(
+                "events",
+                new XeTransform<>(
+                    this.base.user(new RqUser(req).urn()).events().iterate(),
+                    TkEvents::source
+                )
+            )
+        );
+    }
+
+    /**
+     * Convert event to Xembly.
+     * @param event The event
+     * @return Xembly
+     * @throws IOException If fails
+     */
+    private static XeSource source(final Event event) throws IOException {
+        final Iterable<Directive> dirs = event.asXembly();
+        return new XeDirectives(
+            new Directives().append(dirs).append(
+                new XeLink(
+                    "delete",
+                    new XePrint(event.asXembly()).text(
+                        "/event-delete?title={/event/title/text()}"
+                    )
+                ).toXembly()
             )
         );
     }

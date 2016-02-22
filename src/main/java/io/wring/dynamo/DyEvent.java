@@ -65,8 +65,7 @@ public final class DyEvent implements Event {
             .add("urn").set(this.item.get("urn").getS()).up()
             .add("rank").set(this.item.get("rank").getN()).up()
             .add("title").set(this.item.get("title").getS()).up()
-            .add("text").set(this.item.get("text").getS()).up()
-            .up();
+            .add("text").set(this.item.get("text").getS()).up();
     }
 
     @Override

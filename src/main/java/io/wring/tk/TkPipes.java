@@ -30,12 +30,19 @@
 package io.wring.tk;
 
 import io.wring.model.Base;
+import io.wring.model.Pipe;
+import io.wring.model.XePrint;
 import java.io.IOException;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
+import org.takes.rs.xe.XeAppend;
 import org.takes.rs.xe.XeDirectives;
 import org.takes.rs.xe.XeLink;
+import org.takes.rs.xe.XeSource;
+import org.takes.rs.xe.XeTransform;
+import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
  * Pipes.
@@ -43,6 +50,7 @@ import org.takes.rs.xe.XeLink;
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
  * @since 1.0
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 final class TkPipes implements Take {
 
@@ -64,10 +72,34 @@ final class TkPipes implements Take {
         return new RsPage(
             "/xsl/pipes.xsl",
             req,
-            new XeDirectives(
-                this.base.user(new RqUser(req).urn()).pipes().asXembly()
-            ),
-            new XeLink("add", "/pipe-add")
+            new XeLink("add", "/pipe-add"),
+            new XeAppend(
+                "pipes",
+                new XeTransform<>(
+                    this.base.user(new RqUser(req).urn()).pipes().iterate(),
+                    TkPipes::source
+                )
+            )
+        );
+    }
+
+    /**
+     * Convert pipe to Xembly.
+     * @param pipe The pipe
+     * @return Xembly
+     * @throws IOException If fails
+     */
+    private static XeSource source(final Pipe pipe) throws IOException {
+        final Iterable<Directive> dirs = pipe.asXembly();
+        return new XeDirectives(
+            new Directives().append(dirs).append(
+                new XeLink(
+                    "delete",
+                    new XePrint(pipe.asXembly()).text(
+                        "/pipe-delete?id={/pipe/id/text()}"
+                    )
+                ).toXembly()
+            )
         );
     }
 

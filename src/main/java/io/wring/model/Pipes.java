@@ -30,7 +30,6 @@
 package io.wring.model;
 
 import java.io.IOException;
-import org.xembly.Directive;
 
 /**
  * Pipes of a user.
@@ -42,11 +41,11 @@ import org.xembly.Directive;
 public interface Pipes {
 
     /**
-     * Print them all into xembly.
-     * @return Xembly directives
+     * Iterate them all.
+     * @return All pipes
      * @throws IOException If fails
      */
-    Iterable<Directive> asXembly() throws IOException;
+    Iterable<Pipe> iterate() throws IOException;
 
     /**
      * Add new pipe.

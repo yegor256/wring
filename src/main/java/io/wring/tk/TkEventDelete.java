@@ -27,34 +27,53 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.fake;
+package io.wring.tk;
 
+import io.wring.model.Base;
 import io.wring.model.Event;
-import io.wring.model.Events;
-import java.util.Collections;
+import io.wring.model.User;
+import io.wring.model.XePrint;
+import java.io.IOException;
+import org.takes.Request;
+import org.takes.Response;
+import org.takes.Take;
+import org.takes.facets.flash.RsFlash;
+import org.takes.facets.forward.RsForward;
+import org.takes.rq.RqHref;
 
 /**
- * Fake events.
+ * Delete event.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
  * @since 1.0
  */
-public final class FkEvents implements Events {
+final class TkEventDelete implements Take {
 
-    @Override
-    public Iterable<Event> iterate() {
-        return Collections.emptyList();
+    /**
+     * Base.
+     */
+    private final transient Base base;
+
+    /**
+     * Ctor.
+     * @param bse Base
+     */
+    TkEventDelete(final Base bse) {
+        this.base = bse;
     }
 
     @Override
-    public Event post(final String title, final String text) {
-        return new FkEvent();
-    }
-
-    @Override
-    public Event event(final String title) {
-        return new FkEvent();
+    public Response act(final Request req) throws IOException {
+        final User user = this.base.user(new RqUser(req).urn());
+        final Event event = user.events().event(
+            new RqHref.Base(req).href().param("title").iterator().next()
+        );
+        final String msg = new XePrint(event.asXembly()).text(
+            "event \"#{/event/title/text()}\" deleted"
+        );
+        event.delete();
+        return new RsForward(new RsFlash(msg));
     }
 
 }

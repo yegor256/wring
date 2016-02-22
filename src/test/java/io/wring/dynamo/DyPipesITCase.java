@@ -29,12 +29,14 @@
  */
 package io.wring.dynamo;
 
+import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Tv;
 import com.jcabi.matchers.XhtmlMatchers;
 import io.wring.model.Pipe;
 import io.wring.model.Pipes;
 import io.wring.model.User;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.xembly.Xembler;
 
@@ -77,10 +79,8 @@ public final class DyPipesITCase {
             pipes.add("oops");
         }
         MatcherAssert.assertThat(
-            new Xembler(pipes.asXembly()).xml(),
-            XhtmlMatchers.hasXPaths(
-                "/pipes[count(pipe) = 5]"
-            )
+            Iterables.size(pipes.iterate()),
+            Matchers.equalTo(Tv.FIVE)
         );
     }
 

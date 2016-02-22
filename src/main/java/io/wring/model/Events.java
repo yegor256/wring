@@ -30,7 +30,6 @@
 package io.wring.model;
 
 import java.io.IOException;
-import org.xembly.Directive;
 
 /**
  * Events.
@@ -42,11 +41,11 @@ import org.xembly.Directive;
 public interface Events {
 
     /**
-     * Print as many as possible into xembly.
-     * @return Xembly directives
+     * Iterate first events.
+     * @return Events
      * @throws IOException If fails
      */
-    Iterable<Directive> asXembly() throws IOException;
+    Iterable<Event> iterate() throws IOException;
 
     /**
      * Add a new event.
