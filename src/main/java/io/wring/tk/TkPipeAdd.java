@@ -72,7 +72,8 @@ final class TkPipeAdd implements Take {
                 new XePrint(pipe.asXembly()).text(
                     "pipe #{/pipe/id/text()} created"
                 )
-            )
+            ),
+            "/pipes"
         );
     }
 

@@ -73,7 +73,7 @@ final class TkPipeDelete implements Take {
             "pipe #{/pipe/id/text()} deleted"
         );
         pipe.delete();
-        return new RsForward(new RsFlash(msg));
+        return new RsForward(new RsFlash(msg), "/pipes");
     }
 
 }
