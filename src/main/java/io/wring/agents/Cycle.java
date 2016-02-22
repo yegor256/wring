@@ -36,6 +36,7 @@ import io.wring.model.Events;
 import io.wring.model.Pipe;
 import io.wring.model.XePrint;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Queue;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -71,7 +72,9 @@ final class Cycle implements Runnable {
     @Override
     public void run() {
         if (this.pipes.isEmpty()) {
-            this.pipes.addAll(Lists.newArrayList(this.base.pipes()));
+            final Collection<Pipe> ext = Lists.newArrayList(this.base.pipes());
+            this.pipes.addAll(ext);
+            Logger.info(this, "%d pipes added to pipeline", ext.size());
         }
         final Pipe pipe = this.pipes.poll();
         if (pipe != null) {
