@@ -74,7 +74,6 @@ final class Cycle implements Runnable {
         if (this.pipes.isEmpty()) {
             final Collection<Pipe> ext = Lists.newArrayList(this.base.pipes());
             this.pipes.addAll(ext);
-            Logger.info(this, "%d pipes added to pipeline", ext.size());
         }
         final Pipe pipe = this.pipes.poll();
         if (pipe != null) {
@@ -125,7 +124,7 @@ final class Cycle implements Runnable {
             // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Throwable ex) {
             events.post(
-                agent.getClass().getCanonicalName(),
+                agent.toString(),
                 ExceptionUtils.getStackTrace(ex)
             );
         }

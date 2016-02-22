@@ -67,6 +67,11 @@ public final class AgGithub implements Agent {
     }
 
     @Override
+    public String toString() {
+        return this.getClass().getCanonicalName();
+    }
+
+    @Override
     public void push(final Events events) throws IOException {
         final Github github = new RtGithub(this.token);
         final String since = DateFormatUtils.formatUTC(

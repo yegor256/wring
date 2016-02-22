@@ -29,7 +29,6 @@
  */
 package io.wring.dynamo;
 
-import com.google.common.collect.Iterables;
 import com.jcabi.dynamo.Attributes;
 import com.jcabi.dynamo.Conditions;
 import com.jcabi.dynamo.Item;
@@ -73,18 +72,17 @@ public final class DyPipes implements Pipes {
     }
 
     @Override
-    public Iterable<Directive> asXembly() {
-        return new Directives().add("pipes").append(
-            Iterables.concat(
-                Iterables.transform(
-                    this.table()
-                        .frame()
-                        .through(new QueryValve())
-                        .where("urn", Conditions.equalTo(this.urn)),
-                    DyPipes::asDirs
-                )
-            )
-        ).up();
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    public Iterable<Directive> asXembly() throws IOException {
+        final Iterable<Item> items = this.table()
+            .frame()
+            .through(new QueryValve())
+            .where("urn", Conditions.equalTo(this.urn));
+        final Directives dirs = new Directives().add("pipes");
+        for (final Item item : items) {
+            dirs.append(new DyPipe(item).asXembly());
+        }
+        return dirs.up();
     }
 
     @Override
@@ -109,23 +107,6 @@ public final class DyPipes implements Pipes {
             .iterator()
             .next();
         return new DyPipe(item);
-    }
-
-    /**
-     * Item into event.
-     * @param item Item from Dynamo
-     * @return Directives
-     */
-    private static Iterable<Directive> asDirs(final Item item) {
-        try {
-            return new Directives()
-                .add("pipe")
-                .add("id").set(item.get("id").getN()).up()
-                .add("json").set(item.get("json").getS()).up()
-                .up();
-        } catch (final IOException ex) {
-            throw new IllegalStateException(ex);
-        }
     }
 
     /**

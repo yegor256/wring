@@ -60,6 +60,11 @@ final class JsonAgent implements Agent {
     }
 
     @Override
+    public String toString() {
+        return this.agent().toString();
+    }
+
+    @Override
     public void push(final Events events) throws IOException {
         this.agent().push(events);
     }

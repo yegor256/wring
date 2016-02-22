@@ -29,7 +29,6 @@
  */
 package io.wring.dynamo;
 
-import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Tv;
 import com.jcabi.dynamo.Attributes;
 import com.jcabi.dynamo.Conditions;
@@ -75,24 +74,24 @@ public final class DyEvents implements Events {
     }
 
     @Override
-    public Iterable<Directive> asXembly(final String marker) {
-        return new Directives().add("events").append(
-            Iterables.concat(
-                Iterables.transform(
-                    this.table()
-                        .frame()
-                        .through(
-                            new QueryValve()
-                                .withLimit(Tv.TWENTY)
-                                .withIndexName("top")
-                                .withScanIndexForward(false)
-                                .withConsistentRead(false)
-                        )
-                        .where("urn", Conditions.equalTo(this.urn)),
-                    DyEvents::asDirs
-                )
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    public Iterable<Directive> asXembly(final String marker)
+        throws IOException {
+        final Iterable<Item> items = this.table()
+            .frame()
+            .through(
+                new QueryValve()
+                    .withLimit(Tv.TWENTY)
+                    .withIndexName("top")
+                    .withScanIndexForward(false)
+                    .withConsistentRead(false)
             )
-        ).up();
+            .where("urn", Conditions.equalTo(this.urn));
+        final Directives dirs = new Directives().add("events");
+        for (final Item item : items) {
+            dirs.append(new DyEvent(item).asXembly());
+        }
+        return dirs.up();
     }
 
     @Override
@@ -127,22 +126,6 @@ public final class DyEvents implements Events {
      */
     private Table table() {
         return this.region.table("events");
-    }
-
-    /**
-     * Item into event.
-     * @param item Item from Dynamo
-     * @return Directives
-     */
-    private static Iterable<Directive> asDirs(final Item item) {
-        try {
-            return new Directives()
-                .add("event")
-                .add("title").set(item.get("title").getS()).up()
-                .up();
-        } catch (final IOException ex) {
-            throw new IllegalStateException(ex);
-        }
     }
 
 }

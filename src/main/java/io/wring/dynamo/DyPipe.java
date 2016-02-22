@@ -66,7 +66,8 @@ public final class DyPipe implements Pipe {
             .add("pipe")
             .add("urn").set(this.item.get("urn").getS()).up()
             .add("id").set(this.item.get("id").getN()).up()
-            .add("json").set(this.item.get("json").getS()).up();
+            .add("json").set(this.item.get("json").getS()).up()
+            .up();
     }
 
     @Override
