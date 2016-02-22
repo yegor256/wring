@@ -95,10 +95,10 @@ final class Cycle implements Runnable {
     private void process(final Pipe pipe) throws IOException {
         Cycle.process(
             new JsonAgent(
-                new XePrint(pipe.asXembly()).text("/pipe/json/text()")
+                new XePrint(pipe.asXembly()).text("{/pipe/json/text()}")
             ),
             this.base.user(
-                new XePrint(pipe.asXembly()).text("/pipe/urn/text()")
+                new XePrint(pipe.asXembly()).text("{/pipe/urn/text()}")
             ).events()
         );
     }

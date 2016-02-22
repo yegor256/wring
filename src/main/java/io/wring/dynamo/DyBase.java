@@ -36,6 +36,7 @@ import com.jcabi.dynamo.Region;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
 import io.wring.model.User;
+import java.util.regex.Pattern;
 
 /**
  * Dynamo Base.
@@ -45,6 +46,13 @@ import io.wring.model.User;
  * @since 1.0
  */
 public final class DyBase implements Base {
+
+    /**
+     * URN matcher.
+     */
+    private static final Pattern URN = Pattern.compile(
+        "urn:github:.*"
+    );
 
     /**
      * The region to work with.
@@ -68,6 +76,11 @@ public final class DyBase implements Base {
 
     @Override
     public User user(final String name) {
+        if (!DyBase.URN.matcher(name).matches()) {
+            throw new IllegalArgumentException(
+                String.format("invalid user URN: \"%s\"", name)
+            );
+        }
         return new DyUser(this.region, name);
     }
 
