@@ -31,6 +31,7 @@ package io.wring.agents;
 
 import com.jcabi.aspects.Tv;
 import com.jcabi.log.Logger;
+import com.jcabi.log.VerboseRunnable;
 import com.jcabi.log.VerboseThreads;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
@@ -93,7 +94,9 @@ public final class Routine implements Runnable, AutoCloseable {
 
     @Override
     public void run() {
-        final Runnable cycle = new Cycle(this.base, this.pipes);
+        final Runnable cycle = new VerboseRunnable(
+            new Cycle(this.base, this.pipes), true, true
+        );
         for (int thread = 0; thread < this.threads - 1; ++thread) {
             this.executor.scheduleWithFixedDelay(
                 cycle,
@@ -102,7 +105,7 @@ public final class Routine implements Runnable, AutoCloseable {
             );
         }
         this.executor.scheduleWithFixedDelay(
-            new Refill(this.base, this.pipes),
+            new VerboseRunnable(new Refill(this.base, this.pipes), true, true),
             1L, 1L, TimeUnit.MINUTES
         );
         Logger.info(this, "%d threads started", this.threads);
