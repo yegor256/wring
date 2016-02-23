@@ -74,7 +74,7 @@ public final class DyPipe implements Pipe {
         this.item.frame().table().delete(
             new Attributes()
                 .with("urn", this.item.get("urn").getS())
-                .with("id", this.item.get("id").getN())
+                .with("id", Long.parseLong(this.item.get("id").getN()))
         );
     }
 

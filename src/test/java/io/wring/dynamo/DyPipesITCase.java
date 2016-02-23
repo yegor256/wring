@@ -65,6 +65,7 @@ public final class DyPipesITCase {
                 "/pipe/id"
             )
         );
+        pipe.delete();
     }
 
     /**
