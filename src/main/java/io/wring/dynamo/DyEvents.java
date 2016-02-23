@@ -29,9 +29,13 @@
  */
 package io.wring.dynamo;
 
+import com.amazonaws.services.dynamodbv2.model.AttributeAction;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.AttributeValueUpdate;
 import com.amazonaws.services.dynamodbv2.model.Select;
 import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Tv;
+import com.jcabi.dynamo.AttributeUpdates;
 import com.jcabi.dynamo.Attributes;
 import com.jcabi.dynamo.Conditions;
 import com.jcabi.dynamo.Item;
@@ -95,31 +99,69 @@ public final class DyEvents implements Events {
     @Override
     public Event post(final String title, final String text)
         throws IOException {
-        final Item item = this.table().put(
-            new Attributes()
-                .with("urn", this.urn)
-                .with("title", title)
-                .with("text", text)
-                .with("rank", 1)
-                .with("time", System.currentTimeMillis())
-        );
+        final Iterator<Item> items = this.items(title);
+        final Item item;
+        if (items.hasNext()) {
+            item = items.next();
+            item.put(
+                new AttributeUpdates()
+                    .with(
+                        "rank",
+                        new AttributeValueUpdate()
+                            .withValue(new AttributeValue().withN("1"))
+                            .withAction(AttributeAction.ADD)
+                    )
+                    .with(
+                        "text",
+                        new AttributeValueUpdate()
+                            .withAction(AttributeAction.PUT)
+                            .withValue(
+                                new AttributeValue().withS(
+                                    String.format(
+                                        "%s\n\n---\n\n%s",
+                                        item.get("text").getS(),
+                                        text
+                                    )
+                                )
+                            )
+                    )
+            );
+        } else {
+            item = this.table().put(
+                new Attributes()
+                    .with("urn", this.urn)
+                    .with("title", title)
+                    .with("text", text)
+                    .with("rank", 1)
+                    .with("time", System.currentTimeMillis())
+            );
+        }
         return new DyEvent(item);
     }
 
     @Override
     public Event event(final String title) {
-        final Iterator<Item> items = this.table()
-            .frame()
-            .through(new QueryValve())
-            .where("urn", Conditions.equalTo(this.urn))
-            .where("title", Conditions.equalTo(title))
-            .iterator();
+        final Iterator<Item> items = this.items(title);
         if (!items.hasNext()) {
             throw new IllegalArgumentException(
                 String.format("event with title \"%s\" not found", title)
             );
         }
         return new DyEvent(items.next());
+    }
+
+    /**
+     * Find items by title.
+     * @param title Unique title of the event
+     * @return Items or empty
+     */
+    public Iterator<Item> items(final String title) {
+        return this.table()
+            .frame()
+            .through(new QueryValve())
+            .where("urn", Conditions.equalTo(this.urn))
+            .where("title", Conditions.equalTo(title))
+            .iterator();
     }
 
     /**

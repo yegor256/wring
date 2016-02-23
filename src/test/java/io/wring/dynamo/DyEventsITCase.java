@@ -31,12 +31,14 @@ package io.wring.dynamo;
 
 import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Tv;
+import com.jcabi.matchers.XhtmlMatchers;
 import io.wring.model.Event;
 import io.wring.model.Events;
 import io.wring.model.User;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.xembly.Xembler;
 
 /**
  * Integration case for {@link DyEvents}.
@@ -77,6 +79,26 @@ public final class DyEventsITCase {
         MatcherAssert.assertThat(
             Iterables.size(events.iterate()),
             Matchers.equalTo(0)
+        );
+    }
+
+    /**
+     * DyEvents can append text to.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void appendsToExistingEvents() throws Exception {
+        final User user = new DyUser(new Dynamo(), "peter");
+        final Events events = user.events();
+        final String title = "a simple title";
+        events.post(title, "first body");
+        events.post(title, "second body");
+        MatcherAssert.assertThat(
+            new Xembler(events.iterate().iterator().next().asXembly()).xml(),
+            XhtmlMatchers.hasXPaths(
+                "/event/text[contains(.,'first')]",
+                "/event/text[contains(.,'second')]"
+            )
         );
     }
 
