@@ -107,18 +107,8 @@ final class Cycle implements Runnable {
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
     private static void process(final Agent agent, final Events events)
         throws IOException {
-        final long start = System.currentTimeMillis();
         try {
-            final String log = Cycle.log(agent, events);
-            events.post(
-                agent.toString(),
-                Logger.format(
-                    "all good at %tFT%<tRZ, %[ms]s:\n%s",
-                    new Date(),
-                    System.currentTimeMillis() - start,
-                    log
-                )
-            );
+            events.post(agent.toString(), Cycle.log(agent, events));
             // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Throwable ex) {
             events.post(
@@ -145,7 +135,14 @@ final class Cycle implements Runnable {
             baos
         );
         root.addAppender(appender);
+        final long start = System.currentTimeMillis();
         agent.push(events);
+        Logger.info(
+            Cycle.class,
+            "all good at %tFT%<tRZ, %[ms]s",
+            new Date(),
+            System.currentTimeMillis() - start
+        );
         root.removeAppender(appender);
         return baos.toString();
     }
