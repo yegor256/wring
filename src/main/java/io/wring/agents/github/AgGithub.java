@@ -183,22 +183,21 @@ public final class AgGithub implements Agent {
         final StringBuilder body = new StringBuilder();
         while (comments.hasNext()) {
             final Comment.Smart comment = comments.next();
-            if (comment.number() <= seen) {
-                continue;
-            }
-            final String cmt = comment.body();
-            if (ptn.matcher(cmt).matches()) {
-                body.append(cmt);
-            } else {
-                Logger.info(
-                    this,
-                    "comment #%d in %s#%d ignored: %s",
-                    comment.number(), issue.repo().coordinates(),
-                    issue.number(),
-                    StringUtils.abbreviate(cmt, Tv.FIFTY).replaceAll(
-                        "[^a-zA-Z0-9-.@#%$]", " "
-                    )
-                );
+            if (comment.number() > seen) {
+                final String cmt = comment.body();
+                if (ptn.matcher(cmt).matches()) {
+                    body.append(cmt);
+                } else {
+                    Logger.info(
+                        this,
+                        "%s#%d/%d ignored: %s",
+                        comment.number(), issue.repo().coordinates(),
+                        issue.number(),
+                        StringUtils.abbreviate(cmt, Tv.FIFTY).replaceAll(
+                            "[^a-zA-Z0-9-.@#%$]", " "
+                        )
+                    );
+                }
             }
             seen = comment.number();
         }
