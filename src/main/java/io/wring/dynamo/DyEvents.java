@@ -99,7 +99,7 @@ public final class DyEvents implements Events {
                 .with("urn", this.urn)
                 .with("title", title)
                 .with("text", text)
-                .with("rank", Tv.FIFTY)
+                .with("rank", 1)
                 .with("time", System.currentTimeMillis())
         );
         return new DyEvent(item);
