@@ -181,8 +181,8 @@ public final class DyEvents implements Events {
     private static String concat(final String before, final String extra) {
         return String.format(
             "%s\n\n---\n\n%s",
-            extra,
-            StringUtils.abbreviate(before, Tv.FIVE * Tv.THOUSAND)
+            extra.trim(),
+            StringUtils.abbreviate(before.trim(), Tv.TEN * Tv.THOUSAND)
         );
     }
 

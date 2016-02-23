@@ -111,7 +111,7 @@ final class Cycle implements Runnable {
             // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Throwable ex) {
             events.post(
-                agent.toString(),
+                Cycle.class.getCanonicalName(),
                 ExceptionUtils.getStackTrace(ex)
             );
         }
