@@ -41,6 +41,7 @@ import com.jcabi.dynamo.Table;
 import io.wring.model.Event;
 import io.wring.model.Events;
 import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * Dynamo events.
@@ -107,14 +108,18 @@ public final class DyEvents implements Events {
 
     @Override
     public Event event(final String title) {
-        final Item item = this.table()
+        final Iterator<Item> items = this.table()
             .frame()
             .through(new QueryValve())
             .where("urn", Conditions.equalTo(this.urn))
             .where("title", Conditions.equalTo(title))
-            .iterator()
-            .next();
-        return new DyEvent(item);
+            .iterator();
+        if (!items.hasNext()) {
+            throw new IllegalArgumentException(
+                String.format("event with title \"%s\" not found", title)
+            );
+        }
+        return new DyEvent(items.next());
     }
 
     /**
