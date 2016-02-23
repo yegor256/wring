@@ -82,9 +82,7 @@ final class JsonAgent implements Agent {
      * @return Agent
      */
     private Agent agent() {
-        final JsonObject obj = Json.createReader(
-            IOUtils.toInputStream(this.json)
-        ).readObject();
+        final JsonObject obj = this.object();
         final Class<?> type;
         try {
             type = Class.forName(obj.getString("class"));
@@ -103,6 +101,25 @@ final class JsonAgent implements Agent {
             | IllegalAccessException
             | InvocationTargetException ex) {
             throw new IllegalStateException(ex);
+        }
+    }
+
+    /**
+     * Get object from JSON.
+     * @return JSON object
+     */
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
+    private JsonObject object() {
+        try {
+            return Json.createReader(
+                IOUtils.toInputStream(this.json)
+            ).readObject();
+            // @checkstyle IllegalCatchCheck (1 line)
+        } catch (final Throwable ex) {
+            throw new IllegalStateException(
+                String.format("failed to parse JSON: %s", this.json),
+                ex
+            );
         }
     }
 
