@@ -144,14 +144,17 @@ public final class AgGithub implements Agent {
                 )
             )
         );
-        events.post(
-            String.format("[%s#%d] %s", coords, issue.number(), issue.title()),
-            String.format(
-                "[issue #%d](%s)\n%s",
-                issue.number(), issue.htmlUrl(), this.body(issue)
-            )
-        );
-        Logger.info(this, "event in %s#%d", coords, issue.number());
+        final String body = this.body(issue);
+        if (!body.isEmpty()) {
+            events.post(
+                String.format("[%s#%d] %s", coords, issue.number(), issue.title()),
+                String.format(
+                    "[issue #%d](%s)\n%s",
+                    issue.number(), issue.htmlUrl(), body
+                )
+            );
+            Logger.info(this, "event in %s#%d", coords, issue.number());
+        }
     }
 
     /**
