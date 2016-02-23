@@ -191,8 +191,9 @@ public final class AgGithub implements Agent {
                     Logger.info(
                         this,
                         "%s#%d/%d ignored: %s",
-                        comment.number(), issue.repo().coordinates(),
+                        issue.repo().coordinates(),
                         issue.number(),
+                        comment.number(),
                         StringUtils.abbreviate(cmt, Tv.FIFTY).replaceAll(
                             "[^a-zA-Z0-9-.@#%$]", " "
                         )
