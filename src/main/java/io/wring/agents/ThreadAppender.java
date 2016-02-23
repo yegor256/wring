@@ -46,7 +46,7 @@ final class ThreadAppender extends WriterAppender {
     /**
      * The thread to listen to.
      */
-    private final transient Thread thread = Thread.currentThread();
+    private final transient Thread thread;
 
     /**
      * Ctor.
@@ -55,6 +55,7 @@ final class ThreadAppender extends WriterAppender {
      */
     ThreadAppender(final PatternLayout fmt, final OutputStream output) {
         super(fmt, output);
+        this.thread = Thread.currentThread();
     }
 
     @Override
