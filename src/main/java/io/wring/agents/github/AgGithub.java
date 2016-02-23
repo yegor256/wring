@@ -145,7 +145,9 @@ public final class AgGithub implements Agent {
             )
         );
         final String body = this.body(issue);
-        if (!body.isEmpty()) {
+        if (body.isEmpty()) {
+            Logger.info(this, "%s#%d ignored", coords, issue.number());
+        } else {
             events.post(
                 String.format("[%s#%d] %s", coords, issue.number(), issue.title()),
                 String.format(
