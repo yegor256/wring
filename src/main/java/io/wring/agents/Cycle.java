@@ -143,7 +143,7 @@ final class Cycle implements Runnable {
             org.apache.log4j.Logger.getRootLogger();
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final Appender appender = new WriterAppender(
-            new PatternLayout("%c %m\n"),
+            new PatternLayout("%m\n"),
             baos
         );
         root.addAppender(appender);
