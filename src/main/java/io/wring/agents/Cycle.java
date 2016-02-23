@@ -35,6 +35,7 @@ import io.wring.model.Events;
 import io.wring.model.Pipe;
 import io.wring.model.XePrint;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Queue;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -112,7 +113,8 @@ final class Cycle implements Runnable {
             events.post(
                 agent.toString(),
                 Logger.format(
-                    "all good, %[ms]s:\n%s",
+                    "all good at %tFT%<tRZ, %[ms]s:\n%s",
+                    new Date(),
                     System.currentTimeMillis() - start,
                     log
                 )

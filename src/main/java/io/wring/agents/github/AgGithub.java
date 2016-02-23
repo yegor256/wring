@@ -174,9 +174,10 @@ public final class AgGithub implements Agent {
         ).iterator();
         final Pattern ptn = Pattern.compile(
             String.format(
-                "(?<![a-z0-9])@%s(?![a-z0-9])",
-                issue.repo().github().users().self().login()
-            )
+                "(?<![a-zA-Z0-9-])@%s(?![a-zA-Z0-9-])",
+                Pattern.quote(issue.repo().github().users().self().login())
+            ),
+            Pattern.CASE_INSENSITIVE
         );
         int seen = this.seen(issue);
         final StringBuilder body = new StringBuilder();
