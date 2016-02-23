@@ -41,7 +41,6 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Appender;
 import org.apache.log4j.PatternLayout;
-import org.apache.log4j.WriterAppender;
 
 /**
  * Single cycle.
@@ -130,7 +129,7 @@ final class Cycle implements Runnable {
         final org.apache.log4j.Logger root =
             org.apache.log4j.Logger.getRootLogger();
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final Appender appender = new WriterAppender(
+        final Appender appender = new TgAppender(
             new PatternLayout("%m\n"),
             baos
         );
