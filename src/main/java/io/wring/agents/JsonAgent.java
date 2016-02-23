@@ -83,9 +83,15 @@ final class JsonAgent implements Agent {
      */
     private Agent agent() {
         final JsonObject obj = this.object();
+        final String name = obj.getString("class");
+        if (name == null) {
+            throw new IllegalStateException(
+                "your JSON object must contain \"class\" attribute"
+            );
+        }
         final Class<?> type;
         try {
-            type = Class.forName(obj.getString("class"));
+            type = Class.forName(name);
         } catch (final ClassNotFoundException ex) {
             throw new IllegalStateException(ex);
         }
