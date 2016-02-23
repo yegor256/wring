@@ -149,7 +149,10 @@ public final class AgGithub implements Agent {
             Logger.info(this, "%s#%d ignored", coords, issue.number());
         } else {
             events.post(
-                String.format("[%s#%d] %s", coords, issue.number(), issue.title()),
+                String.format(
+                    "[%s#%d] %s",
+                    coords, issue.number(), issue.title()
+                ),
                 String.format(
                     "[issue #%d](%s)\n%s",
                     issue.number(), issue.htmlUrl(), body
@@ -171,7 +174,7 @@ public final class AgGithub implements Agent {
         ).iterator();
         final Pattern ptn = Pattern.compile(
             String.format(
-                "[^a-z0-9]?@%s[^a-z0-9]?",
+                "(?<![a-z0-9])@%s(?![a-z0-9])",
                 issue.repo().github().users().self().login()
             )
         );
