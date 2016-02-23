@@ -127,12 +127,18 @@ public final class DyEvents implements Events {
                     )
             );
         } else {
+            final int rank;
+            if (title.startsWith("io.wring.agents.")) {
+                rank = -Tv.THOUSAND;
+            } else {
+                rank = 1;
+            }
             item = this.table().put(
                 new Attributes()
                     .with("urn", this.urn)
                     .with("title", title)
                     .with("text", text)
-                    .with("rank", 1)
+                    .with("rank", rank)
                     .with("time", System.currentTimeMillis())
             );
         }
