@@ -29,31 +29,27 @@
  */
 package io.wring.dynamo;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
+import com.amazonaws.services.dynamodbv2.model.Select;
+import com.jcabi.dynamo.Attributes;
+import com.jcabi.dynamo.Conditions;
 import com.jcabi.dynamo.Item;
+import com.jcabi.dynamo.QueryValve;
 import com.jcabi.dynamo.Region;
-import io.wring.model.Base;
-import io.wring.model.Pipe;
-import io.wring.model.User;
+import com.jcabi.dynamo.Table;
 import io.wring.model.Vault;
-import java.util.regex.Pattern;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Optional;
 
 /**
- * Dynamo Base.
+ * Dynamo Vault.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id: b2608a3132210a18236a360d0ae5459430ed3a8f $
  * @since 1.0
+ * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */
-public final class DyBase implements Base {
-
-    /**
-     * URN matcher.
-     */
-    private static final Pattern URN = Pattern.compile(
-        "urn:github:.*"
-    );
+public final class DyVault implements Vault {
 
     /**
      * The region to work with.
@@ -62,40 +58,51 @@ public final class DyBase implements Base {
 
     /**
      * Ctor.
-     */
-    public DyBase() {
-        this(new Dynamo());
-    }
-
-    /**
-     * Ctor.
      * @param reg Region
      */
-    public DyBase(final Region reg) {
+    public DyVault(final Region reg) {
         this.region = reg;
     }
 
     @Override
-    public User user(final String name) {
-        if (!DyBase.URN.matcher(name).matches()) {
-            throw new IllegalArgumentException(
-                String.format("invalid user URN: \"%s\"", name)
-            );
+    public Optional<String> value(final String key) throws IOException {
+        final Iterator<Item> items = this.table()
+            .frame()
+            .through(
+                new QueryValve()
+                    .withLimit(1)
+                    .withSelect(Select.ALL_ATTRIBUTES)
+            )
+            .where("key", Conditions.equalTo(key))
+            .iterator();
+        final Optional<String> value;
+        if (items.hasNext()) {
+            value = Optional.of(items.next().get("value").getS());
+        } else {
+            value = Optional.empty();
         }
-        return new DyUser(this.region, name);
+        return value;
     }
 
     @Override
-    public Iterable<Pipe> pipes() {
-        return Iterables.transform(
-            this.region.table("pipes").frame(),
-            (Function<Item, Pipe>) DyPipe::new
+    public void save(final String key, final Optional<String> value)
+        throws IOException {
+        if (!value.isPresent()) {
+            throw new UnsupportedOperationException("can't delete");
+        }
+        this.table().put(
+            new Attributes()
+                .with("key", key)
+                .with("value", value.get())
         );
     }
 
-    @Override
-    public Vault vault() {
-        return new DyVault(this.region);
+    /**
+     * Table to work with.
+     * @return Table
+     */
+    private Table table() {
+        return this.region.table("vault");
     }
 
 }

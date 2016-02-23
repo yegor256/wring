@@ -29,32 +29,32 @@
  */
 package io.wring.model;
 
+import java.io.IOException;
+import java.util.Optional;
+
 /**
- * Base.
+ * Vault.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
- * @since 1.0
+ * @since 0.2
  */
-public interface Base {
+public interface Vault {
 
     /**
-     * Get user by URN.
-     * @param urn URN of the user
-     * @return The user
+     * Get value by key.
+     * @param key The key
+     * @return The value (or empty)
+     * @throws IOException If fails
      */
-    User user(String urn);
+    Optional<String> value(String key) throws IOException;
 
     /**
-     * All pipes available now.
-     * @return All pipes
+     * Put value by key.
+     * @param key The key
+     * @param value The value (empty if we need to delete it)
+     * @throws IOException If fails
      */
-    Iterable<Pipe> pipes();
-
-    /**
-     * Vault.
-     * @return The vault
-     */
-    Vault vault();
+    void save(String key, Optional<String> value) throws IOException;
 
 }

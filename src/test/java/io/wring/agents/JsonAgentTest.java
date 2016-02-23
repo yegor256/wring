@@ -29,6 +29,7 @@
  */
 package io.wring.agents;
 
+import io.wring.fake.FkBase;
 import io.wring.model.Events;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -48,6 +49,7 @@ public final class JsonAgentTest {
     @Test
     public void makesAgent() throws Exception {
         final Agent agent = new JsonAgent(
+            new FkBase(),
             "{\"class\":\"io.wring.agents.FkAgent\"}"
         );
         final Events events = Mockito.mock(Events.class);

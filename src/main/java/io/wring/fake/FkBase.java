@@ -32,6 +32,7 @@ package io.wring.fake;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
 import io.wring.model.User;
+import io.wring.model.Vault;
 import java.util.Collections;
 
 /**
@@ -51,6 +52,11 @@ public final class FkBase implements Base {
     @Override
     public Iterable<Pipe> pipes() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public Vault vault() {
+        return new FkVault();
     }
 
 }

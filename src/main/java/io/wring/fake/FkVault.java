@@ -27,34 +27,27 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.model;
+package io.wring.fake;
+
+import io.wring.model.Vault;
+import java.util.Optional;
 
 /**
- * Base.
+ * Fake Vault.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
  * @since 1.0
  */
-public interface Base {
+public final class FkVault implements Vault {
 
-    /**
-     * Get user by URN.
-     * @param urn URN of the user
-     * @return The user
-     */
-    User user(String urn);
+    @Override
+    public Optional<String> value(final String key) {
+        return Optional.empty();
+    }
 
-    /**
-     * All pipes available now.
-     * @return All pipes
-     */
-    Iterable<Pipe> pipes();
-
-    /**
-     * Vault.
-     * @return The vault
-     */
-    Vault vault();
-
+    @Override
+    public void save(final String key, final Optional<String> value) {
+        // nothing
+    }
 }

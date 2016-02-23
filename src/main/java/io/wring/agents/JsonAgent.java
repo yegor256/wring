@@ -29,6 +29,7 @@
  */
 package io.wring.agents;
 
+import io.wring.model.Base;
 import io.wring.model.Events;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -47,15 +48,22 @@ import org.apache.commons.io.IOUtils;
 final class JsonAgent implements Agent {
 
     /**
+     * Base.
+     */
+    private final transient Base base;
+
+    /**
      * JSON config.
      */
     private final transient String json;
 
     /**
      * Ctor.
+     * @param bse Base
      * @param cfg JSON config
      */
-    JsonAgent(final String cfg) {
+    JsonAgent(final Base bse, final String cfg) {
+        this.base = bse;
         this.json = cfg;
     }
 
@@ -85,12 +93,12 @@ final class JsonAgent implements Agent {
         }
         final Constructor<?> ctor;
         try {
-            ctor = type.getConstructor(JsonObject.class);
+            ctor = type.getConstructor(Base.class, JsonObject.class);
         } catch (final NoSuchMethodException ex) {
             throw new IllegalStateException(ex);
         }
         try {
-            return Agent.class.cast(ctor.newInstance(obj));
+            return Agent.class.cast(ctor.newInstance(this.base, obj));
         } catch (final InstantiationException
             | IllegalAccessException
             | InvocationTargetException ex) {

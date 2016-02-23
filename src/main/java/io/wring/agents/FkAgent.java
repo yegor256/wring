@@ -29,6 +29,7 @@
  */
 package io.wring.agents;
 
+import io.wring.model.Base;
 import io.wring.model.Events;
 import java.io.IOException;
 import javax.json.JsonObject;
@@ -43,20 +44,28 @@ import javax.json.JsonObject;
 public final class FkAgent implements Agent {
 
     /**
+     * Base.
+     */
+    private final transient Base base;
+
+    /**
      * JSON config.
      */
     private final transient JsonObject json;
 
     /**
      * Ctor.
+     * @param bse Base
      * @param cfg JSON config
      */
-    public FkAgent(final JsonObject cfg) {
+    public FkAgent(final Base bse, final JsonObject cfg) {
+        this.base = bse;
         this.json = cfg;
     }
 
     @Override
     public void push(final Events events) throws IOException {
+        assert this.base != null;
         assert this.json != null;
         events.post("fake title", "fake text");
     }

@@ -415,6 +415,7 @@
                                     <tables>
                                         <table>${basedir}/src/test/dynamodb/events.json</table>
                                         <table>${basedir}/src/test/dynamodb/pipes.json</table>
+                                        <table>${basedir}/src/test/dynamodb/vault.json</table>
                                     </tables>
                                 </configuration>
                             </execution>

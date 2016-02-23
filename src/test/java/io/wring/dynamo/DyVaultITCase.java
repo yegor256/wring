@@ -27,34 +27,35 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.model;
+package io.wring.dynamo;
+
+import io.wring.model.Vault;
+import java.util.Optional;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
 /**
- * Base.
- *
+ * Integration case for {@link DyVault}.
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
- * @since 1.0
+ * @since 0.2
  */
-public interface Base {
+public final class DyVaultITCase {
 
     /**
-     * Get user by URN.
-     * @param urn URN of the user
-     * @return The user
+     * DyVault can save and read.
+     * @throws Exception If some problem inside
      */
-    User user(String urn);
-
-    /**
-     * All pipes available now.
-     * @return All pipes
-     */
-    Iterable<Pipe> pipes();
-
-    /**
-     * Vault.
-     * @return The vault
-     */
-    Vault vault();
+    @Test
+    public void savesAndReads() throws Exception {
+        final Vault vault = new DyBase(new Dynamo()).vault();
+        final String key = "the key";
+        vault.save(key, Optional.of("tje value to save"));
+        MatcherAssert.assertThat(
+            vault.value(key).get(),
+            Matchers.endsWith("to save")
+        );
+    }
 
 }

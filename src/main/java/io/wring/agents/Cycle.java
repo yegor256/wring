@@ -88,6 +88,7 @@ final class Cycle implements Runnable {
     private void process(final Pipe pipe) throws IOException {
         Cycle.process(
             new JsonAgent(
+                this.base,
                 new XePrint(pipe.asXembly()).text("{/pipe/json/text()}")
             ),
             this.base.user(
