@@ -186,7 +186,7 @@ public final class AgGithub implements Agent {
             if (comment.number() > seen) {
                 final String cmt = comment.body();
                 if (ptn.matcher(cmt).matches()) {
-                    body.append(cmt);
+                    body.append(cmt).append("\n\n");
                 } else {
                     Logger.info(
                         this,
