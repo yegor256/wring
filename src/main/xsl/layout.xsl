@@ -106,6 +106,9 @@
                                 <li>
                                     <xsl:value-of select="@sla"/>
                                 </li>
+                                <li>
+                                    <xsl:value-of select="@date"/>
+                                </li>
                             </ul>
                         </nav>
                         <nav>
