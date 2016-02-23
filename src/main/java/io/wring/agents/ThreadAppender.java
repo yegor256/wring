@@ -35,32 +35,31 @@ import org.apache.log4j.WriterAppender;
 import org.apache.log4j.spi.LoggingEvent;
 
 /**
- * Thread group appender.
+ * Thread thread appender.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
  * @since 1.0
  */
-final class TgAppender extends WriterAppender {
+final class ThreadAppender extends WriterAppender {
 
     /**
-     * The thread group to listen to .
+     * The thread to listen to.
      */
-    private final transient ThreadGroup group =
-        Thread.currentThread().getThreadGroup();
+    private final transient Thread thread = Thread.currentThread();
 
     /**
      * Ctor.
      * @param fmt Layout
      * @param output Output stream
      */
-    TgAppender(final PatternLayout fmt, final OutputStream output) {
+    ThreadAppender(final PatternLayout fmt, final OutputStream output) {
         super(fmt, output);
     }
 
     @Override
     public void append(final LoggingEvent event) {
-        if (Thread.currentThread().getThreadGroup().equals(this.group)) {
+        if (Thread.currentThread().equals(this.thread)) {
             super.append(event);
         }
     }
