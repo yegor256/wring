@@ -56,6 +56,11 @@ public final class DyVaultITCase {
             vault.value(key).get(),
             Matchers.endsWith("to save")
         );
+        vault.save(key, Optional.of("another one"));
+        MatcherAssert.assertThat(
+            vault.value(key).get(),
+            Matchers.endsWith(" one")
+        );
     }
 
 }
