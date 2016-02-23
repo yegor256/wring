@@ -90,14 +90,10 @@ final class Cycle implements Runnable {
      */
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
     private void process(final Pipe pipe) throws IOException {
+        final XePrint print = new XePrint(pipe.asXembly());
         Cycle.process(
-            new JsonAgent(
-                this.base,
-                new XePrint(pipe.asXembly()).text("{/pipe/json/text()}")
-            ),
-            this.base.user(
-                new XePrint(pipe.asXembly()).text("{/pipe/urn/text()}")
-            ).events()
+            new JsonAgent(this.base, print.text("{/pipe/json/text()}")),
+            this.base.user(print.text("{/pipe/urn/text()}")).events()
         );
     }
 

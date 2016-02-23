@@ -46,6 +46,7 @@ import io.wring.model.Event;
 import io.wring.model.Events;
 import java.io.IOException;
 import java.util.Iterator;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Dynamo events.
@@ -117,8 +118,7 @@ public final class DyEvents implements Events {
                             .withAction(AttributeAction.PUT)
                             .withValue(
                                 new AttributeValue().withS(
-                                    String.format(
-                                        "%s\n\n---\n\n%s",
+                                    DyEvents.concat(
                                         item.get("text").getS(),
                                         text
                                     )
@@ -170,6 +170,20 @@ public final class DyEvents implements Events {
      */
     private Table table() {
         return this.region.table("events");
+    }
+
+    /**
+     * Concatenate old and new messages.
+     * @param before What do we have now
+     * @param extra What do add
+     * @return Table
+     */
+    private static String concat(final String before, final String extra) {
+        return String.format(
+            "%s\n\n---\n\n%s",
+            extra,
+            StringUtils.abbreviate(before, Tv.FIVE * Tv.THOUSAND)
+        );
     }
 
 }
