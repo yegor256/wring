@@ -36,7 +36,11 @@ import io.wring.model.Pipe;
 import io.wring.model.XePrint;
 import java.io.IOException;
 import java.util.Queue;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.log4j.Appender;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.WriterAppender;
 
 /**
  * Single cycle.
@@ -108,12 +112,13 @@ final class Cycle implements Runnable {
         throws IOException {
         final long start = System.currentTimeMillis();
         try {
-            agent.push(events);
+            final String log = Cycle.log(agent, events);
             events.post(
                 agent.toString(),
                 Logger.format(
-                    "all good, %[ms]s",
-                    System.currentTimeMillis() - start
+                    "all good, %[ms]s:\n%s",
+                    System.currentTimeMillis() - start,
+                    log
                 )
             );
             // @checkstyle IllegalCatchCheck (1 line)
@@ -123,6 +128,28 @@ final class Cycle implements Runnable {
                 ExceptionUtils.getStackTrace(ex)
             );
         }
+    }
+
+    /**
+     * Push and collect logs.
+     * @param agent The agent
+     * @param events User events
+     * @return Logs
+     * @throws IOException If fails
+     */
+    private static String log(final Agent agent, final Events events)
+        throws IOException {
+        final org.apache.log4j.Logger root =
+            org.apache.log4j.Logger.getRootLogger();
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final Appender appender = new WriterAppender(
+            new PatternLayout("%c %m\n"),
+            baos
+        );
+        root.addAppender(appender);
+        agent.push(events);
+        root.removeAppender(appender);
+        return baos.toString();
     }
 
 }

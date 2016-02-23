@@ -40,6 +40,7 @@ import com.jcabi.github.RtPagination;
 import com.jcabi.github.Smarts;
 import com.jcabi.http.Request;
 import com.jcabi.http.response.RestResponse;
+import com.jcabi.log.Logger;
 import io.wring.agents.Agent;
 import io.wring.model.Base;
 import io.wring.model.Events;
@@ -150,6 +151,7 @@ public final class AgGithub implements Agent {
                 issue.number(), issue.htmlUrl(), this.body(issue)
             )
         );
+        Logger.info(this, "event in %s#%d", coords, issue.number());
     }
 
     /**
