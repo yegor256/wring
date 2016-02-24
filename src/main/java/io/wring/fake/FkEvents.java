@@ -48,8 +48,8 @@ public final class FkEvents implements Events {
     }
 
     @Override
-    public Event post(final String title, final String text) {
-        return new FkEvent();
+    public void post(final String title, final String text) {
+        // nothing
     }
 
     @Override

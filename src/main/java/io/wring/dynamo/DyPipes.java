@@ -38,6 +38,7 @@ import com.jcabi.dynamo.Item;
 import com.jcabi.dynamo.QueryValve;
 import com.jcabi.dynamo.Region;
 import com.jcabi.dynamo.Table;
+import com.jcabi.log.Logger;
 import io.wring.model.Pipe;
 import io.wring.model.Pipes;
 import java.io.IOException;
@@ -88,15 +89,19 @@ public final class DyPipes implements Pipes {
     }
 
     @Override
-    public Pipe add(final String json) throws IOException {
-        final Item item = this.table().put(
+    public void add(final String json) throws IOException {
+        final long num = System.currentTimeMillis();
+        this.table().put(
             new Attributes()
                 .with("urn", this.urn)
-                .with("id", System.currentTimeMillis())
+                .with("id", num)
                 .with("json", json)
                 .with("time", System.currentTimeMillis())
         );
-        return new DyPipe(item);
+        Logger.info(
+            this, "new pipe #%d created by %s",
+            num, this.urn
+        );
     }
 
     @Override

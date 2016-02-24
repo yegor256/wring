@@ -57,7 +57,8 @@ public final class DyPipesITCase {
     public void addsAndRemovePipes() throws Exception {
         final User user = new DyUser(new Dynamo(), "jeffrey");
         final Pipes pipes = user.pipes();
-        final Pipe pipe = pipes.add("name: hello");
+        pipes.add("name: hello");
+        final Pipe pipe = pipes.iterate().iterator().next();
         MatcherAssert.assertThat(
             new Xembler(pipe.asXembly()).xml(),
             XhtmlMatchers.hasXPaths(

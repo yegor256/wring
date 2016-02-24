@@ -51,10 +51,9 @@ public interface Events {
      * Add a new event.
      * @param title Title
      * @param text Text
-     * @return Event
      * @throws IOException If fails
      */
-    Event post(String title, String text) throws IOException;
+    void post(String title, String text) throws IOException;
 
     /**
      * Find an event by title.

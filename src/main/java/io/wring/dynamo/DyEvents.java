@@ -42,6 +42,7 @@ import com.jcabi.dynamo.Item;
 import com.jcabi.dynamo.QueryValve;
 import com.jcabi.dynamo.Region;
 import com.jcabi.dynamo.Table;
+import com.jcabi.log.Logger;
 import io.wring.model.Event;
 import io.wring.model.Events;
 import java.io.IOException;
@@ -98,7 +99,7 @@ public final class DyEvents implements Events {
     }
 
     @Override
-    public Event post(final String title, final String text)
+    public void post(final String title, final String text)
         throws IOException {
         final Iterator<Item> items = this.items(title);
         final Item item;
@@ -142,7 +143,10 @@ public final class DyEvents implements Events {
                     .with("time", System.currentTimeMillis())
             );
         }
-        return new DyEvent(item);
+        Logger.info(
+            this, "new event created for %s: \"%s\"",
+            this.urn, title
+        );
     }
 
     @Override

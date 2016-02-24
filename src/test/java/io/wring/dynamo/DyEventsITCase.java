@@ -74,7 +74,8 @@ public final class DyEventsITCase {
     public void deletesEvent() throws Exception {
         final User user = new DyUser(new Dynamo(), "boris");
         final Events events = user.events();
-        final Event event = events.post("subj", "body");
+        events.post("subj", "body");
+        final Event event = events.iterate().iterator().next();
         event.delete();
         MatcherAssert.assertThat(
             Iterables.size(events.iterate()),

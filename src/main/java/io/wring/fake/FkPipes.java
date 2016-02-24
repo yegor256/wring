@@ -48,8 +48,8 @@ public final class FkPipes implements Pipes {
     }
 
     @Override
-    public Pipe add(final String json) {
-        return new FkPipe();
+    public void add(final String json) {
+        // nothing
     }
 
     @Override

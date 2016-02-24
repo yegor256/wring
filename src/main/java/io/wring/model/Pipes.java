@@ -50,10 +50,9 @@ public interface Pipes {
     /**
      * Add new pipe.
      * @param json JSON configuration
-     * @return Pipe just added
      * @throws IOException If fails
      */
-    Pipe add(String json) throws IOException;
+    void add(String json) throws IOException;
 
     /**
      * Find pipe by number.

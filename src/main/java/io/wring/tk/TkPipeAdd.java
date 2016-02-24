@@ -30,8 +30,6 @@
 package io.wring.tk;
 
 import io.wring.model.Base;
-import io.wring.model.Pipe;
-import io.wring.model.XePrint;
 import java.io.IOException;
 import org.takes.Request;
 import org.takes.Response;
@@ -64,15 +62,11 @@ final class TkPipeAdd implements Take {
 
     @Override
     public Response act(final Request req) throws IOException {
-        final Pipe pipe = this.base.user(new RqUser(req).urn()).pipes().add(
+        this.base.user(new RqUser(req).urn()).pipes().add(
             new RqForm.Base(req).param("json").iterator().next()
         );
         return new RsForward(
-            new RsFlash(
-                new XePrint(pipe.asXembly()).text(
-                    "pipe #{/pipe/id/text()} created"
-                )
-            ),
+            new RsFlash("pipe #{/pipe/id/text()} created"),
             "/pipes"
         );
     }
