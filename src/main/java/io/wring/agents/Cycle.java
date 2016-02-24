@@ -113,7 +113,10 @@ final class Cycle implements Runnable {
         } catch (final Throwable ex) {
             events.post(
                 Cycle.class.getCanonicalName(),
-                String.format("failed to parse JSON:\n%s", json)
+                String.format(
+                    "failed to parse JSON:\n%s\n\n%s",
+                    json, ExceptionUtils.getStackTrace(ex)
+                )
             );
         }
     }
