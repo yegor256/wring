@@ -195,9 +195,21 @@ public final class AgGithub implements Agent {
             }
             // @checkstyle MagicNumber (1 line)
             if (comment.number() < 188060467) {
+                Logger.info(
+                    this,
+                    "%s#%d/%d ignored since too old",
+                    issue.repo().coordinates(), issue.number(),
+                    comment.number()
+                );
                 continue;
             }
             if (comment.author().login().equals(self)) {
+                Logger.info(
+                    this,
+                    "%s#%d/%d ignored since you're the author",
+                    issue.repo().coordinates(), issue.number(),
+                    comment.number()
+                );
                 continue;
             }
             final String cmt = comment.body();
