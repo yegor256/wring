@@ -185,6 +185,10 @@ public final class AgGithub implements Agent {
             Pattern.CASE_INSENSITIVE
         );
         int seen = this.seen(issue);
+        Logger.info(
+            this, "last seen comment in %s#%d is #%d",
+            issue.repo().coordinates(), issue.number(), seen
+        );
         final StringBuilder body = new StringBuilder();
         while (comments.hasNext()) {
             final Comment.Smart comment = comments.next();
@@ -211,6 +215,10 @@ public final class AgGithub implements Agent {
         this.base.vault().save(
             AgGithub.key(issue),
             Optional.of(Integer.toString(seen))
+        );
+        Logger.info(
+            this, "seen comment set to %d for %s#%d",
+            seen, issue.repo().coordinates(), issue.number()
         );
         return body.toString();
     }
