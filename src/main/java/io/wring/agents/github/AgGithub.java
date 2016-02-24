@@ -197,18 +197,22 @@ public final class AgGithub implements Agent {
                 continue;
             }
             final String cmt = comment.body();
+            final String start = StringUtils.abbreviate(cmt, Tv.FIFTY)
+                .replaceAll("[^a-zA-Z0-9-.@#%$]", " ").trim();
             if (ptn.matcher(cmt).matches()) {
                 body.append(StringEscapeUtils.escapeHtml4(cmt)).append("\n\n");
+                Logger.info(
+                    this,
+                    "%s#%d/%d accepted: %s",
+                    issue.repo().coordinates(), issue.number(),
+                    comment.number(), start
+                );
             } else {
                 Logger.info(
                     this,
                     "%s#%d/%d ignored: %s",
-                    issue.repo().coordinates(),
-                    issue.number(),
-                    comment.number(),
-                    StringUtils.abbreviate(cmt, Tv.FIFTY).replaceAll(
-                        "[^a-zA-Z0-9-.@#%$]", " "
-                    ).trim()
+                    issue.repo().coordinates(), issue.number(),
+                    comment.number(), start
                 );
             }
             seen = comment.number();
