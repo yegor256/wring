@@ -51,6 +51,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import javax.json.JsonObject;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -197,7 +198,7 @@ public final class AgGithub implements Agent {
             }
             final String cmt = comment.body();
             if (ptn.matcher(cmt).matches()) {
-                body.append(cmt).append("\n\n");
+                body.append(StringEscapeUtils.escapeHtml4(cmt)).append("\n\n");
             } else {
                 Logger.info(
                     this,

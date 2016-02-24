@@ -35,7 +35,6 @@ import io.wring.model.Event;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -103,7 +102,7 @@ public final class DyEvent implements Event {
             );
         }
         mtr.appendTail(out);
-        return StringEscapeUtils.escapeHtml4(out.toString());
+        return out.toString();
     }
 
 }
