@@ -201,14 +201,13 @@ public final class AgGithub implements Agent {
             } else {
                 Logger.info(
                     this,
-                    "%s#%d/%d ignored: %s (%s)",
+                    "%s#%d/%d ignored: %s",
                     issue.repo().coordinates(),
                     issue.number(),
                     comment.number(),
                     StringUtils.abbreviate(cmt, Tv.FIFTY).replaceAll(
                         "[^a-zA-Z0-9-.@#%$]", " "
-                    ).trim(),
-                    ptn
+                    ).trim()
                 );
             }
             seen = comment.number();
