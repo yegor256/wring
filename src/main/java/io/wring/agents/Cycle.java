@@ -135,7 +135,7 @@ final class Cycle implements Runnable {
         if (!log.isEmpty()) {
             log = Logger.format(
                 "%s\nall good at %tFT%<tRZ, %[ms]s",
-                log,
+                log.trim(),
                 new Date(),
                 System.currentTimeMillis() - start
             );
