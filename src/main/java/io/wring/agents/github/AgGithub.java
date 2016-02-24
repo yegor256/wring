@@ -168,20 +168,17 @@ public final class AgGithub implements Agent {
      * @param issue The issue
      * @return Body text
      * @throws IOException If fails
+     * @checkstyle ExecutableStatementCountCheck (100 lines)
      */
     private String body(final Issue.Smart issue) throws IOException {
         final Iterator<Comment.Smart> comments = new Smarts<Comment.Smart>(
             new Bulk<>(issue.comments().iterate())
         ).iterator();
+        final String self = issue.repo().github().users().self().login();
         final Pattern ptn = Pattern.compile(
             String.format(
                 ".*(?<![a-zA-Z0-9-])%s(?![a-zA-Z0-9-]).*",
-                Pattern.quote(
-                    String.format(
-                        "@%s",
-                        issue.repo().github().users().self().login()
-                    )
-                )
+                Pattern.quote(String.format("@%s", self))
             ),
             Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE
         );
@@ -198,6 +195,9 @@ public final class AgGithub implements Agent {
             }
             // @checkstyle MagicNumber (1 line)
             if (comment.number() < 188060467) {
+                continue;
+            }
+            if (comment.author().login().equals(self)) {
                 continue;
             }
             final String cmt = comment.body();
