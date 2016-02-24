@@ -82,7 +82,7 @@ final class IgnoreEvents implements Events {
 
     @Override
     public void post(final String title, final String text) throws IOException {
-        if (this.regex.matcher(text).matches()) {
+        if (this.regex.matcher(text).find()) {
             Logger.info(
                 this, "ignoring \"%s\" because of %s",
                 StringUtils.abbreviate(text, Tv.FIFTY),
