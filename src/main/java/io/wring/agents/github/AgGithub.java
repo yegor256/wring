@@ -196,6 +196,10 @@ public final class AgGithub implements Agent {
             if (comment.number() <= seen) {
                 continue;
             }
+            // @checkstyle MagicNumber (1 line)
+            if (comment.number() < 188060467) {
+                continue;
+            }
             final String cmt = comment.body();
             final String start = StringUtils.abbreviate(cmt, Tv.FIFTY)
                 .replaceAll("[^a-zA-Z0-9-.@#%$]", " ").trim();

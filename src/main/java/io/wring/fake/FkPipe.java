@@ -30,8 +30,8 @@
 package io.wring.fake;
 
 import io.wring.model.Pipe;
-import java.util.Collections;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
  * Fake pipe.
@@ -44,7 +44,11 @@ public final class FkPipe implements Pipe {
 
     @Override
     public Iterable<Directive> asXembly() {
-        return Collections.emptyList();
+        return new Directives()
+            .add("pipe")
+            .add("urn").set("urn:test:1").up()
+            .add("json").set("{}").up()
+            .up();
     }
 
     @Override

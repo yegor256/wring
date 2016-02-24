@@ -27,63 +27,33 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.dynamo;
+package io.wring.agents;
 
-import com.google.common.collect.Iterables;
-import com.jcabi.aspects.Tv;
-import com.jcabi.matchers.XhtmlMatchers;
+import com.google.common.collect.Lists;
+import io.wring.fake.FkBase;
+import io.wring.fake.FkPipe;
+import io.wring.model.Base;
 import io.wring.model.Pipe;
-import io.wring.model.Pipes;
-import io.wring.model.User;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
+import java.util.Collections;
 import org.junit.Test;
-import org.xembly.Xembler;
 
 /**
- * Integration case for {@link DyPipes}.
+ * Test case for {@link Cycle}.
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
- * @since 1.0
- * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
+ * @since 0.4
  */
-public final class DyPipesITCase {
+public final class CycleTest {
 
     /**
-     * DyPipes can add and remove pipes.
+     * Cycle can process a single pipe.
      * @throws Exception If some problem inside
      */
     @Test
-    public void addsAndRemovePipes() throws Exception {
-        final User user = new DyUser(new Dynamo(), "jeffrey");
-        final Pipes pipes = user.pipes();
-        pipes.add("{\"name\": \"hello\"}");
-        final Pipe pipe = pipes.iterate().iterator().next();
-        MatcherAssert.assertThat(
-            new Xembler(pipe.asXembly()).xml(),
-            XhtmlMatchers.hasXPaths(
-                "/pipe/json",
-                "/pipe/id"
-            )
-        );
-        pipe.delete();
-    }
-
-    /**
-     * DyPipes can add many pipes.
-     * @throws Exception If some problem inside
-     */
-    @Test
-    public void addsManyPipes() throws Exception {
-        final User user = new DyUser(new Dynamo(), "sarah");
-        final Pipes pipes = user.pipes();
-        for (int idx = 0; idx < Tv.FIVE; ++idx) {
-            pipes.add("{\"oops\":true}");
-        }
-        MatcherAssert.assertThat(
-            Iterables.size(pipes.iterate()),
-            Matchers.equalTo(Tv.FIVE)
-        );
+    public void processesSinglePipe() throws Exception {
+        final Base base = new FkBase();
+        final Pipe pipe = new FkPipe();
+        new Cycle(base, Lists.newLinkedList(Collections.singleton(pipe))).run();
     }
 
 }

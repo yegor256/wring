@@ -108,6 +108,7 @@ final class Cycle implements Runnable {
 
     /**
      * Get object from JSON.
+     * @param json JSON as a string
      * @return JSON object
      */
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
@@ -205,6 +206,7 @@ final class Cycle implements Runnable {
      * @param json JSON
      * @return Events that ignore
      */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private static Events ignoring(final Events origin, final JsonObject json) {
         Events events = origin;
         final JsonArray ignore = json.getJsonArray("ignore");
