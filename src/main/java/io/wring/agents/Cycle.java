@@ -106,15 +106,41 @@ final class Cycle implements Runnable {
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
     private static void process(final Agent agent, final Events events)
         throws IOException {
+        String title;
+        String body;
         try {
-            events.post(agent.toString(), Cycle.log(agent, events));
+            title = agent.toString();
+            body = Cycle.wrap(agent, events);
             // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Throwable ex) {
-            events.post(
-                Cycle.class.getCanonicalName(),
-                ExceptionUtils.getStackTrace(ex)
+            title = Cycle.class.getCanonicalName();
+            body = ExceptionUtils.getStackTrace(ex);
+        }
+        if (!body.isEmpty()) {
+            events.post(title, body);
+        }
+    }
+
+    /**
+     * Push, collect logs, and wrap.
+     * @param agent The agent
+     * @param events User events
+     * @return Logs
+     * @throws IOException If fails
+     */
+    private static String wrap(final Agent agent, final Events events)
+        throws IOException {
+        final long start = System.currentTimeMillis();
+        String log = Cycle.log(agent, events);
+        if (!log.isEmpty()) {
+            log = Logger.format(
+                "%s\nall good at %tFT%<tRZ, %[ms]s",
+                log,
+                new Date(),
+                System.currentTimeMillis() - start
             );
         }
+        return log;
     }
 
     /**
@@ -134,14 +160,7 @@ final class Cycle implements Runnable {
             baos
         );
         root.addAppender(appender);
-        final long start = System.currentTimeMillis();
         agent.push(events);
-        Logger.info(
-            Cycle.class,
-            "all good at %tFT%<tRZ, %[ms]s",
-            new Date(),
-            System.currentTimeMillis() - start
-        );
         root.removeAppender(appender);
         return baos.toString();
     }
