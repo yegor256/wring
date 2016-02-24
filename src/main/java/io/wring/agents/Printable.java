@@ -29,42 +29,35 @@
  */
 package io.wring.agents;
 
-import io.wring.model.Events;
-import org.junit.Test;
-import org.mockito.Mockito;
+import com.jcabi.aspects.Tv;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- * Test case for {@link IgnoreEvents}.
+ * Printable string.
+ *
  * @author Yegor Bugayenko (yegor@teamed.io)
- * @version $Id$
- * @since 0.4
+ * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
+ * @since 0.6
  */
-public final class IgnoreEventsTest {
+public final class Printable {
 
     /**
-     * IgnoreEvents can filter out events.
-     * @throws Exception If some problem inside
+     * Origin.
      */
-    @Test
-    public void filtersEventsOut() throws Exception {
-        final Events events = Mockito.mock(Events.class);
-        new IgnoreEvents(events, "/alpha.*/").post("x", "an\nalpha one\nhere");
-        Mockito.verify(events, Mockito.never()).post(
-            Mockito.anyString(), Mockito.anyString()
-        );
+    private final transient String origin;
+
+    /**
+     * Ctor.
+     * @param txt Origin
+     */
+    public Printable(final String txt) {
+        this.origin = txt;
     }
 
-    /**
-     * IgnoreEvents can pass events through.
-     * @throws Exception If some problem inside
-     */
-    @Test
-    public void passesEventsThrough() throws Exception {
-        final Events events = Mockito.mock(Events.class);
-        new IgnoreEvents(events, "/beta.*/").post("y", "there is no text here");
-        Mockito.verify(events).post(
-            Mockito.anyString(), Mockito.anyString()
-        );
+    @Override
+    public String toString() {
+        return StringUtils.abbreviate(this.origin, Tv.FIFTY)
+            .replaceAll("[^a-zA-Z0-9-.@#%$]", " ").trim();
     }
 
 }

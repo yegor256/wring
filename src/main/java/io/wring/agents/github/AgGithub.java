@@ -42,6 +42,7 @@ import com.jcabi.http.Request;
 import com.jcabi.http.response.RestResponse;
 import com.jcabi.log.Logger;
 import io.wring.agents.Agent;
+import io.wring.agents.Printable;
 import io.wring.model.Base;
 import io.wring.model.Events;
 import java.io.IOException;
@@ -62,6 +63,7 @@ import org.apache.commons.lang3.time.DateUtils;
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
  * @since 1.0
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 public final class AgGithub implements Agent {
 
@@ -170,6 +172,7 @@ public final class AgGithub implements Agent {
      * @throws IOException If fails
      * @checkstyle ExecutableStatementCountCheck (100 lines)
      */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private String body(final Issue.Smart issue) throws IOException {
         final Iterator<Comment.Smart> comments = new Smarts<Comment.Smart>(
             new Bulk<>(issue.comments().iterate())
@@ -213,22 +216,20 @@ public final class AgGithub implements Agent {
                 continue;
             }
             final String cmt = comment.body();
-            final String start = StringUtils.abbreviate(cmt, Tv.FIFTY)
-                .replaceAll("[^a-zA-Z0-9-.@#%$]", " ").trim();
             if (ptn.matcher(cmt).matches()) {
                 body.append(StringEscapeUtils.escapeHtml4(cmt)).append("\n\n");
                 Logger.info(
                     this,
                     "%s#%d/%d accepted: %s",
                     issue.repo().coordinates(), issue.number(),
-                    comment.number(), start
+                    comment.number(), new Printable(cmt)
                 );
             } else {
                 Logger.info(
                     this,
                     "%s#%d/%d ignored: %s",
                     issue.repo().coordinates(), issue.number(),
-                    comment.number(), start
+                    comment.number(), new Printable(cmt)
                 );
             }
             seen = comment.number();

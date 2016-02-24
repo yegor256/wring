@@ -29,13 +29,12 @@
  */
 package io.wring.agents;
 
-import com.jcabi.aspects.Tv;
 import com.jcabi.log.Logger;
 import io.wring.model.Event;
 import io.wring.model.Events;
 import java.io.IOException;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Events that ignores by regular expression.
@@ -62,13 +61,7 @@ final class IgnoreEvents implements Events {
      * @param ptn Pattern
      */
     IgnoreEvents(final Events events, final String ptn) {
-        this(
-            events,
-            Pattern.compile(
-                ptn,
-                Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE
-            )
-        );
+        this(events, IgnoreEvents.pattern(ptn));
     }
 
     /**
@@ -91,7 +84,7 @@ final class IgnoreEvents implements Events {
         if (this.regex.matcher(text).find()) {
             Logger.info(
                 this, "ignoring \"%s\" because of %s",
-                StringUtils.abbreviate(text, Tv.FIFTY),
+                new Printable(text),
                 this.regex
             );
         } else {
@@ -103,4 +96,27 @@ final class IgnoreEvents implements Events {
     public Event event(final String title) throws IOException {
         return this.origin.event(title);
     }
+
+    /**
+     * Make regex from a string.
+     * @param ptn Pattern
+     * @return Pattern
+     */
+    private static Pattern pattern(final String ptn) {
+        final Pattern slashes = Pattern.compile(
+            "/(.*)/", Pattern.DOTALL | Pattern.MULTILINE
+        );
+        final Matcher mtr = slashes.matcher(ptn);
+        final Pattern pattern;
+        if (mtr.matches()) {
+            pattern = Pattern.compile(
+                mtr.group(1),
+                Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE
+            );
+        } else {
+            pattern = Pattern.compile(Pattern.quote(ptn));
+        }
+        return pattern;
+    }
+
 }
