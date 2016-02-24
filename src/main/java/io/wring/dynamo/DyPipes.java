@@ -84,6 +84,7 @@ public final class DyPipes implements Pipes {
                     new QueryValve()
                         .withSelect(Select.ALL_ATTRIBUTES)
                         .withLimit(Tv.HUNDRED)
+                        .withConsistentRead(true)
                 )
                 .where("urn", Conditions.equalTo(this.urn)),
             DyPipe::new
@@ -111,7 +112,7 @@ public final class DyPipes implements Pipes {
     public Pipe pipe(final long number) {
         final Item item = this.table()
             .frame()
-            .through(new QueryValve())
+            .through(new QueryValve().withLimit(1).withConsistentRead(true))
             .where("urn", Conditions.equalTo(this.urn))
             .where("id", Conditions.equalTo(number))
             .iterator()
