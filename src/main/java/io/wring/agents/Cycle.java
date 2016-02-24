@@ -141,7 +141,7 @@ final class Cycle implements Runnable {
         String log = Cycle.log(agent, events);
         if (!log.isEmpty()) {
             log = Logger.format(
-                "%s\nall good at %tFT%<tRZ, %[ms]s",
+                "%s\ndone. %tFT%<tRZ. %[ms]s spent.",
                 log.trim(),
                 new Date(),
                 System.currentTimeMillis() - start

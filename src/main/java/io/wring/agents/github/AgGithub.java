@@ -182,7 +182,7 @@ public final class AgGithub implements Agent {
                     )
                 )
             ),
-            Pattern.CASE_INSENSITIVE | Pattern.MULTILINE
+            Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE
         );
         int seen = this.seen(issue);
         Logger.info(
