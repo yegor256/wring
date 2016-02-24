@@ -33,8 +33,14 @@ import com.jcabi.log.Logger;
 import io.wring.model.Event;
 import io.wring.model.Events;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonString;
 
 /**
  * Events that ignores by regular expression.
@@ -54,6 +60,15 @@ final class IgnoreEvents implements Events {
      * Regex to ignore.
      */
     private final transient Pattern regex;
+
+    /**
+     * Ctor.
+     * @param events Agent original
+     * @param cfg JSON config
+     */
+    IgnoreEvents(final Events events, final JsonObject cfg) {
+        this(events, IgnoreEvents.pattern(cfg));
+    }
 
     /**
      * Ctor.
@@ -117,6 +132,34 @@ final class IgnoreEvents implements Events {
             pattern = Pattern.compile(Pattern.quote(ptn));
         }
         return pattern;
+    }
+
+    /**
+     * Make regex from a JSON config.
+     * @param json JSON config
+     * @return Pattern
+     */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    private static Pattern pattern(final JsonObject json) {
+        final JsonArray ignore = json.getJsonArray("ignore");
+        final Collection<Pattern> ptns = new LinkedList<>();
+        if (ignore != null) {
+            ptns.addAll(
+                ignore.getValuesAs(JsonString.class)
+                    .stream()
+                    .map(JsonString::getString)
+                    .map(IgnoreEvents::pattern)
+                    .collect(Collectors.toList())
+            );
+        }
+        return Pattern.compile(
+            String.format(
+                "(%s)",
+                ptns.stream()
+                    .map(Pattern::toString)
+                    .collect(Collectors.joining(")|("))
+            )
+        );
     }
 
 }

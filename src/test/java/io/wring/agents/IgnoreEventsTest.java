@@ -30,6 +30,8 @@
 package io.wring.agents;
 
 import io.wring.model.Events;
+import javax.json.Json;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -63,6 +65,24 @@ public final class IgnoreEventsTest {
         final Events events = Mockito.mock(Events.class);
         new IgnoreEvents(events, "/beta.*/").post("y", "there is no text here");
         Mockito.verify(events).post(
+            Mockito.anyString(), Mockito.anyString()
+        );
+    }
+
+    /**
+     * IgnoreEvents can filter out events.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void filtersEventsOutByJsonConfig() throws Exception {
+        final Events events = Mockito.mock(Events.class);
+        new IgnoreEvents(
+            events,
+            Json.createReader(
+                IOUtils.toInputStream("{\"ignore\":[\"/gamma.*/\"]}")
+            ).readObject()
+        ).post("xx", "an\ngamma\nhere");
+        Mockito.verify(events, Mockito.never()).post(
             Mockito.anyString(), Mockito.anyString()
         );
     }
