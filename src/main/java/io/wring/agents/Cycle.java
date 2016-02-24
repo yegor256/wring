@@ -94,34 +94,26 @@ final class Cycle implements Runnable {
      * @param pipe The pipe
      * @throws IOException If fails
      */
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     private void process(final Pipe pipe) throws IOException {
         final XePrint print = new XePrint(pipe.asXembly());
-        final JsonObject json = Cycle.json(print.text("{/pipe/json/text()}"));
-        Cycle.process(
-            new JsonAgent(this.base, json),
-            Cycle.ignoring(
-                this.base.user(print.text("{/pipe/urn/text()}")).events(),
-                json
-            )
-        );
-    }
-
-    /**
-     * Get object from JSON.
-     * @param json JSON as a string
-     * @return JSON object
-     */
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    private static JsonObject json(final String json) {
+        final Events events = this.base.user(
+            print.text("{/pipe/urn/text()}")
+        ).events();
+        final String json = print.text("{/pipe/json/text()}");
         try {
-            return Json.createReader(
+            final JsonObject object = Json.createReader(
                 IOUtils.toInputStream(json)
             ).readObject();
+            Cycle.process(
+                new JsonAgent(this.base, object),
+                Cycle.ignoring(events, object)
+            );
             // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Throwable ex) {
-            throw new IllegalStateException(
-                String.format("failed to parse JSON: %s", json),
-                ex
+            events.post(
+                Cycle.class.getCanonicalName(),
+                String.format("failed to parse JSON:\n%s", json)
             );
         }
     }
