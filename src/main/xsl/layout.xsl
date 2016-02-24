@@ -39,7 +39,21 @@
                     <link rel="shortcut icon" href="/images/logo.png"/>
                 </xsl:if>
                 <xsl:if test="identity">
-                    <link rel="shortcut icon" type="image/gif" href="/favicon"/>
+                    <link id='favicon' rel="shortcut icon" type="image/png"
+                        data-origin="{links/link[@rel='favicon']/@href}"
+                        href="{links/link[@rel='favicon']/@href}?{@date}{@sla}"/>
+                    <script type="text/javascript">
+                        setInterval(
+                          function() {
+                            var link = document.getElementById('favicon');
+                            link.setAttribute(
+                              'href',
+                              link.getAttribute('data-origin') + '?' + new Date().getTime()
+                            );
+                          },
+                          60 * 1000
+                        );
+                    </script>
                 </xsl:if>
                 <link rel="stylesheet" href="http://yegor256.github.io/tacit/tacit.min.css"/>
                 <link rel="stylesheet" href="/css/main.css"/>
