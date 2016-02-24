@@ -62,6 +62,7 @@ import org.takes.tk.TkWrap;
  * @since 1.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  * @checkstyle MultipleStringLiteralsCheck (500 lines)
+ * @checkstyle ClassFanOutComplexityCheck (500 lines)
  */
 public final class TkApp extends TkWrap {
 
