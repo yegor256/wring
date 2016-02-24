@@ -30,6 +30,7 @@
 package io.wring.agents;
 
 import com.jcabi.log.Logger;
+import com.jcabi.manifests.Manifests;
 import io.wring.model.Base;
 import io.wring.model.Events;
 import io.wring.model.Pipe;
@@ -117,7 +118,13 @@ final class Cycle implements Runnable {
             body = ExceptionUtils.getStackTrace(ex);
         }
         if (!body.isEmpty()) {
-            events.post(title, body);
+            events.post(
+                String.format(
+                    "%s by %s",
+                    title, Manifests.read("Wring-Version")
+                ),
+                body
+            );
         }
     }
 
@@ -156,7 +163,7 @@ final class Cycle implements Runnable {
             org.apache.log4j.Logger.getRootLogger();
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final Appender appender = new ThreadAppender(
-            new PatternLayout("%m\n"),
+            new PatternLayout("%p %m\n"),
             baos
         );
         root.addAppender(appender);
