@@ -29,32 +29,29 @@
  */
 package io.wring.agents;
 
-import io.wring.fake.FkBase;
 import io.wring.model.Events;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
- * Test case for {@link JsonAgent}.
+ * Test case for {@link IgnoreEvents}.
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
- * @since 1.0
+ * @since 0.4
  */
-public final class JsonAgentTest {
+public final class IgnoreEventsTest {
 
     /**
-     * JsonAgent can make an agent.
+     * IgnoreEvents can filter out events.
      * @throws Exception If some problem inside
      */
     @Test
-    public void makesAgent() throws Exception {
-        final Agent agent = new JsonAgent(
-            new FkBase(),
-            "{\"class\":\"io.wring.agents.FkAgent\"}"
-        );
+    public void filtersEventsOut() throws Exception {
         final Events events = Mockito.mock(Events.class);
-        agent.push(events);
-        Mockito.verify(events).post(Mockito.anyString(), Mockito.anyString());
+        new IgnoreEvents(events, "alpha.*").post("x", "alpha one");
+        Mockito.verify(events, Mockito.never()).post(
+            Mockito.anyString(), Mockito.anyString()
+        );
     }
 
 }

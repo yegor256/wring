@@ -34,7 +34,9 @@ import io.wring.model.Events;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import javax.json.Json;
 import javax.json.JsonObject;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Agent in JSON.
@@ -54,6 +56,15 @@ final class JsonAgent implements Agent {
      * JSON config.
      */
     private final transient JsonObject json;
+
+    /**
+     * Ctor.
+     * @param bse Base
+     * @param cfg JSON config
+     */
+    JsonAgent(final Base bse, final String cfg) {
+        this(bse, Json.createReader(IOUtils.toInputStream(cfg)).readObject());
+    }
 
     /**
      * Ctor.
