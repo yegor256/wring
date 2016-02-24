@@ -127,6 +127,10 @@ public final class DyEvents implements Events {
                             )
                     )
             );
+            Logger.info(
+                this, "event updated for %s: \"%s\"",
+                this.urn, title
+            );
         } else {
             final int rank;
             if (title.startsWith("io.wring.agents.")) {
@@ -134,7 +138,7 @@ public final class DyEvents implements Events {
             } else {
                 rank = 1;
             }
-            item = this.table().put(
+            this.table().put(
                 new Attributes()
                     .with("urn", this.urn)
                     .with("title", title)
@@ -142,11 +146,11 @@ public final class DyEvents implements Events {
                     .with("rank", rank)
                     .with("time", System.currentTimeMillis())
             );
+            Logger.info(
+                this, "new event created for %s: \"%s\"",
+                this.urn, title
+            );
         }
-        Logger.info(
-            this, "new event created for %s: \"%s\"",
-            this.urn, title
-        );
     }
 
     @Override
