@@ -62,7 +62,13 @@ final class IgnoreEvents implements Events {
      * @param ptn Pattern
      */
     IgnoreEvents(final Events events, final String ptn) {
-        this(events, Pattern.compile(ptn));
+        this(
+            events,
+            Pattern.compile(
+                ptn,
+                Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE
+            )
+        );
     }
 
     /**

@@ -48,8 +48,21 @@ public final class IgnoreEventsTest {
     @Test
     public void filtersEventsOut() throws Exception {
         final Events events = Mockito.mock(Events.class);
-        new IgnoreEvents(events, "alpha.*").post("x", "it's alpha one here");
+        new IgnoreEvents(events, "alpha.*").post("x", "it's\nalpha one\nhere");
         Mockito.verify(events, Mockito.never()).post(
+            Mockito.anyString(), Mockito.anyString()
+        );
+    }
+
+    /**
+     * IgnoreEvents can pass events through.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void passesEventsThrough() throws Exception {
+        final Events events = Mockito.mock(Events.class);
+        new IgnoreEvents(events, "beta.*").post("y", "there is no text here");
+        Mockito.verify(events).post(
             Mockito.anyString(), Mockito.anyString()
         );
     }
