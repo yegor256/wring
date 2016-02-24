@@ -64,6 +64,11 @@ public final class FkAgent implements Agent {
     }
 
     @Override
+    public String toString() {
+        return this.getClass().getCanonicalName();
+    }
+
+    @Override
     public void push(final Events events) throws IOException {
         assert this.base != null;
         assert this.json != null;

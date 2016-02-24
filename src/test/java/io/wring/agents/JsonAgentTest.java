@@ -31,6 +31,8 @@ package io.wring.agents;
 
 import io.wring.fake.FkBase;
 import io.wring.model.Events;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -55,6 +57,21 @@ public final class JsonAgentTest {
         final Events events = Mockito.mock(Events.class);
         agent.push(events);
         Mockito.verify(events).post(Mockito.anyString(), Mockito.anyString());
+    }
+
+    /**
+     * JsonAgent can parse complex JSON.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void parsesComplexJson() throws Exception {
+        MatcherAssert.assertThat(
+            new JsonAgent(
+                new FkBase(),
+                "{\"class\":\"io.wring.agents.FkAgent\",\"x\":\"\\\\E\"}"
+            ).toString(),
+            Matchers.equalTo(FkAgent.class.getCanonicalName())
+        );
     }
 
 }
