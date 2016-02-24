@@ -35,7 +35,12 @@
             <head>
                 <meta charset="UTF-8"/>
                 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/>
-                <link rel="shortcut icon" href="/images/logo.png"/>
+                <xsl:if test="not(identity)">
+                    <link rel="shortcut icon" href="/images/logo.png"/>
+                </xsl:if>
+                <xsl:if test="identity">
+                    <link rel="shortcut icon" type="image/gif" href="/favicon"/>
+                </xsl:if>
                 <link rel="stylesheet" href="http://yegor256.github.io/tacit/tacit.min.css"/>
                 <link rel="stylesheet" href="/css/main.css"/>
                 <xsl:apply-templates select="." mode="head"/>

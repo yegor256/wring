@@ -160,6 +160,7 @@ public final class TkApp extends TkWrap {
                 new TkSecure(
                     new TkFork(
                         new FkRegex("/", new TkEvents(base)),
+                        new FkRegex("/favicon", new TkFavicon(base)),
                         new FkRegex("/pipes", new TkPipes(base)),
                         new FkRegex("/pipe-add", new TkPipeAdd(base)),
                         new FkRegex("/pipe-delete", new TkPipeDelete(base)),
