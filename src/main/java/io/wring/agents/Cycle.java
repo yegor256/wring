@@ -38,6 +38,11 @@ import io.wring.model.XePrint;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Queue;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonString;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Appender;
@@ -89,13 +94,35 @@ final class Cycle implements Runnable {
      * @param pipe The pipe
      * @throws IOException If fails
      */
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     private void process(final Pipe pipe) throws IOException {
         final XePrint print = new XePrint(pipe.asXembly());
+        final JsonObject json = Cycle.json(print.text("{/pipe/json/text()}"));
         Cycle.process(
-            new JsonAgent(this.base, print.text("{/pipe/json/text()}")),
-            this.base.user(print.text("{/pipe/urn/text()}")).events()
+            new JsonAgent(this.base, json),
+            Cycle.ignoring(
+                this.base.user(print.text("{/pipe/urn/text()}")).events(),
+                json
+            )
         );
+    }
+
+    /**
+     * Get object from JSON.
+     * @return JSON object
+     */
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
+    private static JsonObject json(final String json) {
+        try {
+            return Json.createReader(
+                IOUtils.toInputStream(json)
+            ).readObject();
+            // @checkstyle IllegalCatchCheck (1 line)
+        } catch (final Throwable ex) {
+            throw new IllegalStateException(
+                String.format("failed to parse JSON: %s", json),
+                ex
+            );
+        }
     }
 
     /**
@@ -170,6 +197,24 @@ final class Cycle implements Runnable {
         agent.push(events);
         root.removeAppender(appender);
         return baos.toString();
+    }
+
+    /**
+     * Make ignoring events, if necessary.
+     * @param origin Original
+     * @param json JSON
+     * @return Events that ignore
+     */
+    private static Events ignoring(final Events origin, final JsonObject json) {
+        Events events = origin;
+        final JsonArray ignore = json.getJsonArray("ignore");
+        if (ignore != null) {
+            for (final JsonString regex
+                : ignore.getValuesAs(JsonString.class)) {
+                events = new IgnoreEvents(events, regex.toString());
+            }
+        }
+        return events;
     }
 
 }

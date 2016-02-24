@@ -29,82 +29,72 @@
  */
 package io.wring.agents;
 
-import io.wring.model.Base;
+import com.jcabi.aspects.Tv;
+import com.jcabi.log.Logger;
+import io.wring.model.Event;
 import io.wring.model.Events;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import javax.json.JsonObject;
+import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- * Agent in JSON.
+ * Events that ignores by regular expression.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
- * @since 1.0
+ * @since 0.4
  */
-final class JsonAgent implements Agent {
+final class IgnoreEvents implements Events {
 
     /**
-     * Base.
+     * Origin.
      */
-    private final transient Base base;
+    private final transient Events origin;
 
     /**
-     * JSON config.
+     * Regex to ignore.
      */
-    private final transient JsonObject json;
+    private final transient Pattern regex;
 
     /**
      * Ctor.
-     * @param bse Base
-     * @param cfg JSON config
+     * @param events Agent original
+     * @param ptn Pattern
      */
-    JsonAgent(final Base bse, final JsonObject cfg) {
-        this.base = bse;
-        this.json = cfg;
-    }
-
-    @Override
-    public String toString() {
-        return this.agent().toString();
-    }
-
-    @Override
-    public void push(final Events events) throws IOException {
-        this.agent().push(events);
+    IgnoreEvents(final Events events, final String ptn) {
+        this(events, Pattern.compile(ptn));
     }
 
     /**
-     * Make an agent.
-     * @return Agent
+     * Ctor.
+     * @param events Agent original
+     * @param ptn Pattern
      */
-    private Agent agent() {
-        final String name = this.json.getString("class");
-        if (name == null) {
-            throw new IllegalStateException(
-                "your JSON object must contain \"class\" attribute"
+    IgnoreEvents(final Events events, final Pattern ptn) {
+        this.origin = events;
+        this.regex = ptn;
+    }
+
+    @Override
+    public Iterable<Event> iterate() throws IOException {
+        return this.origin.iterate();
+    }
+
+    @Override
+    public void post(final String title, final String text) throws IOException {
+        if (this.regex.matcher(text).matches()) {
+            Logger.info(
+                this, "ignoring \"%s\" because of %s",
+                StringUtils.abbreviate(text, Tv.FIFTY),
+                this.regex
             );
-        }
-        final Class<?> type;
-        try {
-            type = Class.forName(name);
-        } catch (final ClassNotFoundException ex) {
-            throw new IllegalStateException(ex);
-        }
-        final Constructor<?> ctor;
-        try {
-            ctor = type.getConstructor(Base.class, JsonObject.class);
-        } catch (final NoSuchMethodException ex) {
-            throw new IllegalStateException(ex);
-        }
-        try {
-            return Agent.class.cast(ctor.newInstance(this.base, this.json));
-        } catch (final InstantiationException
-            | IllegalAccessException
-            | InvocationTargetException ex) {
-            throw new IllegalStateException(ex);
+        } else {
+            this.origin.post(title, text);
         }
     }
 
+    @Override
+    public Event event(final String title) throws IOException {
+        return this.origin.event(title);
+    }
 }
