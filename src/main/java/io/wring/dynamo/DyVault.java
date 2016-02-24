@@ -72,6 +72,7 @@ public final class DyVault implements Vault {
                 new QueryValve()
                     .withLimit(1)
                     .withSelect(Select.ALL_ATTRIBUTES)
+                    .withConsistentRead(true)
             )
             .where("key", Conditions.equalTo(key))
             .iterator();

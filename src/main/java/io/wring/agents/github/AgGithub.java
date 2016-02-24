@@ -159,7 +159,7 @@ public final class AgGithub implements Agent {
                     issue.number(), issue.htmlUrl(), body
                 )
             );
-            Logger.info(this, "event in %s#%d", coords, issue.number());
+            Logger.info(this, "new event in %s#%d", coords, issue.number());
         }
     }
 
