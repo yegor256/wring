@@ -217,7 +217,11 @@ public final class AgGithub implements Agent {
             }
             final String cmt = comment.body();
             if (ptn.matcher(cmt).matches()) {
-                body.append(StringEscapeUtils.escapeHtml4(cmt)).append("\n\n");
+                body.append('@')
+                    .append(comment.author().login())
+                    .append(": ")
+                    .append(StringEscapeUtils.escapeHtml4(cmt))
+                    .append("\n\n");
                 Logger.info(
                     this,
                     "%s#%d/%d accepted: %s",
