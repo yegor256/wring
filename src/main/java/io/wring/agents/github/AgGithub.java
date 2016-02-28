@@ -219,6 +219,8 @@ public final class AgGithub implements Agent {
             if (ptn.matcher(cmt).matches()) {
                 body.append('@')
                     .append(comment.author().login())
+                    .append(" at ")
+                    .append(String.format("%te-%<tb-%<tY", comment.createdAt()))
                     .append(": ")
                     .append(StringEscapeUtils.escapeHtml4(cmt))
                     .append("\n\n");
