@@ -156,10 +156,7 @@ public final class AgGithub implements Agent {
                     "[%s#%d] %s",
                     coords, issue.number(), issue.title()
                 ),
-                String.format(
-                    "[issue #%d](%s)\n%s",
-                    issue.number(), issue.htmlUrl(), body
-                )
+                body
             );
             Logger.info(this, "new event in %s#%d", coords, issue.number());
         }
@@ -219,9 +216,13 @@ public final class AgGithub implements Agent {
             if (ptn.matcher(cmt).matches()) {
                 body.append('@')
                     .append(comment.author().login())
-                    .append(" at ")
+                    .append(" at [")
                     .append(String.format("%te-%<tb-%<tY", comment.createdAt()))
-                    .append(": ")
+                    .append("](")
+                    .append(issue.htmlUrl())
+                    .append("#issuecomment-")
+                    .append(comment.number())
+                    .append("): ")
                     .append(StringEscapeUtils.escapeHtml4(cmt))
                     .append("\n\n");
                 Logger.info(
