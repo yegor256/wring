@@ -92,13 +92,14 @@ public final class DyEventsITCase {
         final User user = new DyUser(new Dynamo(), "peter");
         final Events events = user.events();
         final String title = "a simple title";
-        events.post(title, "first body");
-        events.post(title, "second body");
+        events.post(title, "\n\tfirst body");
+        events.post(title, "second body\n\n");
         MatcherAssert.assertThat(
             new Xembler(events.iterate().iterator().next().asXembly()).xml(),
             XhtmlMatchers.hasXPaths(
                 "/event/text[contains(.,'first')]",
-                "/event/text[contains(.,'second')]"
+                "/event/text[contains(.,'second body')]",
+                "/event/text[not(contains(.,'first body\n'))]"
             )
         );
     }
