@@ -75,6 +75,7 @@ final class TkFavicon implements Take {
             width, height, BufferedImage.TYPE_INT_RGB
         );
         final Graphics graph = image.getGraphics();
+        // @checkstyle MagicNumber (1 line)
         graph.setColor(new Color(0x36, 0x7a, 0xc3));
         graph.fillRect(0, 0, width, height);
         final int total = Iterables.size(
