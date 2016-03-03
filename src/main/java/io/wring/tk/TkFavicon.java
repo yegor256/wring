@@ -34,7 +34,8 @@ import com.jcabi.aspects.Tv;
 import io.wring.model.Base;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -74,7 +75,7 @@ final class TkFavicon implements Take {
         final BufferedImage image = new BufferedImage(
             width, height, BufferedImage.TYPE_INT_RGB
         );
-        final Graphics graph = image.getGraphics();
+        final Graphics2D graph = Graphics2D.class.cast(image.getGraphics());
         // @checkstyle MagicNumber (1 line)
         graph.setColor(new Color(0x36, 0x7a, 0xc3));
         graph.fillRect(0, 0, width, height);
@@ -90,6 +91,10 @@ final class TkFavicon implements Take {
             }
             graph.setColor(Color.WHITE);
             graph.setFont(new Font(Font.SANS_SERIF, Font.BOLD, height / 2));
+            graph.setRenderingHint(
+                RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON
+            );
             graph.drawString(
                 text,
                 width - width / Tv.TEN

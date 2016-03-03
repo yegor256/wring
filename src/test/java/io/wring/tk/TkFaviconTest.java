@@ -29,45 +29,33 @@
  */
 package io.wring.tk;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import org.takes.HttpException;
-import org.takes.Request;
-import org.takes.facets.auth.Identity;
-import org.takes.facets.auth.RqAuth;
-import org.takes.rq.RqWrap;
+import io.wring.fake.FkBase;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+import org.takes.Take;
+import org.takes.rq.RqFake;
+import org.takes.rs.RsPrint;
 
 /**
- * User in request.
- *
+ * Test case for {@link TkFavicon}.
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
- * @since 1.0
+ * @since 0.7
  */
-public final class RqUser extends RqWrap {
+public final class TkFaviconTest {
 
     /**
-     * Ctor.
-     * @param req Request
+     * TkFavicon can render home page.
+     * @throws Exception If some problem inside
      */
-    public RqUser(final Request req) {
-        super(req);
-    }
-
-    /**
-     * Get URN.
-     * @return URN
-     * @throws IOException If fails
-     */
-    public String urn() throws IOException {
-        final Identity identity = new RqAuth(this).identity();
-        if (identity.equals(Identity.ANONYMOUS)) {
-            throw new HttpException(
-                HttpURLConnection.HTTP_FORBIDDEN,
-                "you're not authorized"
-            );
-        }
-        return identity.urn();
+    @Test
+    public void rendersIcon() throws Exception {
+        final Take take = new TkAppAuth(new TkFavicon(new FkBase()));
+        MatcherAssert.assertThat(
+            new RsPrint(take.act(new RqFake())).printBody(),
+            Matchers.notNullValue()
+        );
     }
 
 }
