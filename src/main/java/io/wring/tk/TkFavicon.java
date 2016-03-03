@@ -69,17 +69,17 @@ final class TkFavicon implements Take {
 
     @Override
     public Response act(final Request req) throws IOException {
-        final int total = Iterables.size(
-            this.base.user(new RqUser(req).urn()).events().iterate()
-        );
         final int width = 64;
         final int height = 64;
         final BufferedImage image = new BufferedImage(
             width, height, BufferedImage.TYPE_INT_RGB
         );
         final Graphics graph = image.getGraphics();
-        graph.setColor(Color.GRAY);
+        graph.setColor(new Color(0x36, 0x7a, 0xc3));
         graph.fillRect(0, 0, width, height);
+        final int total = Iterables.size(
+            this.base.user(new RqUser(req).urn()).events().iterate()
+        );
         if (total > 0) {
             final String text;
             if (total >= Tv.HUNDRED) {
