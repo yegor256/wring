@@ -90,18 +90,18 @@
         <dependency>
             <groupId>org.takes</groupId>
             <artifactId>takes</artifactId>
-            <version>0.31</version>
+            <version>0.32.1</version>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-core</artifactId>
-            <version>1.10.48</version>
+            <version>1.10.57</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-dynamodb</artifactId>
-            <version>1.10.48</version>
+            <version>1.10.57</version>
         </dependency>
         <dependency>
             <groupId>com.jcabi.incubator</groupId>
@@ -155,7 +155,7 @@
         <dependency>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-http</artifactId>
-            <version>1.14.2</version>
+            <version>1.16</version>
         </dependency>
         <dependency>
             <groupId>com.jcabi</groupId>

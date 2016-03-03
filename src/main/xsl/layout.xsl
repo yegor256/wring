@@ -112,7 +112,7 @@
                     </article>
                     <footer>
                         <nav>
-                            <ul style="color:gray;">
+                            <ul style="color:gray;" class="bottom">
                                 <li>
                                     <xsl:text>v</xsl:text>
                                     <xsl:value-of select="version/name"/>
