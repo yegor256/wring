@@ -74,9 +74,13 @@ final class Dynamo implements Region {
         );
         final Region region;
         if (key.startsWith("AAAAA")) {
-            final int port = Integer.parseInt(
-                System.getProperty("dynamo.port")
-            );
+            final String property = System.getProperty("dynamo.port");
+            if (property == null) {
+                throw new IllegalStateException(
+                    "You're not supposed to run this test outside of Maven"
+                );
+            }
+            final int port = Integer.parseInt(property);
             region = new Region.Simple(new Credentials.Direct(creds, port));
             Logger.warn(Dynamo.class, "test DynamoDB at port #%d", port);
         } else {

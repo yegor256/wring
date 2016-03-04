@@ -37,6 +37,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.xembly.Directive;
 import org.xembly.Directives;
+import org.xembly.Xembler;
 
 /**
  * Dynamo event.
@@ -69,8 +70,10 @@ public final class DyEvent implements Event {
             .add("event")
             .add("urn").set(this.item.get("urn").getS()).up()
             .add("rank").set(this.item.get("rank").getN()).up()
-            .add("title").set(this.item.get("title").getS()).up()
-            .add("text").set(text).up()
+            .add("title")
+            .set(Xembler.escape(this.item.get("title").getS())).up()
+            .add("text")
+            .set(Xembler.escape(text)).up()
             .add("html").set(DyEvent.html(text)).up();
     }
 
@@ -106,3 +109,4 @@ public final class DyEvent implements Event {
     }
 
 }
+

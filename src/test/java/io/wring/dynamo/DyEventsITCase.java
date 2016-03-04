@@ -93,6 +93,7 @@ public final class DyEventsITCase {
         final Events events = user.events();
         final String title = "a simple title";
         events.post(title, "\n\tfirst body");
+        events.post(title, "\n\u0000\u00fdin between");
         events.post(title, "second body\n\n");
         MatcherAssert.assertThat(
             new Xembler(events.iterate().iterator().next().asXembly()).xml(),

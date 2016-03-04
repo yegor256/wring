@@ -35,6 +35,7 @@ import io.wring.model.Pipe;
 import java.io.IOException;
 import org.xembly.Directive;
 import org.xembly.Directives;
+import org.xembly.Xembler;
 
 /**
  * Dynamo pipe.
@@ -66,7 +67,7 @@ public final class DyPipe implements Pipe {
             .add("pipe")
             .add("urn").set(this.item.get("urn").getS()).up()
             .add("id").set(this.item.get("id").getN()).up()
-            .add("json").set(this.item.get("json").getS()).up();
+            .add("json").set(Xembler.escape(this.item.get("json").getS())).up();
     }
 
     @Override
