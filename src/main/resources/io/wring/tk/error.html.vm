@@ -17,6 +17,13 @@
                         </li>
                     </ul>
                 </nav>
+                <nav>
+                    <ul>
+                        <li style="color:red;font-weight:bold;">
+                            Internal Application Error
+                        </li>
+                    </ul>
+                </nav>
             </header>
             <article>
                 <p>
