@@ -27,6 +27,14 @@
                 </p>
                 <pre style="white-space:pre">${err}</pre>
             </article>
+            <footer>
+                <nav>
+                    <ul>
+                        <li>${version}</li>
+                        <li>${revision}</li>
+                    </ul>
+                </nav>
+            </footer>
         </section>
     </body>
 </html>
