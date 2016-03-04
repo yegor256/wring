@@ -74,7 +74,8 @@ public final class DyEvent implements Event {
             .set(Xembler.escape(this.item.get("title").getS())).up()
             .add("text")
             .set(Xembler.escape(text)).up()
-            .add("html").set(DyEvent.html(text)).up();
+            .add("html")
+            .set(Xembler.escape(DyEvent.html(text))).up();
     }
 
     @Override
