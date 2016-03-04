@@ -31,7 +31,7 @@
                 <nav>
                     <ul>
                         <li>${version}</li>
-                        <li>${revision}</li>
+                        <li>${rev}</li>
                     </ul>
                 </nav>
             </footer>
