@@ -57,6 +57,11 @@ import org.takes.tk.TkWrap;
 final class TkAppFallback extends TkWrap {
 
     /**
+     * Version.
+     */
+    private static final String VERSION = Manifests.read("Wring-Version");
+
+    /**
      * Revision.
      */
     private static final String REV = Manifests.read("Wring-Revision");
@@ -112,7 +117,8 @@ final class TkAppFallback extends TkWrap {
                         "err",
                         ExceptionUtils.getStackTrace(req.throwable())
                     ),
-                    new RsVelocity.Pair("rev", TkAppFallback.REV)
+                    new RsVelocity.Pair("rev", TkAppFallback.REV),
+                    new RsVelocity.Pair("version", TkAppFallback.VERSION)
                 ),
                 "text/html"
             ),
