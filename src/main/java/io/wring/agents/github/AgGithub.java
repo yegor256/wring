@@ -127,7 +127,7 @@ public final class AgGithub implements Agent {
     /**
      * Post an event.
      * @param github Github client
-     * @param json JSON object
+     * @param json JSON object of the notification event
      * @param events Events
      * @throws IOException If fails
      */

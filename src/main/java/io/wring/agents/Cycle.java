@@ -136,7 +136,11 @@ final class Cycle implements Runnable {
             // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Throwable ex) {
             title = Cycle.class.getCanonicalName();
-            body = ExceptionUtils.getStackTrace(ex);
+            body = String.format(
+                "%tFT%<tRZ %s",
+                new Date(),
+                ExceptionUtils.getStackTrace(ex)
+            );
         }
         if (!body.isEmpty()) {
             events.post(
