@@ -51,7 +51,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import javax.json.Json;
 import javax.json.JsonObject;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -134,6 +136,15 @@ public final class AgGithub implements Agent {
     private void push(final Github github, final JsonObject json,
         final Events events)
         throws IOException {
+        final JsonObject subject = json.getJsonObject("subject");
+        if (!"Issue".equals(subject.getString("type"))) {
+            try (final ByteArrayOutputStream baos =
+                new ByteArrayOutputStream()) {
+                Json.createWriter(baos).write(subject);
+                Logger.warn(this, "subject ignored: %s", baos.toString());
+            }
+            return;
+        }
         final Coordinates coords = new Coordinates.Simple(
             json.getJsonObject("repository").getString("full_name")
         );
@@ -141,7 +152,7 @@ public final class AgGithub implements Agent {
             github.repos().get(coords).issues().get(
                 Integer.parseInt(
                     StringUtils.substringAfterLast(
-                        json.getJsonObject("subject").getString("url"),
+                        subject.getString("url"),
                         "/"
                     )
                 )
