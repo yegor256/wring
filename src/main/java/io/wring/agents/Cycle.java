@@ -29,6 +29,7 @@
  */
 package io.wring.agents;
 
+import com.jcabi.aspects.Tv;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
 import io.wring.model.Base;
@@ -42,6 +43,7 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Appender;
 import org.apache.log4j.PatternLayout;
@@ -140,6 +142,10 @@ final class Cycle implements Runnable {
                 "%tFT%<tRZ %s",
                 new Date(),
                 ExceptionUtils.getStackTrace(ex)
+            );
+            events.post(
+                StringUtils.abbreviate(ex.getLocalizedMessage(), Tv.FIFTY),
+                body
             );
         }
         if (!body.isEmpty()) {
