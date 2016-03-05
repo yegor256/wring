@@ -137,13 +137,17 @@ public final class AgGithub implements Agent {
         final Events events)
         throws IOException {
         final JsonObject subject = json.getJsonObject("subject");
-        if (!"Issue".equals(subject.getString("type"))) {
+        final String type = subject.getString("type");
+        if (!"Issue".equals(type) && !"PullRequest".equals(type)) {
             try (final ByteArrayOutputStream baos =
                 new ByteArrayOutputStream()) {
                 Json.createWriter(baos).write(subject);
-                Logger.warn(this, "subject ignored: %s", baos.toString());
+                throw new IllegalArgumentException(
+                    String.format(
+                        "subject ignored: %s", baos.toString()
+                    )
+                );
             }
-            return;
         }
         final Coordinates coords = new Coordinates.Simple(
             json.getJsonObject("repository").getString("full_name")
