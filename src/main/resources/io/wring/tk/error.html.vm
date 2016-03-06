@@ -13,7 +13,9 @@
                 <nav>
                     <ul>
                         <li>
-                            <img src="/images/logo.svg" style="width:150px;"/>
+                            <a href="/">
+                                <img src="/images/logo.svg" style="width:150px;"/>
+                            </a>
                         </li>
                     </ul>
                 </nav>
