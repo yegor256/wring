@@ -98,14 +98,12 @@ final class TkEvents implements Take {
         return new XeDirectives(
             new Directives()
                 .append(dirs)
-                .push()
                 .append(
                     new XeLink(
                         "delete",
                         new Href("/event-delete").with("title", title)
                     ).toXembly()
                 )
-                .pop().push()
                 .append(
                     new XeLink(
                         "down",
