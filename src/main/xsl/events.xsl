@@ -48,7 +48,7 @@
         <xsl:apply-templates select="event"/>
     </xsl:template>
     <xsl:template match="event">
-        <p>
+        <p class="event">
             <code>
                 <a href="{links/link[@rel='down']/@href}" title="drop it down">
                     <xsl:text>&#x25BC;</xsl:text>
