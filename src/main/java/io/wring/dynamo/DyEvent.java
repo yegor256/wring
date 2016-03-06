@@ -29,6 +29,9 @@
  */
 package io.wring.dynamo;
 
+import com.amazonaws.services.dynamodbv2.model.AttributeAction;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.AttributeValueUpdate;
 import com.jcabi.dynamo.Attributes;
 import com.jcabi.dynamo.Item;
 import io.wring.model.Event;
@@ -84,6 +87,16 @@ public final class DyEvent implements Event {
             new Attributes()
                 .with("urn", this.item.get("urn").getS())
                 .with("title", this.item.get("title").getS())
+        );
+    }
+
+    @Override
+    public void vote(final int points) throws IOException {
+        this.item.put(
+            "rank",
+            new AttributeValueUpdate()
+                .withAction(AttributeAction.ADD)
+                .withValue(new AttributeValue().withN(Integer.toString(points)))
         );
     }
 

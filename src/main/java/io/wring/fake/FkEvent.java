@@ -51,4 +51,9 @@ public final class FkEvent implements Event {
     public void delete() {
         // nothing
     }
+
+    @Override
+    public void vote(final int points) {
+        // nothing
+    }
 }

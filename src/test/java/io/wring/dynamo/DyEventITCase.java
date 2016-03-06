@@ -27,38 +27,44 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.model;
+package io.wring.dynamo;
 
-import java.io.IOException;
-import org.xembly.Directive;
+import com.jcabi.aspects.Tv;
+import com.jcabi.matchers.XhtmlMatchers;
+import io.wring.model.Event;
+import io.wring.model.Events;
+import io.wring.model.User;
+import org.hamcrest.MatcherAssert;
+import org.junit.Test;
+import org.xembly.Xembler;
 
 /**
- * Event.
- *
+ * Integration case for {@link DyEvent}.
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
  * @since 1.0
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-public interface Event {
+public final class DyEventITCase {
 
     /**
-     * Print it into xembly.
-     * @return Xembly directives
-     * @throws IOException If fails
+     * DyEvent can up-vote.
+     * @throws Exception If some problem inside
      */
-    Iterable<Directive> asXembly() throws IOException;
-
-    /**
-     * Delete it.
-     * @throws IOException If fails
-     */
-    void delete() throws IOException;
-
-    /**
-     * Vote for it.
-     * @param points How many points to add (can be negative)
-     * @throws IOException If fails
-     */
-    void vote(int points) throws IOException;
+    @Test
+    public void upvotes() throws Exception {
+        final User user = new DyUser(new Dynamo(), "nick");
+        final Events events = user.events();
+        events.post("hey you", "some text");
+        final Event event = events.iterate().iterator().next();
+        event.vote(Tv.FIFTEEN);
+        MatcherAssert.assertThat(
+            new Xembler(events.iterate().iterator().next().asXembly()).xml(),
+            XhtmlMatchers.hasXPaths(
+                "/event[title='hey you']",
+                "/event[rank=16]"
+            )
+        );
+    }
 
 }
