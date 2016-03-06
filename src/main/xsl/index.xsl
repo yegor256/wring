@@ -40,10 +40,11 @@
     </xsl:template>
     <xsl:template match="page" mode="body">
         <p>
-            <xsl:text>The project is under construction.</xsl:text>
-        </p>
-        <p>
-            <xsl:text>Please, come back in April 2016.</xsl:text>
+            <xsl:text>Read </xsl:text>
+            <a href="">
+                <xsl:text>this blog post</xsl:text>
+            </a>
+            <xsl:text>, it explains how it works.</xsl:text>
         </p>
     </xsl:template>
 </xsl:stylesheet>
