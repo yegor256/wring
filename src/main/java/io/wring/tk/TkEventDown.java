@@ -29,32 +29,26 @@
  */
 package io.wring.tk;
 
+import com.jcabi.aspects.Tv;
 import io.wring.model.Base;
 import io.wring.model.Event;
-import io.wring.model.XePrint;
+import io.wring.model.User;
 import java.io.IOException;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
-import org.takes.misc.Href;
-import org.takes.rs.xe.XeAppend;
-import org.takes.rs.xe.XeDirectives;
-import org.takes.rs.xe.XeLink;
-import org.takes.rs.xe.XeSource;
-import org.takes.rs.xe.XeTransform;
-import org.xembly.Directive;
-import org.xembly.Directives;
+import org.takes.facets.flash.RsFlash;
+import org.takes.facets.forward.RsForward;
+import org.takes.rq.RqHref;
 
 /**
- * List of events.
+ * Down vote event.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
- * @since 1.0
- * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
- * @checkstyle MultipleStringLiteralsCheck (500 lines)
+ * @since 0.9
  */
-final class TkEvents implements Take {
+final class TkEventDown implements Take {
 
     /**
      * Base.
@@ -65,52 +59,18 @@ final class TkEvents implements Take {
      * Ctor.
      * @param bse Base
      */
-    TkEvents(final Base bse) {
+    TkEventDown(final Base bse) {
         this.base = bse;
     }
 
     @Override
     public Response act(final Request req) throws IOException {
-        return new RsPage(
-            "/xsl/events.xsl",
-            req,
-            new XeAppend(
-                "events",
-                new XeTransform<>(
-                    this.base.user(new RqUser(req).urn()).events().iterate(),
-                    TkEvents::source
-                )
-            )
+        final User user = this.base.user(new RqUser(req).urn());
+        final Event event = user.events().event(
+            new RqHref.Base(req).href().param("title").iterator().next()
         );
-    }
-
-    /**
-     * Convert event to Xembly.
-     * @param event The event
-     * @return Xembly
-     * @throws IOException If fails
-     */
-    private static XeSource source(final Event event) throws IOException {
-        final Iterable<Directive> dirs = event.asXembly();
-        final String title = new XePrint(event.asXembly()).text(
-            "{/event/title/text()}"
-        );
-        return new XeDirectives(
-            new Directives()
-                .append(dirs)
-                .append(
-                    new XeLink(
-                        "delete",
-                        new Href("/event-delete").with("title", title)
-                    ).toXembly()
-                )
-                .append(
-                    new XeLink(
-                        "down",
-                        new Href("/event-down").with("title", title)
-                    ).toXembly()
-                )
-        );
+        event.vote(-Tv.TEN);
+        return new RsForward(new RsFlash("event down-voted"));
     }
 
 }

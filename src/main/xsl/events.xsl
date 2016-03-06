@@ -50,12 +50,16 @@
     <xsl:template match="event">
         <p>
             <code>
+                <a href="{links/link[@rel='down']/@href}" title="drop it down">
+                    <xsl:text>&#x25BC;</xsl:text>
+                </a>
+                <xsl:text> </xsl:text>
                 <xsl:value-of select="rank"/>
             </code>
             <xsl:text> </xsl:text>
             <xsl:value-of select="title"/>
             <xsl:text> </xsl:text>
-            <a href="{links/link[@rel='delete']/@href}">
+            <a href="{links/link[@rel='delete']/@href}" title="delete it forever">
                 <xsl:text>delete</xsl:text>
             </a>
         </p>
