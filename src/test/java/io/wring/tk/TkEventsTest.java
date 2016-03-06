@@ -27,34 +27,49 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.fake;
+package io.wring.tk;
 
-import io.wring.model.Event;
-import io.wring.model.Events;
-import java.util.Collections;
+import com.jcabi.matchers.XhtmlMatchers;
+import io.wring.fake.FkBase;
+import org.hamcrest.MatcherAssert;
+import org.junit.Test;
+import org.takes.Take;
+import org.takes.rq.RqFake;
+import org.takes.rq.RqWithHeader;
+import org.takes.rs.RsPrint;
 
 /**
- * Fake events.
- *
+ * Test case for {@link TkEvents}.
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
- * @since 1.0
+ * @since 0.9
  */
-public final class FkEvents implements Events {
+public final class TkEventsTest {
 
-    @Override
-    public Iterable<Event> iterate() {
-        return Collections.singleton(new FkEvent());
-    }
-
-    @Override
-    public void post(final String title, final String text) {
-        // nothing
-    }
-
-    @Override
-    public Event event(final String title) {
-        return new FkEvent();
+    /**
+     * TkEvents can render list of events.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void rendersListOfEvents() throws Exception {
+        final Take take = new TkAppAuth(new TkEvents(new FkBase()));
+        MatcherAssert.assertThat(
+            XhtmlMatchers.xhtml(
+                new RsPrint(
+                    take.act(
+                        new RqWithHeader(
+                            new RqFake("GET", "/"),
+                            "Accept",
+                            "text/xml"
+                        )
+                    )
+                ).printBody()
+            ),
+            XhtmlMatchers.hasXPaths(
+                "/page/millis",
+                "/page/events/event"
+            )
+        );
     }
 
 }

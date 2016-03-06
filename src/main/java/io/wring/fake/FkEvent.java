@@ -30,8 +30,8 @@
 package io.wring.fake;
 
 import io.wring.model.Event;
-import java.util.Collections;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
  * Fake event.
@@ -44,7 +44,8 @@ public final class FkEvent implements Event {
 
     @Override
     public Iterable<Directive> asXembly() {
-        return Collections.emptyList();
+        return new Directives().add("event")
+            .add("title").set("test").up();
     }
 
     @Override
