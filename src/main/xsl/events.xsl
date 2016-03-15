@@ -49,8 +49,11 @@
         <xsl:if test="count(event) &lt; @total">
             <p>
                 <xsl:text>There are more events in the inbox (</xsl:text>
-                <xsl:value-of select="@total - count(event)"/>
-                <xsl:text>+), but they are not visible in the list.</xsl:text>
+                <strong>
+                    <xsl:value-of select="@total - count(event)"/>
+                    <xsl:text>+</xsl:text>
+                </strong>
+                <xsl:text>), but they are not visible in the list.</xsl:text>
                 <xsl:text> Once you read and delete these ones,</xsl:text>
                 <xsl:text> you will see others.</xsl:text>
             </p>
