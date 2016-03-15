@@ -40,12 +40,21 @@
     </xsl:template>
     <xsl:template match="page" mode="body">
         <xsl:if test="not(events/event)">
-            <xsl:text>Inbox is empty.</xsl:text>
+            <p><xsl:text>Inbox is empty.</xsl:text></p>
         </xsl:if>
         <xsl:apply-templates select="events"/>
     </xsl:template>
     <xsl:template match="events">
         <xsl:apply-templates select="event"/>
+        <xsl:if test="count(event) &lt; @total">
+            <p>
+                <xsl:text>There are more events in the inbox (</xsl:text>
+                <xsl:value-of select="@total - count(event)"/>
+                <xsl:text>+), but they are not visible in the list.</xsl:text>
+                <xsl:text> Once you read and delete these ones,</xsl:text>
+                <xsl:text> you will see others.</xsl:text>
+            </p>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="event">
         <p class="event">

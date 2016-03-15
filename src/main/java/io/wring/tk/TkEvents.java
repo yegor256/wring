@@ -29,6 +29,8 @@
  */
 package io.wring.tk;
 
+import com.google.common.collect.Iterables;
+import com.jcabi.aspects.Tv;
 import io.wring.model.Base;
 import io.wring.model.Event;
 import io.wring.model.XePrint;
@@ -38,6 +40,7 @@ import org.takes.Response;
 import org.takes.Take;
 import org.takes.misc.Href;
 import org.takes.rs.xe.XeAppend;
+import org.takes.rs.xe.XeChain;
 import org.takes.rs.xe.XeDirectives;
 import org.takes.rs.xe.XeLink;
 import org.takes.rs.xe.XeSource;
@@ -71,14 +74,22 @@ final class TkEvents implements Take {
 
     @Override
     public Response act(final Request req) throws IOException {
+        final Iterable<Event> events = this.base.user(new RqUser(req).urn())
+            .events()
+            .iterate();
         return new RsPage(
             "/xsl/events.xsl",
             req,
             new XeAppend(
                 "events",
-                new XeTransform<>(
-                    this.base.user(new RqUser(req).urn()).events().iterate(),
-                    TkEvents::source
+                new XeChain(
+                    new XeTransform<>(
+                        Iterables.limit(events, Tv.TWENTY),
+                        TkEvents::source
+                    )
+                ),
+                new XeDirectives(
+                    new Directives().attr("total", Iterables.size(events))
                 )
             )
         );
