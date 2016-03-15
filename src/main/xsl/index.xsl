@@ -41,10 +41,10 @@
     <xsl:template match="page" mode="body">
         <p>
             <xsl:text>Read </xsl:text>
-            <a href="">
+            <a href="http://www.yegor256.com/2016/03/15/wring-dispatcher-github-notifications.html">
                 <xsl:text>this blog post</xsl:text>
             </a>
-            <xsl:text>, it explains how it works.</xsl:text>
+            <xsl:text>, it explains how this system works.</xsl:text>
         </p>
     </xsl:template>
 </xsl:stylesheet>
