@@ -29,24 +29,16 @@
  */
 package io.wring.agents;
 
-import com.jcabi.aspects.Tv;
-import com.jcabi.log.Logger;
-import com.jcabi.manifests.Manifests;
 import io.wring.model.Base;
 import io.wring.model.Events;
 import io.wring.model.Pipe;
 import io.wring.model.XePrint;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Queue;
 import javax.json.Json;
 import javax.json.JsonObject;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.log4j.Appender;
-import org.apache.log4j.PatternLayout;
 
 /**
  * Single cycle.
@@ -105,10 +97,10 @@ final class Cycle implements Runnable {
             final JsonObject object = Json.createReader(
                 IOUtils.toInputStream(json)
             ).readObject();
-            Cycle.process(
+            new Exec(
                 new JsonAgent(this.base, object),
                 new IgnoreEvents(events, object)
-            );
+            ).run();
             // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Throwable ex) {
             events.post(
@@ -119,88 +111,6 @@ final class Cycle implements Runnable {
                 )
             );
         }
-    }
-
-    /**
-     * Process a single pipe.
-     * @param agent The agent
-     * @param events User events
-     * @throws IOException If fails
-     */
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    private static void process(final Agent agent, final Events events)
-        throws IOException {
-        String title;
-        String body;
-        try {
-            title = agent.toString();
-            body = Cycle.wrap(agent, events);
-            // @checkstyle IllegalCatchCheck (1 line)
-        } catch (final Throwable ex) {
-            title = Cycle.class.getCanonicalName();
-            body = String.format(
-                "%tFT%<tRZ %s",
-                new Date(),
-                ExceptionUtils.getStackTrace(ex)
-            );
-            events.post(
-                StringUtils.abbreviate(ex.getLocalizedMessage(), Tv.FIFTY),
-                body
-            );
-        }
-        if (!body.isEmpty()) {
-            events.post(
-                String.format(
-                    "%s by %s",
-                    title, Manifests.read("Wring-Version")
-                ),
-                body
-            );
-        }
-    }
-
-    /**
-     * Push, collect logs, and wrap.
-     * @param agent The agent
-     * @param events User events
-     * @return Logs
-     * @throws IOException If fails
-     */
-    private static String wrap(final Agent agent, final Events events)
-        throws IOException {
-        final long start = System.currentTimeMillis();
-        String log = Cycle.log(agent, events);
-        if (!log.isEmpty()) {
-            log = Logger.format(
-                "%s\ndone. %tFT%<tRZ. %[ms]s spent.",
-                log.trim(),
-                new Date(),
-                System.currentTimeMillis() - start
-            );
-        }
-        return log;
-    }
-
-    /**
-     * Push and collect logs.
-     * @param agent The agent
-     * @param events User events
-     * @return Logs
-     * @throws IOException If fails
-     */
-    private static String log(final Agent agent, final Events events)
-        throws IOException {
-        final org.apache.log4j.Logger root =
-            org.apache.log4j.Logger.getRootLogger();
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final Appender appender = new ThreadAppender(
-            new PatternLayout("%p %m\n"),
-            baos
-        );
-        root.addAppender(appender);
-        agent.push(events);
-        root.removeAppender(appender);
-        return baos.toString();
     }
 
 }
