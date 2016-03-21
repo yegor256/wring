@@ -52,16 +52,16 @@ public final class ExecTest {
     public void catchesExceptions() throws Exception {
         final Agent agent = Mockito.mock(Agent.class);
         final Events events = Mockito.mock(Events.class);
-        Mockito.doThrow(new IOException("intended")).when(agent).push(events);
+        Mockito.doThrow(new IOException("<bug>")).when(agent).push(events);
         new Exec(agent, events).run();
         Mockito.verify(events).post(
             MockitoHamcrest.argThat(
                 Matchers.startsWith(
-                    "internal error (java.io.IOException): intended"
+                    "internal error (java.io.IOException): &lt;bug&gt;"
                 )
             ),
             MockitoHamcrest.argThat(
-                Matchers.containsString("java.io.IOException: intended\n")
+                Matchers.containsString("java.io.IOException: &lt;bug&gt;\n")
             )
         );
     }

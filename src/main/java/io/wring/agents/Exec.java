@@ -36,6 +36,7 @@ import io.wring.model.Events;
 import java.io.IOException;
 import java.util.Date;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Appender;
@@ -86,12 +87,14 @@ final class Exec {
             title = String.format(
                 "internal error (%s): %s",
                 ex.getClass().getCanonicalName(),
-                StringUtils.abbreviate(ex.getLocalizedMessage(), Tv.FIFTY)
+                StringEscapeUtils.escapeHtml4(
+                    StringUtils.abbreviate(ex.getLocalizedMessage(), Tv.FIFTY)
+                )
             );
             body = String.format(
                 "%tFT%<tRZ %s",
                 new Date(),
-                ExceptionUtils.getStackTrace(ex)
+                StringEscapeUtils.escapeHtml4(ExceptionUtils.getStackTrace(ex))
             );
         }
         if (!body.isEmpty()) {
