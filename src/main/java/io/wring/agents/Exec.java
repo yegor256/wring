@@ -72,8 +72,9 @@ final class Exec {
 
     /**
      * Run it.
-     * @throws IOException
+     * @throws IOException If fails
      */
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     public void run() throws IOException {
         String title;
         String body;
@@ -82,15 +83,15 @@ final class Exec {
             body = this.body();
             // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Throwable ex) {
-            title = Cycle.class.getCanonicalName();
+            title = String.format(
+                "internal error (%s): %s",
+                ex.getClass().getCanonicalName(),
+                StringUtils.abbreviate(ex.getLocalizedMessage(), Tv.FIFTY)
+            );
             body = String.format(
                 "%tFT%<tRZ %s",
                 new Date(),
                 ExceptionUtils.getStackTrace(ex)
-            );
-            this.events.post(
-                StringUtils.abbreviate(ex.getLocalizedMessage(), Tv.FIFTY),
-                body
             );
         }
         if (!body.isEmpty()) {

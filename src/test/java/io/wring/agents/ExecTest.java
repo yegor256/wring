@@ -55,7 +55,11 @@ public final class ExecTest {
         Mockito.doThrow(new IOException("intended")).when(agent).push(events);
         new Exec(agent, events).run();
         Mockito.verify(events).post(
-            MockitoHamcrest.argThat(Matchers.startsWith("internal error: ")),
+            MockitoHamcrest.argThat(
+                Matchers.startsWith(
+                    "internal error (java.io.IOException): intended"
+                )
+            ),
             MockitoHamcrest.argThat(
                 Matchers.containsString("java.io.IOException: intended\n")
             )

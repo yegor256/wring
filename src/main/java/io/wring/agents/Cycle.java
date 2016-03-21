@@ -85,6 +85,7 @@ final class Cycle implements Runnable {
      * Process a single pipe.
      * @param pipe The pipe
      * @throws IOException If fails
+     * @checkstyle IllegalCatchCheck (20 lines)
      */
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
     private void process(final Pipe pipe) throws IOException {
@@ -101,7 +102,6 @@ final class Cycle implements Runnable {
                 new JsonAgent(this.base, object),
                 new IgnoreEvents(events, object)
             ).run();
-            // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Throwable ex) {
             events.post(
                 Cycle.class.getCanonicalName(),
