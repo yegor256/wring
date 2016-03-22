@@ -84,6 +84,10 @@ final class Exec {
             body = this.body();
             // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Throwable ex) {
+            Logger.warn(
+                this, "%s: %s", ex.getClass().getCanonicalName(),
+                StringUtils.abbreviate(ex.getLocalizedMessage(), Tv.FIFTY)
+            );
             title = String.format(
                 "internal error (%s): %s",
                 ex.getClass().getCanonicalName(),
