@@ -36,6 +36,7 @@ import com.jcabi.github.RtGithub;
 import com.jcabi.github.RtPagination;
 import com.jcabi.http.Request;
 import com.jcabi.http.response.RestResponse;
+import com.jcabi.log.Logger;
 import io.wring.agents.Agent;
 import io.wring.model.Base;
 import io.wring.model.Events;
@@ -130,6 +131,7 @@ public final class AgGithub implements Agent {
             ),
             json.getJsonObject("subject")
         ).push(github, events);
+        Logger.info(this, "GitHub event %s processed", json.getString("id"));
     }
 
 }
