@@ -116,25 +116,17 @@ final class Subject {
                 )
             );
         } else {
-            throw this.failure();
+            try (final ByteArrayOutputStream baos =
+                new ByteArrayOutputStream()) {
+                Json.createWriter(baos).write(this.json);
+                throw new IOException(
+                    String.format(
+                        "subject ignored: %s", baos.toString()
+                    )
+                );
+            }
         }
         body.push(events);
-    }
-
-    /**
-     * Fail.
-     * @return Exception
-     * @throws IOException If fails
-     */
-    private IOException failure() throws IOException {
-        try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            Json.createWriter(baos).write(this.json);
-            return new IOException(
-                String.format(
-                    "subject ignored: %s", baos.toString()
-                )
-            );
-        }
     }
 
 }
