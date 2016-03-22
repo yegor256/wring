@@ -30,32 +30,19 @@
 package io.wring.agents.github;
 
 import com.jcabi.aspects.Tv;
-import com.jcabi.github.Bulk;
-import com.jcabi.github.Comment;
 import com.jcabi.github.Coordinates;
 import com.jcabi.github.Github;
-import com.jcabi.github.Issue;
 import com.jcabi.github.RtGithub;
 import com.jcabi.github.RtPagination;
-import com.jcabi.github.Smarts;
 import com.jcabi.http.Request;
 import com.jcabi.http.response.RestResponse;
-import com.jcabi.log.Logger;
 import io.wring.agents.Agent;
-import io.wring.agents.Printable;
 import io.wring.model.Base;
 import io.wring.model.Events;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.regex.Pattern;
-import javax.json.Json;
 import javax.json.JsonObject;
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -136,165 +123,13 @@ public final class AgGithub implements Agent {
     private void push(final Github github, final JsonObject json,
         final Events events)
         throws IOException {
-        final JsonObject subject = json.getJsonObject("subject");
-        final String type = subject.getString("type");
-        if (!"Issue".equals(type) && !"PullRequest".equals(type)) {
-            try (final ByteArrayOutputStream baos =
-                new ByteArrayOutputStream()) {
-                Json.createWriter(baos).write(subject);
-                throw new IllegalArgumentException(
-                    String.format(
-                        "subject ignored: %s", baos.toString()
-                    )
-                );
-            }
-        }
-        final Coordinates coords = new Coordinates.Simple(
-            json.getJsonObject("repository").getString("full_name")
-        );
-        final Issue.Smart issue = new Issue.Smart(
-            github.repos().get(coords).issues().get(
-                Integer.parseInt(
-                    StringUtils.substringAfterLast(
-                        subject.getString("url"),
-                        "/"
-                    )
-                )
-            )
-        );
-        final String body = this.body(issue);
-        if (body.isEmpty()) {
-            Logger.info(this, "%s#%d ignored", coords, issue.number());
-        } else {
-            events.post(
-                String.format(
-                    "[%s#%d] %s",
-                    coords, issue.number(), issue.title()
-                ),
-                body
-            );
-            Logger.info(this, "new event in %s#%d", coords, issue.number());
-        }
-    }
-
-    /**
-     * Collect all important texts from the issue.
-     * @param issue The issue
-     * @return Body text
-     * @throws IOException If fails
-     * @checkstyle ExecutableStatementCountCheck (100 lines)
-     */
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    private String body(final Issue.Smart issue) throws IOException {
-        final Iterator<Comment.Smart> comments = new Smarts<Comment.Smart>(
-            new Bulk<>(issue.comments().iterate())
-        ).iterator();
-        final String self = issue.repo().github().users().self().login();
-        final Pattern ptn = Pattern.compile(
-            String.format(
-                ".*(?<![a-zA-Z0-9-])%s(?![a-zA-Z0-9-]).*",
-                Pattern.quote(String.format("@%s", self))
+        new Subject(
+            this.base,
+            new Coordinates.Simple(
+                json.getJsonObject("repository").getString("full_name")
             ),
-            Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE
-        );
-        int seen = this.seen(issue);
-        Logger.info(
-            this, "last seen comment in %s#%d is #%d",
-            issue.repo().coordinates(), issue.number(), seen
-        );
-        final StringBuilder body = new StringBuilder();
-        while (comments.hasNext()) {
-            final Comment.Smart comment = comments.next();
-            if (comment.number() <= seen) {
-                continue;
-            }
-            // @checkstyle MagicNumber (1 line)
-            if (comment.number() < 188060467) {
-                Logger.info(
-                    this,
-                    "%s#%d/%d ignored since too old",
-                    issue.repo().coordinates(), issue.number(),
-                    comment.number()
-                );
-                continue;
-            }
-            if (comment.author().login().equals(self)) {
-                Logger.info(
-                    this,
-                    "%s#%d/%d ignored since you're the author",
-                    issue.repo().coordinates(), issue.number(),
-                    comment.number()
-                );
-                continue;
-            }
-            final String cmt = comment.body();
-            if (ptn.matcher(cmt).matches()) {
-                body.append('@')
-                    .append(comment.author().login())
-                    .append(" at [")
-                    .append(String.format("%te-%<tb-%<tY", comment.createdAt()))
-                    .append("](")
-                    .append(issue.htmlUrl())
-                    .append("#issuecomment-")
-                    .append(comment.number())
-                    .append("): ")
-                    .append(StringEscapeUtils.escapeHtml4(cmt))
-                    .append("\n\n");
-                Logger.info(
-                    this,
-                    "%s#%d/%d accepted: %s",
-                    issue.repo().coordinates(), issue.number(),
-                    comment.number(), new Printable(cmt)
-                );
-            } else {
-                Logger.info(
-                    this,
-                    "%s#%d/%d ignored: %s",
-                    issue.repo().coordinates(), issue.number(),
-                    comment.number(), new Printable(cmt)
-                );
-            }
-            seen = comment.number();
-        }
-        this.base.vault().save(
-            AgGithub.key(issue),
-            Optional.of(Integer.toString(seen))
-        );
-        Logger.info(
-            this, "seen comment set to %d for %s#%d",
-            seen, issue.repo().coordinates(), issue.number()
-        );
-        return body.toString();
-    }
-
-    /**
-     * Get the latest seen comment number in the issue.
-     * @param issue The issue
-     * @return Comment number of zero
-     * @throws IOException If fails
-     */
-    private int seen(final Issue.Smart issue) throws IOException {
-        final Optional<String> before = this.base.vault().value(
-            AgGithub.key(issue)
-        );
-        final int seen;
-        if (before.isPresent()) {
-            seen = Integer.parseInt(before.get());
-        } else {
-            seen = 0;
-        }
-        return seen;
-    }
-
-    /**
-     * Make key for this issue.
-     * @param issue The issue
-     * @return The key
-     */
-    private static String key(final Issue.Smart issue) {
-        return String.format(
-            "%s#%d", issue.repo().coordinates(), issue.number()
-        );
+            json.getJsonObject("subject")
+        ).push(github, events);
     }
 
 }
