@@ -29,7 +29,9 @@
  */
 package io.wring.agents;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.jcabi.log.Logger;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
 import java.util.Collection;
@@ -69,6 +71,10 @@ final class Refill implements Runnable {
         if (this.pipes.isEmpty()) {
             final Collection<Pipe> ext = Lists.newArrayList(this.base.pipes());
             this.pipes.addAll(ext);
+            Logger.info(
+                this, "%d pipes added to the queue (%d total)",
+                ext.size(), Iterables.size(this.base.pipes())
+            );
         }
     }
 
