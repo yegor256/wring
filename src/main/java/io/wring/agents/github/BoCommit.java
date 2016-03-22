@@ -75,8 +75,8 @@ final class BoCommit implements Body {
 
     @Override
     public void push(final Events events) throws IOException {
-        final String body = this.text();
         final Coordinates coords = this.commit.repo().coordinates();
+        final String body = this.text(coords);
         if (body.isEmpty()) {
             Logger.info(
                 this, "%s %s ignored",
@@ -104,11 +104,11 @@ final class BoCommit implements Body {
      * @checkstyle ExecutableStatementCountCheck (100 lines)
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public String text() throws IOException {
+    public String text(final Coordinates coords) throws IOException {
         final Iterator<JsonObject> comments = new RtPagination<>(
             this.commit.repo().github().entry()
                 .uri().path("repos")
-                .path("owner").path("repo")
+                .path(coords.user()).path(coords.repo())
                 .path("commits")
                 .path(this.commit.sha())
                 .path("comments").back(),
