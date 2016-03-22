@@ -42,7 +42,9 @@ import io.wring.model.Base;
 import io.wring.model.Events;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import javax.json.JsonObject;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -98,12 +100,14 @@ public final class AgGithub implements Agent {
                 .back(),
             RtPagination.COPYING
         );
+        final Collection<String> done = new LinkedList<>();
         for (final JsonObject event : list) {
             final String reason = event.getString("reason");
             if (!"mention".equals(reason)) {
                 continue;
             }
             this.push(github, event, events);
+            done.add(event.getString("id"));
         }
         req.uri()
             .queryParam("last_read_at", since).back()
@@ -112,6 +116,10 @@ public final class AgGithub implements Agent {
             .fetch()
             .as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_RESET);
+        Logger.info(
+            this, "%d GitHub events for @%s processed: %s",
+            done.size(), github.users().self().login(), done
+        );
     }
 
     /**
@@ -131,7 +139,6 @@ public final class AgGithub implements Agent {
             ),
             json.getJsonObject("subject")
         ).push(github, events);
-        Logger.info(this, "GitHub event %s processed", json.getString("id"));
     }
 
 }
