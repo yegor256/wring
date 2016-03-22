@@ -107,11 +107,14 @@ final class BoCommit implements Body {
     public String text(final Coordinates coords) throws IOException {
         final Iterator<JsonObject> comments = new RtPagination<>(
             this.commit.repo().github().entry()
-                .uri().path("repos")
-                .path(coords.user()).path(coords.repo())
+                .uri()
+                .path("repos")
+                .path(coords.user())
+                .path(coords.repo())
                 .path("commits")
                 .path(this.commit.sha())
-                .path("comments").back(),
+                .path("comments")
+                .back(),
             object -> object
         ).iterator();
         final String self = this.commit.repo().github().users().self().login();
