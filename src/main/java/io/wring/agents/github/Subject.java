@@ -32,6 +32,7 @@ package io.wring.agents.github;
 import com.jcabi.github.Coordinates;
 import com.jcabi.github.Github;
 import com.jcabi.github.Issue;
+import com.jcabi.github.RepoCommit;
 import io.wring.model.Base;
 import io.wring.model.Events;
 import java.io.IOException;
@@ -47,6 +48,7 @@ import org.apache.commons.lang3.StringUtils;
  * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
  * @since 0.13
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
+ * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */
 final class Subject {
 
@@ -97,6 +99,18 @@ final class Subject {
                                 this.json.getString("url"),
                                 "/"
                             )
+                        )
+                    )
+                )
+            );
+        } else if ("Commit".equals(type)) {
+            body = new BoCommit(
+                this.base,
+                new RepoCommit.Smart(
+                    github.repos().get(this.coords).commits().get(
+                        StringUtils.substringAfterLast(
+                            this.json.getString("url"),
+                            "/"
                         )
                     )
                 )
