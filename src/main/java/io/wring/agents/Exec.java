@@ -92,7 +92,8 @@ final class Exec {
                 )
             );
             body = String.format(
-                "%tFT%<tRZ %s",
+                // @checkstyle LineLength (1 line)
+                "%tFT%<tRZ %s\n\nIf you see this message, please report it to htts://github.com/yegor256/wring/issues",
                 new Date(),
                 StringEscapeUtils.escapeHtml4(ExceptionUtils.getStackTrace(ex))
             );
