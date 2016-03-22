@@ -116,10 +116,12 @@ public final class AgGithub implements Agent {
             .fetch()
             .as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_RESET);
-        Logger.info(
-            this, "%d GitHub events for @%s processed: %s",
-            done.size(), github.users().self().login(), done
-        );
+        if (!done.isEmpty()) {
+            Logger.info(
+                this, "%d GitHub events for @%s processed: %s",
+                done.size(), github.users().self().login(), done
+            );
+        }
     }
 
     /**
