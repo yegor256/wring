@@ -99,6 +99,7 @@ final class BoCommit implements Body {
 
     /**
      * Collect all important texts from the issue.
+     * @param coords Coords
      * @return Body text
      * @throws IOException If fails
      * @checkstyle ExecutableStatementCountCheck (100 lines)
