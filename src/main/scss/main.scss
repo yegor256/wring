@@ -26,10 +26,10 @@ pre {
 }
 
 .event {
-  margin-top: 2em;
+  margin-top: 6em;
   margin-bottom: 2em;
-  &:nth-child {
-    margin-top: 6em;
+  &:first-child {
+    margin-top: 2em;
   }
 }
 
