@@ -28,6 +28,9 @@ pre {
 .event {
   margin-top: 2em;
   margin-bottom: 2em;
+  &:nth-child {
+    margin-top: 6em;
+  }
 }
 
 article a:visited {
