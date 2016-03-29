@@ -6,4 +6,5 @@
 
 [www.wring.io](http://www.wring.io)
 
-to be continued...
+Read about it here:
+[Wring.io, a Dispatcher of GitHub Notifications](http://www.yegor256.com/2016/03/15/wring-dispatcher-github-notifications.html)
