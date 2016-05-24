@@ -31,6 +31,10 @@ package io.wring.tk;
 
 import io.wring.model.Base;
 import java.io.IOException;
+import javax.json.Json;
+import javax.json.JsonException;
+import javax.json.stream.JsonParsingException;
+import org.apache.commons.io.IOUtils;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
@@ -62,11 +66,24 @@ final class TkPipeAdd implements Take {
 
     @Override
     public Response act(final Request req) throws IOException {
-        this.base.user(new RqUser(req).urn()).pipes().add(
-            new RqForm.Base(req).param("json").iterator().next().trim()
-        );
+        String message;
+        try {
+            this.base.user(new RqUser(req).urn()).pipes().add(
+                Json.createReader(
+                    IOUtils.toInputStream(
+                        new RqForm.Base(req).param("json").iterator().next()
+                            .trim()
+                    )
+                ).readObject().toString()
+            );
+            message = "pipe created";
+        } catch (final JsonParsingException ex) {
+            message = "Invalid json format. No pipe added.";
+        } catch (final JsonException ex) {
+            message = "Empty json. No pipe added.";
+        }
         return new RsForward(
-            new RsFlash("pipe created"),
+            new RsFlash(message),
             "/pipes"
         );
     }

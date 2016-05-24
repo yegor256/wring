@@ -46,7 +46,7 @@ import javax.json.JsonString;
  * Events that boost by regular expression.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
- * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
+ * @version $Id$
  * @since 0.13
  */
 final class BoostEvents implements Events {
