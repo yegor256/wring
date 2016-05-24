@@ -90,18 +90,18 @@
         <dependency>
             <groupId>org.takes</groupId>
             <artifactId>takes</artifactId>
-            <version>0.32.4</version>
+            <version>0.32.8</version>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-core</artifactId>
-            <version>1.10.57</version>
+            <version>1.11.3</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-dynamodb</artifactId>
-            <version>1.10.57</version>
+            <version>1.11.3</version>
         </dependency>
         <dependency>
             <groupId>com.jcabi.incubator</groupId>
@@ -170,7 +170,7 @@
         <dependency>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-dynamo</artifactId>
-            <version>0.21</version>
+            <version>0.21.1</version>
         </dependency>
         <dependency>
             <groupId>com.jcabi</groupId>
@@ -186,7 +186,7 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>1.19</version>
+            <version>1.19.1</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
