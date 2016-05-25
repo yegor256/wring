@@ -66,4 +66,17 @@ public final class BoostEventsTest {
         new BoostEvents(events, "/beta.*/").post("y", "there is no text here");
     }
 
+    /**
+     * BoostEvents can boost events by title.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void boostsEventsByTitle() throws Exception {
+        final Events events = Mockito.mock(Events.class);
+        final Event event = Mockito.mock(Event.class);
+        Mockito.doReturn(event).when(events).event(Mockito.anyString());
+        new BoostEvents(events, "xyz.*").post("xyz", "some body");
+        Mockito.verify(event).vote(Tv.FIVE);
+    }
+
 }
