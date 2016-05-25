@@ -53,7 +53,7 @@ import org.apache.commons.lang3.time.DateUtils;
  * GitHub agent.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
- * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
+ * @version $Id$
  * @since 1.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
