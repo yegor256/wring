@@ -115,7 +115,7 @@ public final class DyEvent implements Event {
                 String.format(
                     "<a href='%s'>%s</a>",
                     mtr.group(2), mtr.group(1)
-                )
+                ).replace("$", "\\$")
             );
         }
         mtr.appendTail(out);
