@@ -55,7 +55,7 @@ public final class DyEventITCase {
     public void upvotes() throws Exception {
         final User user = new DyUser(new Dynamo(), "nick");
         final Events events = user.events();
-        events.post("hey you", "some text");
+        events.post("hey you", "some text [test](http://a.com/$t)!");
         final Event event = events.iterate().iterator().next();
         event.vote(Tv.FIFTEEN);
         MatcherAssert.assertThat(
