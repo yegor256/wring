@@ -55,6 +55,10 @@
             <xsl:text>.</xsl:text>
         </p>
         <p>
+            <xsl:text>It's not possible to edit a pipe.</xsl:text>
+            <xsl:text> If you want to make changes, just copy the existing one somewhere, delete it and then create a new one.</xsl:text>
+        </p>
+        <p>
             <xsl:text>All supported JSON elements are listed below:</xsl:text>
         </p>
         <p>
