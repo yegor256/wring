@@ -46,7 +46,7 @@ import javax.json.JsonString;
  * Events that boost by regular expression.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
- * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
+ * @version $Id$
  * @since 0.13
  */
 final class BoostEvents implements Events {
@@ -97,7 +97,8 @@ final class BoostEvents implements Events {
     @Override
     public void post(final String title, final String text) throws IOException {
         this.origin.post(title, text);
-        if (this.regex.matcher(text).find()) {
+        if (this.regex.matcher(text).find()
+            || this.regex.matcher(title).find()) {
             this.origin.event(title).vote(Tv.FIVE);
             Logger.info(
                 this, "boosting \"%s\" because of %s",
@@ -141,3 +142,4 @@ final class BoostEvents implements Events {
     }
 
 }
+

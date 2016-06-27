@@ -44,7 +44,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
  * Single cycle.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
- * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
+ * @version $Id$
  * @since 1.0
  */
 final class Cycle implements Runnable {
@@ -100,7 +100,10 @@ final class Cycle implements Runnable {
             ).readObject();
             new Exec(
                 new JsonAgent(this.base, object),
-                new IgnoreEvents(events, object)
+                new BoostEvents(
+                    new IgnoreEvents(events, object),
+                    object
+                )
             ).run();
         } catch (final Throwable ex) {
             events.post(
@@ -114,3 +117,4 @@ final class Cycle implements Runnable {
     }
 
 }
+
