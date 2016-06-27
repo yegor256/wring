@@ -42,6 +42,8 @@ import com.jcabi.log.Logger;
 import io.wring.model.Pipe;
 import io.wring.model.Pipes;
 import java.io.IOException;
+import javax.json.Json;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Dynamo Pitches.
@@ -91,6 +93,7 @@ public final class DyPipes implements Pipes {
 
     @Override
     public void add(final String json) throws IOException {
+        Json.createReader(IOUtils.toInputStream(json)).readObject();
         final long num = System.currentTimeMillis();
         this.table().put(
             new Attributes()

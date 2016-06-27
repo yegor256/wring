@@ -38,7 +38,7 @@ import org.apache.log4j.spi.LoggingEvent;
  * Thread thread appender.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
- * @version $Id$
+ * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
  * @since 1.0
  */
 final class ThreadAppender extends WriterAppender {

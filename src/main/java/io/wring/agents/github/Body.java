@@ -36,7 +36,7 @@ import java.io.IOException;
  * Body.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
- * @version $Id$
+ * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
  * @since 0.13
  */
 interface Body {
