@@ -47,6 +47,26 @@
             </textarea>
             <button type="submit">Add</button>
         </form>
+        <p>
+            <xsl:text>Check general instructions here: </xsl:text>
+            <a href="http://www.yegor256.com/2016/03/15/wring-dispatcher-github-notifications.html">
+                <xsl:text>Wring.io, a Dispatcher of GitHub Notifications</xsl:text>
+            </a>
+            <xsl:text>.</xsl:text>
+        </p>
+        <p>
+            <xsl:text>All supported JSON elements are listed below:</xsl:text>
+        </p>
+        <p>
+            <code><xsl:text>ignore</xsl:text></code>
+            <xsl:text> may contain a list of texts or regular expressions to ignore.</xsl:text>
+            <xsl:text> A regular expression must start and end with a slash.</xsl:text>
+        </p>
+        <p>
+            <code><xsl:text>boost</xsl:text></code>
+            <xsl:text> may contain a list of regular expressions.</xsl:text>
+            <xsl:text> An event will be boosted (+5 to the rating) if it matches.</xsl:text>
+        </p>
     </xsl:template>
     <xsl:template match="pipes">
         <xsl:apply-templates select="pipe"/>
