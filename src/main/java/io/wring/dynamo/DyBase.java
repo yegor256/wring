@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
  * Dynamo Base.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
- * @version $Id: b2608a3132210a18236a360d0ae5459430ed3a8f $
+ * @version $Id$
  * @since 1.0
  */
 public final class DyBase implements Base {
