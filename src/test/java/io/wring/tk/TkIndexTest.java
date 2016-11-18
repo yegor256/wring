@@ -30,6 +30,7 @@
 package io.wring.tk;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import io.wring.fake.FkBase;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.takes.Take;
@@ -51,7 +52,7 @@ public final class TkIndexTest {
      */
     @Test
     public void rendersHomePage() throws Exception {
-        final Take take = new TkIndex();
+        final Take take = new TkIndex(new FkBase());
         MatcherAssert.assertThat(
             XhtmlMatchers.xhtml(
                 new RsPrint(
@@ -66,7 +67,8 @@ public final class TkIndexTest {
             ),
             XhtmlMatchers.hasXPaths(
                 "/page/millis",
-                "/page/links/link[@rel='takes:github']"
+                "/page/links/link[@rel='takes:github']",
+                "/page/total"
             )
         );
     }

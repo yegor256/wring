@@ -30,20 +30,21 @@
 package io.wring.dynamo;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
+import com.google.common.collect.Collections2;
 import com.jcabi.dynamo.Item;
 import com.jcabi.dynamo.Region;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
 import io.wring.model.User;
 import io.wring.model.Vault;
+import java.util.Collection;
 import java.util.regex.Pattern;
 
 /**
  * Dynamo Base.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
- * @version $Id: b2608a3132210a18236a360d0ae5459430ed3a8f $
+ * @version $Id$
  * @since 1.0
  */
 public final class DyBase implements Base {
@@ -86,9 +87,10 @@ public final class DyBase implements Base {
     }
 
     @Override
-    public Iterable<Pipe> pipes() {
-        return Iterables.transform(
-            this.region.table("pipes").frame(),
+    public Collection<Pipe> pipes() {
+        return Collections2.transform(
+            this.region.table("pipes")
+                .frame(),
             (Function<Item, Pipe>) DyPipe::new
         );
     }

@@ -29,6 +29,8 @@
  */
 package io.wring.model;
 
+import java.util.Collection;
+
 /**
  * Base.
  *
@@ -49,7 +51,7 @@ public interface Base {
      * All pipes available now.
      * @return All pipes
      */
-    Iterable<Pipe> pipes();
+    Collection<Pipe> pipes();
 
     /**
      * Vault.

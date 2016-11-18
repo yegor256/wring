@@ -33,6 +33,7 @@ import io.wring.model.Base;
 import io.wring.model.Pipe;
 import io.wring.model.User;
 import io.wring.model.Vault;
+import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -50,7 +51,7 @@ public final class FkBase implements Base {
     }
 
     @Override
-    public Iterable<Pipe> pipes() {
+    public Collection<Pipe> pipes() {
         return Collections.emptyList();
     }
 

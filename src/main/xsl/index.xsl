@@ -46,5 +46,12 @@
             </a>
             <xsl:text>, it explains how this system works.</xsl:text>
         </p>
+        <p>
+            <xsl:text>There are </xsl:text>
+            <strong>
+                <xsl:value-of select="total"/>
+            </strong>
+            <xsl:text> pipes registered in the system at the moment.</xsl:text>
+        </p>
     </xsl:template>
 </xsl:stylesheet>
