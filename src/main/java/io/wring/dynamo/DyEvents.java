@@ -33,7 +33,6 @@ import com.amazonaws.services.dynamodbv2.model.AttributeAction;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.AttributeValueUpdate;
 import com.amazonaws.services.dynamodbv2.model.Select;
-import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Tv;
 import com.jcabi.dynamo.AttributeUpdates;
 import com.jcabi.dynamo.Attributes;
@@ -82,20 +81,21 @@ public final class DyEvents implements Events {
 
     @Override
     public Iterable<Event> iterate() {
-        return Iterables.transform(
-            this.table()
-                .frame()
-                .through(
-                    new QueryValve()
-                        .withLimit(Tv.TWENTY)
-                        .withIndexName("top")
-                        .withSelect(Select.ALL_ATTRIBUTES)
-                        .withScanIndexForward(false)
-                        .withConsistentRead(false)
-                )
-                .where("urn", Conditions.equalTo(this.urn)),
-            DyEvent::new
-        );
+        return this.table()
+            .frame()
+            .through(
+                new QueryValve()
+                    .withLimit(Tv.TWENTY)
+                    .withIndexName("top")
+                    .withSelect(Select.ALL_ATTRIBUTES)
+                    .withScanIndexForward(false)
+                    .withConsistentRead(false)
+            )
+            .where("urn", Conditions.equalTo(this.urn))
+            .stream()
+            .map(DyEvent::new)
+            .map(Event.class::cast)
+            ::iterator;
     }
 
     @Override

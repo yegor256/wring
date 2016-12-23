@@ -30,7 +30,6 @@
 package io.wring.dynamo;
 
 import com.amazonaws.services.dynamodbv2.model.Select;
-import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Tv;
 import com.jcabi.dynamo.Attributes;
 import com.jcabi.dynamo.Conditions;
@@ -77,18 +76,19 @@ public final class DyPipes implements Pipes {
 
     @Override
     public Iterable<Pipe> iterate() {
-        return Iterables.transform(
-            this.table()
-                .frame()
-                .through(
-                    new QueryValve()
-                        .withSelect(Select.ALL_ATTRIBUTES)
-                        .withLimit(Tv.HUNDRED)
-                        .withConsistentRead(true)
-                )
-                .where("urn", Conditions.equalTo(this.urn)),
-            DyPipe::new
-        );
+        return this.table()
+            .frame()
+            .through(
+                new QueryValve()
+                    .withSelect(Select.ALL_ATTRIBUTES)
+                    .withLimit(Tv.HUNDRED)
+                    .withConsistentRead(true)
+            )
+            .where("urn", Conditions.equalTo(this.urn))
+            .stream()
+            .map(DyPipe::new)
+            .map(Pipe.class::cast)
+            ::iterator;
     }
 
     @Override
