@@ -41,7 +41,7 @@ import java.util.Queue;
  * Refill the queue.
  *
  * @author Yegor Bugayenko (yegor@teamed.io)
- * @version $Id: c79829f9e91907f21c716854779af4233e496fa9 $
+ * @version $Id$
  * @since 1.0
  */
 final class Refill implements Runnable {
