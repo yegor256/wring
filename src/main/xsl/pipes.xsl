@@ -62,6 +62,19 @@
             <xsl:text>All supported JSON elements are listed below:</xsl:text>
         </p>
         <p>
+            <code><xsl:text>class</xsl:text></code>
+            <xsl:text> is the Java class name, like </xsl:text>
+            <code><xsl:text>io.wring.agents.github.AgGithub</xsl:text></code>
+            <xsl:text>.</xsl:text>
+        </p>
+        <p>
+            <code><xsl:text>token</xsl:text></code>
+            <xsl:text> is GitHub authentication token,</xsl:text>
+            <xsl:text> you can get it </xsl:text>
+            <a href="https://github.com/settings/tokens"><xsl:text>here</xsl:text></a>
+            <xsl:text>.</xsl:text>
+        </p>
+        <p>
             <code><xsl:text>ignore</xsl:text></code>
             <xsl:text> may contain a list of texts or regular expressions to ignore.</xsl:text>
             <xsl:text> A regular expression must start and end with a slash.</xsl:text>
