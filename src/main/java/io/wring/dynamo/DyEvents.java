@@ -81,7 +81,7 @@ public final class DyEvents implements Events {
 
     @Override
     public Iterable<Event> iterate() {
-        return this.table()
+        return () -> this.table()
             .frame()
             .through(
                 new QueryValve()
@@ -95,7 +95,7 @@ public final class DyEvents implements Events {
             .stream()
             .map(DyEvent::new)
             .map(Event.class::cast)
-            ::iterator;
+            .iterator();
     }
 
     @Override

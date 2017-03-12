@@ -29,9 +29,7 @@
  */
 package io.wring.dynamo;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import com.jcabi.dynamo.Item;
 import com.jcabi.dynamo.Region;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
@@ -91,7 +89,7 @@ public final class DyBase implements Base {
         return Collections2.transform(
             this.region.table("pipes")
                 .frame(),
-            (Function<Item, Pipe>) DyPipe::new
+            DyPipe::new
         );
     }
 

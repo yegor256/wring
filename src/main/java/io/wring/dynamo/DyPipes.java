@@ -76,7 +76,7 @@ public final class DyPipes implements Pipes {
 
     @Override
     public Iterable<Pipe> iterate() {
-        return this.table()
+        return () -> this.table()
             .frame()
             .through(
                 new QueryValve()
@@ -88,7 +88,7 @@ public final class DyPipes implements Pipes {
             .stream()
             .map(DyPipe::new)
             .map(Pipe.class::cast)
-            ::iterator;
+            .iterator();
     }
 
     @Override
