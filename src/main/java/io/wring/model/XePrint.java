@@ -70,6 +70,13 @@ public final class XePrint {
         final Matcher mtr = ptn.matcher(pattern);
         final StringBuffer out = new StringBuffer(pattern.length());
         while (mtr.find()) {
+            if (mtr.groupCount() < 1) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Broken matcher: %s", mtr
+                    )
+                );
+            }
             mtr.appendReplacement(out, xml.xpath(mtr.group(1)).get(0));
         }
         mtr.appendTail(out);

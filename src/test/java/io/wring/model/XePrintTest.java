@@ -27,12 +27,64 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.wring.model;
+
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+import org.xembly.Directives;
 
 /**
- * Model.
- *
+ * Test case for {@link XePrint}.
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
- * @since 1.0
+ * @since 0.15
+ * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */
-package io.wring.model;
+public final class XePrintTest {
+
+    /**
+     * Prints by XPath.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void printsByXpath() throws Exception {
+        MatcherAssert.assertThat(
+            new XePrint(
+                new Directives().add("hello").add("world").set("you, dude")
+            ).text("{/hello/world/text()}"),
+            Matchers.containsString("dude")
+        );
+    }
+
+    /**
+     * Prints by XPath.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void printsByMultiXpath() throws Exception {
+        MatcherAssert.assertThat(
+            new XePrint(
+                new Directives().add("foo")
+                    .add("bar")
+                    .set("hello, bar 1")
+                    .up()
+                    .add("bar")
+                    .set("hello, bar 2")
+            ).text("{/foo/bar/text()}"),
+            Matchers.containsString("hello, bar")
+        );
+    }
+
+    /**
+     * Prints by missed XPath.
+     * @throws Exception If some problem inside
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void printsByMissedXpath() throws Exception {
+        new XePrint(
+            new Directives().add("oops")
+        ).text("{/event/title/text()}");
+    }
+
+}
