@@ -55,7 +55,7 @@ public final class XePrintTest {
                     "you, dude $1 $2 $3"
                 )
             ).text("{/hello/world/text()}"),
-            Matchers.containsString("dude")
+            Matchers.containsString("$1 $2 $3")
         );
     }
 

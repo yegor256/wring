@@ -70,7 +70,9 @@ public final class XePrint {
         final Matcher mtr = ptn.matcher(pattern);
         final StringBuffer out = new StringBuffer(pattern.length());
         while (mtr.find()) {
-            mtr.appendReplacement(out, xml.xpath(mtr.group(1)).get(0));
+            mtr.appendReplacement(
+                out, xml.xpath(mtr.group(1)).get(0).replace("$", "\\$")
+            );
         }
         mtr.appendTail(out);
         return out.toString();
