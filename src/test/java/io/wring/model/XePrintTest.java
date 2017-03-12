@@ -51,7 +51,9 @@ public final class XePrintTest {
     public void printsByXpath() throws Exception {
         MatcherAssert.assertThat(
             new XePrint(
-                new Directives().add("hello").add("world").set("you, dude")
+                new Directives().add("hello").add("world").set(
+                    "you, dude $1 $2 $3"
+                )
             ).text("{/hello/world/text()}"),
             Matchers.containsString("dude")
         );
