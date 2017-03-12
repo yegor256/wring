@@ -103,9 +103,7 @@ final class TkEvents implements Take {
      */
     private static XeSource source(final Event event) throws IOException {
         final Iterable<Directive> dirs = event.asXembly();
-        final String title = new XePrint(event.asXembly()).text(
-            "{/event/title/text()}"
-        );
+        final String title = new XePrint(dirs).text("{/event/title/text()}");
         return new XeDirectives(
             new Directives()
                 .append(dirs)
