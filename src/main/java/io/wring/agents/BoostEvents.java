@@ -142,3 +142,4 @@ final class BoostEvents implements Events {
     }
 
 }
+
