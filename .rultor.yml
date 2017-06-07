@@ -12,6 +12,9 @@ env:
 install: |-
   sudo gem install pdd
   java -version
+  export LC_ALL=en_US.UTF-8
+  export LANG=en_US.UTF-8
+  export LANGUAGE=en_US.UTF-8
 deploy:
   script: |
     mvn clean install -Prultor --settings ../settings.xml
