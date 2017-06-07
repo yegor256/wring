@@ -44,7 +44,7 @@ import java.util.Optional;
 /**
  * Dynamo Vault.
  *
- * @author Yegor Bugayenko (yegor@teamed.io)
+ * @author Yegor Bugayenko (yegor256@gmail.com)
  * @version $Id$
  * @since 1.0
  * @checkstyle MultipleStringLiteralsCheck (500 lines)

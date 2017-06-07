@@ -47,7 +47,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 /**
  * Body of issue.
  *
- * @author Yegor Bugayenko (yegor@teamed.io)
+ * @author Yegor Bugayenko (yegor256@gmail.com)
  * @version $Id$
  * @since 0.13
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
