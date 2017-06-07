@@ -101,7 +101,7 @@ final class BoostEvents implements Events {
             || this.regex.matcher(title).find()) {
             this.origin.event(title).vote(Tv.FIVE);
             Logger.info(
-                this, "boosting \"%s\" because of %s",
+                this, "Boosting \"%s\" because of %s",
                 new Printable(text),
                 this.regex
             );

@@ -37,8 +37,13 @@ import java.io.IOException;
 import java.util.Queue;
 import javax.json.Json;
 import javax.json.JsonObject;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.cactoos.func.FuncWithCallback;
+import org.cactoos.func.ProcAsFunc;
+import org.cactoos.func.UncheckedFunc;
+import org.cactoos.io.BytesAsInput;
+import org.cactoos.text.BytesAsText;
+import org.cactoos.text.TextAsBytes;
+import org.cactoos.text.ThrowableAsBytes;
 
 /**
  * Single cycle.
@@ -46,6 +51,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
  * @author Yegor Bugayenko (yegor@teamed.io)
  * @version $Id$
  * @since 1.0
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 final class Cycle implements Runnable {
 
@@ -94,26 +100,34 @@ final class Cycle implements Runnable {
             print.text("{/pipe/urn/text()}")
         ).events();
         final String json = print.text("{/pipe/json/text()}");
-        try {
-            final JsonObject object = Json.createReader(
-                IOUtils.toInputStream(json)
-            ).readObject();
-            new Exec(
-                new JsonAgent(this.base, object),
-                new BoostEvents(
-                    new IgnoreEvents(events, object),
-                    object
+        new UncheckedFunc<>(
+            new FuncWithCallback<String, JsonObject>(
+                str -> Json.createReader(
+                    new BytesAsInput(new TextAsBytes(str)).stream()
+                ).readObject(),
+                new ProcAsFunc<>(
+                    error -> events.post(
+                        Cycle.class.getCanonicalName(),
+                        String.format(
+                            "Failed to parse JSON:\n%s\n\n%s",
+                            json,
+                            new BytesAsText(
+                                new ThrowableAsBytes(error)
+                            ).asString()
+                        )
+                    )
+                ),
+                new ProcAsFunc<>(
+                    obj -> new Exec(
+                        new JsonAgent(this.base, obj),
+                        new BoostEvents(
+                            new IgnoreEvents(events, obj),
+                            obj
+                        )
+                    ).run()
                 )
-            ).run();
-        } catch (final Throwable ex) {
-            events.post(
-                Cycle.class.getCanonicalName(),
-                String.format(
-                    "failed to parse JSON:\n%s\n\n%s",
-                    json, ExceptionUtils.getStackTrace(ex)
-                )
-            );
-        }
+            )
+        ).apply(json);
     }
 
 }

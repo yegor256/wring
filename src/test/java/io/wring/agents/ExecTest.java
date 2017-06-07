@@ -57,7 +57,7 @@ public final class ExecTest {
         Mockito.verify(events).post(
             MockitoHamcrest.argThat(
                 Matchers.startsWith(
-                    "internal error (java.io.IOException): &lt;bug&gt;"
+                    "Internal error (java.io.IOException): &lt;bug&gt;"
                 )
             ),
             MockitoHamcrest.argThat(

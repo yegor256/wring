@@ -158,7 +158,7 @@ public final class DyEvents implements Events {
         final Iterator<Item> items = this.items(title);
         if (!items.hasNext()) {
             throw new IllegalArgumentException(
-                String.format("event with title \"%s\" not found", title)
+                String.format("Event with title \"%s\" not found", title)
             );
         }
         return new DyEvent(items.next());
