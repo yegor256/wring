@@ -36,7 +36,7 @@ import org.takes.Response;
 import org.takes.Take;
 import org.takes.facets.flash.RsFlash;
 import org.takes.facets.forward.RsForward;
-import org.takes.rq.RqForm;
+import org.takes.rq.form.RqFormBase;
 
 /**
  * Add pipe.
@@ -63,7 +63,7 @@ final class TkPipeAdd implements Take {
     @Override
     public Response act(final Request req) throws IOException {
         this.base.user(new RqUser(req).urn()).pipes().add(
-            new RqForm.Base(req).param("json").iterator().next().trim()
+            new RqFormBase(req).param("json").iterator().next().trim()
         );
         return new RsForward(
             new RsFlash("pipe created"),

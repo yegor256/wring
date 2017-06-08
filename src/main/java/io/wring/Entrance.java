@@ -35,7 +35,7 @@ import io.wring.model.Base;
 import io.wring.tk.TkApp;
 import java.io.IOException;
 import org.takes.http.Exit;
-import org.takes.http.FtCLI;
+import org.takes.http.FtCli;
 
 /**
  * Command line entry.
@@ -62,7 +62,7 @@ public final class Entrance {
         final Base base = new DyBase();
         try (final Routine routine = new Routine(base)) {
             routine.run();
-            new FtCLI(new TkApp(base), args).start(Exit.NEVER);
+            new FtCli(new TkApp(base), args).start(Exit.NEVER);
         }
     }
 

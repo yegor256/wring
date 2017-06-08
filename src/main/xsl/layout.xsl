@@ -113,19 +113,24 @@
                     <footer>
                         <nav>
                             <ul style="color:gray;" class="bottom">
-                                <li>
+                                <li title="Currently deployed version">
                                     <xsl:text>v</xsl:text>
                                     <xsl:value-of select="version/name"/>
                                 </li>
-                                <li>
+                                <li title="Server time to generate this page">
                                     <xsl:call-template name="millis">
                                         <xsl:with-param name="millis" select="millis"/>
                                     </xsl:call-template>
                                 </li>
-                                <li>
+                                <li title="Load average of the server">
                                     <xsl:value-of select="@sla"/>
                                 </li>
-                                <li>
+                                <li title="Free/total memory in Mb">
+                                    <xsl:value-of select="memory/@free"/>
+                                    <xsl:text>/</xsl:text>
+                                    <xsl:value-of select="memory/@total"/>
+                                </li>
+                                <li title="Current date/time">
                                     <xsl:value-of select="@date"/>
                                 </li>
                             </ul>
