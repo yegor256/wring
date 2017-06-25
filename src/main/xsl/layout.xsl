@@ -30,10 +30,10 @@
  -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns="http://www.w3.org/1999/xhtml" version="1.0">
-    <xsl:include href="http://cdn.rawgit.com/yegor256/takes/master/src/main/resources/org/takes/rs/xe/sla.xsl"/>
-    <xsl:include href="http://cdn.rawgit.com/yegor256/takes/master/src/main/resources/org/takes/rs/xe/memory.xsl"/>
-    <xsl:include href="http://cdn.rawgit.com/yegor256/takes/master/src/main/resources/org/takes/rs/xe/millis.xsl"/>
-    <xsl:include href="http://cdn.rawgit.com/yegor256/takes/master/src/main/resources/org/takes/facets/flash/flash.xsl"/>
+    <xsl:include href="/org/takes/rs/xe/sla.xsl"/>
+    <xsl:include href="/org/takes/rs/xe/memory.xsl"/>
+    <xsl:include href="/org/takes/rs/xe/millis.xsl"/>
+    <xsl:include href="/org/takes/facets/flash/flash.xsl"/>
     <xsl:template match="/page">
         <html lang="en">
             <head>
