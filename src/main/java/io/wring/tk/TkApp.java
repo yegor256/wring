@@ -125,7 +125,7 @@ public final class TkApp extends TkWrap {
         return new TkFork(
             new FkRegex("/robots.txt", ""),
             new FkRegex(
-                "/org/takes/[a-z\\-]+\\.xsl",
+                "/org/takes/.+\\.xsl",
                 new TkClasspath()
             ),
             new FkRegex(
