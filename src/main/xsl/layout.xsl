@@ -30,6 +30,10 @@
  -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns="http://www.w3.org/1999/xhtml" version="1.0">
+    <xsl:include href="http://cdn.rawgit.com/yegor256/takes/master/src/main/resources/org/takes/rs/xe/sla.xsl"/>
+    <xsl:include href="http://cdn.rawgit.com/yegor256/takes/master/src/main/resources/org/takes/rs/xe/memory.xsl"/>
+    <xsl:include href="http://cdn.rawgit.com/yegor256/takes/master/src/main/resources/org/takes/rs/xe/millis.xsl"/>
+    <xsl:include href="http://cdn.rawgit.com/yegor256/takes/master/src/main/resources/org/takes/facets/flash/flash.xsl"/>
     <xsl:template match="/page">
         <html lang="en">
             <head>
@@ -105,7 +109,9 @@
                                 </xsl:if>
                             </ul>
                         </nav>
-                        <xsl:apply-templates select="flash"/>
+                        <xsl:call-template name="takes_flash">
+                            <xsl:with-param name="flash" select="flash"/>
+                        </xsl:call-template>
                     </header>
                     <article>
                         <xsl:apply-templates select="." mode="body"/>
@@ -118,17 +124,19 @@
                                     <xsl:value-of select="version/name"/>
                                 </li>
                                 <li title="Server time to generate this page">
-                                    <xsl:call-template name="millis">
+                                    <xsl:call-template name="takes_millis">
                                         <xsl:with-param name="millis" select="millis"/>
                                     </xsl:call-template>
                                 </li>
                                 <li title="Load average of the server">
-                                    <xsl:value-of select="@sla"/>
+                                    <xsl:call-template name="takes_sla">
+                                        <xsl:with-param name="sla" select="@sla"/>
+                                    </xsl:call-template>
                                 </li>
                                 <li title="Free/total memory in Mb">
-                                    <xsl:value-of select="memory/@free"/>
-                                    <xsl:text>/</xsl:text>
-                                    <xsl:value-of select="memory/@total"/>
+                                    <xsl:call-template name="takes_memory">
+                                        <xsl:with-param name="memory" select="memory"/>
+                                    </xsl:call-template>
                                 </li>
                                 <li title="Current date/time">
                                     <xsl:value-of select="@date"/>
@@ -165,47 +173,5 @@
                 </script>
             </body>
         </html>
-    </xsl:template>
-    <xsl:template match="flash">
-        <p>
-            <xsl:attribute name="style">
-                <xsl:text>color:</xsl:text>
-                <xsl:choose>
-                    <xsl:when test="level = 'INFO'">
-                        <xsl:text>#348C62</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="level = 'WARNING'">
-                        <xsl:text>orange</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="level = 'SEVERE'">
-                        <xsl:text>red</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>inherit</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-            <xsl:value-of select="message"/>
-        </p>
-    </xsl:template>
-    <xsl:template name="millis">
-        <xsl:param name="millis"/>
-        <xsl:choose>
-            <xsl:when test="not($millis)">
-                <xsl:text>?</xsl:text>
-            </xsl:when>
-            <xsl:when test="$millis &gt; 60000">
-                <xsl:value-of select="format-number($millis div 60000, '0')"/>
-                <xsl:text>min</xsl:text>
-            </xsl:when>
-            <xsl:when test="$millis &gt; 1000">
-                <xsl:value-of select="format-number($millis div 1000, '0.0')"/>
-                <xsl:text>s</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="format-number($millis, '0')"/>
-                <xsl:text>ms</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
     </xsl:template>
 </xsl:stylesheet>
