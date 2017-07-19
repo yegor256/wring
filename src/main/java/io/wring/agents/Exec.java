@@ -89,7 +89,7 @@ final class Exec {
                 StringUtils.abbreviate(ex.getLocalizedMessage(), Tv.FIFTY)
             );
             title = String.format(
-                "Internal error (%s): %s",
+                "Internal error (%s): \"%s\"",
                 ex.getClass().getCanonicalName(),
                 StringEscapeUtils.escapeHtml4(
                     StringUtils.abbreviate(ex.getLocalizedMessage(), Tv.FIFTY)

@@ -105,4 +105,21 @@ public final class DyEventsITCase {
         );
     }
 
+    /**
+     * DyEvents can post and vote.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void postsAndVotes() throws Exception {
+        final User user = new DyUser(new Dynamo(), "erikk");
+        final Events events = user.events();
+        final String title = "the title of the Event --+";
+        events.post(title, "some body text of the event");
+        events.event(title).vote(1);
+        MatcherAssert.assertThat(
+            new Xembler(events.event(title).asXembly()).xml(),
+            XhtmlMatchers.hasXPaths("/event[rank=2]")
+        );
+    }
+
 }
