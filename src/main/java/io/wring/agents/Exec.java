@@ -41,6 +41,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Appender;
 import org.apache.log4j.PatternLayout;
+import org.cactoos.func.Ternary;
+import org.cactoos.func.UncheckedScalar;
 
 /**
  * One execution.
@@ -93,7 +95,14 @@ final class Exec {
                 ex.getClass().getCanonicalName(),
                 StringEscapeUtils.escapeHtml4(
                     StringUtils.abbreviate(
-                        ex.getLocalizedMessage().replaceAll("\\s+", " "),
+                        new UncheckedScalar<>(
+                            new Ternary<String>(
+                                () -> ex.getLocalizedMessage() == null,
+                                () -> "null",
+                                () -> ex.getLocalizedMessage()
+                                    .replaceAll("\\s+", " ")
+                            )
+                        ).value(),
                         Tv.FIFTY
                     )
                 )
