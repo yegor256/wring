@@ -42,7 +42,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Appender;
 import org.apache.log4j.PatternLayout;
-import org.cactoos.Func;
 import org.cactoos.func.FuncWithFallback;
 import org.cactoos.func.Ternary;
 import org.cactoos.func.UncheckedFunc;
@@ -54,6 +53,7 @@ import org.cactoos.func.UncheckedScalar;
  * @author Yegor Bugayenko (yegor256@gmail.com)
  * @version $Id$
  * @since 0.13
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 final class Exec {
 
@@ -82,13 +82,20 @@ final class Exec {
      * @throws IOException If fails
      */
     public void run() throws IOException {
-        final StringBuilder title = new StringBuilder(this.agent.toString());
+        final StringBuilder title = new StringBuilder();
         final String body = new UncheckedFunc<>(
-            new FuncWithFallback<>(
-                input -> this.body(),
-                new Func<Throwable, String>() {
-                    @Override
-                    public String apply(final Throwable err) throws Exception {
+            new FuncWithFallback<Boolean, String>(
+                input -> {
+                    title.append(this.agent.name());
+                    return this.body();
+                },
+                err -> {
+                    title.setLength(0);
+                    final String text;
+                    if (err instanceof Agent.UserException) {
+                        title.append("It's your fault");
+                        text = err.getLocalizedMessage();
+                    } else {
                         Sentry.capture(err);
                         final String msg = StringEscapeUtils.escapeHtml4(
                             StringUtils.abbreviate(
@@ -103,11 +110,6 @@ final class Exec {
                                 Tv.FIFTY
                             )
                         );
-                        Logger.warn(
-                            this, "%s: %s",
-                            err.getClass().getCanonicalName(), msg
-                        );
-                        title.setLength(9);
                         title.append(
                             String.format(
                                 "Internal error (%s): \"%s\"",
@@ -115,7 +117,7 @@ final class Exec {
                                 msg
                             )
                         );
-                        return String.format(
+                        text = String.format(
                             // @checkstyle LineLength (1 line)
                             "%tFT%<tRZ %s\n\nIf you see this message, please report it to https://github.com/yegor256/wring/issues",
                             new Date(),
@@ -124,9 +126,11 @@ final class Exec {
                             )
                         );
                     }
+                    return text;
                 }
             )
-        ).apply(true);
+        )
+            .apply(true);
         if (!body.isEmpty()) {
             this.events.post(
                 String.format(

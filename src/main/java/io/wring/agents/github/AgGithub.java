@@ -80,7 +80,7 @@ public final class AgGithub implements Agent {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return this.getClass().getCanonicalName();
     }
 

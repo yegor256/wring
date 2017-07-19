@@ -42,10 +42,34 @@ import java.io.IOException;
 public interface Agent {
 
     /**
+     * Name of it.
+     * @return Name
+     * @throws IOException If fails
+     */
+    String name() throws IOException;
+
+    /**
      * Push new events.
      * @param events Where to push
      * @throws IOException If fails
      */
     void push(Events events) throws IOException;
+
+    /**
+     * User failure.
+     */
+    class UserException extends IOException {
+        /**
+         * Serialization marker.
+         */
+        private static final long serialVersionUID = -8371431530136279547L;
+        /**
+         * Ctor.
+         * @param cause The cause
+         */
+        UserException(final String cause) {
+            super(cause);
+        }
+    }
 
 }

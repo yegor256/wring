@@ -69,7 +69,7 @@ public final class JsonAgentTest {
             new JsonAgent(
                 new FkBase(),
                 "{\"class\":\"io.wring.agents.FkAgent\",\"x\":\"\\\\E\"}"
-            ).toString(),
+            ).name(),
             Matchers.equalTo(FkAgent.class.getCanonicalName())
         );
     }

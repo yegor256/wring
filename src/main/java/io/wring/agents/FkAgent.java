@@ -64,7 +64,7 @@ public final class FkAgent implements Agent {
     }
 
     @Override
-    public String toString() {
+    public String name() {
         return this.getClass().getCanonicalName();
     }
 

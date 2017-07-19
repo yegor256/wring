@@ -77,8 +77,8 @@ final class JsonAgent implements Agent {
     }
 
     @Override
-    public String toString() {
-        return this.agent().toString();
+    public String name() throws IOException {
+        return this.agent().name();
     }
 
     @Override
@@ -89,11 +89,12 @@ final class JsonAgent implements Agent {
     /**
      * Make an agent.
      * @return Agent
+     * @throws Agent.UserException If fails
      */
-    private Agent agent() {
+    private Agent agent() throws Agent.UserException {
         final String name = this.json.getString("class", "");
         if (name.isEmpty()) {
-            throw new IllegalStateException(
+            throw new Agent.UserException(
                 "Your JSON object must contain non-empty \"class\" attribute"
             );
         }
