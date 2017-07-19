@@ -133,9 +133,9 @@ public final class AgGithub implements Agent {
      */
     private static Iterable<JsonObject> safe(final Iterable<JsonObject> list)
         throws Agent.UserException {
-        final Iterator<JsonObject> objects;
+        final Iterator<JsonObject> objects = list.iterator();
         try {
-            objects = list.iterator();
+            objects.hasNext();
         } catch (final AssertionError ex) {
             throw new Agent.UserException(
                 String.format(
