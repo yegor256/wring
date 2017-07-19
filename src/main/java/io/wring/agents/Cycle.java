@@ -37,12 +37,12 @@ import java.io.IOException;
 import java.util.Queue;
 import javax.json.Json;
 import javax.json.JsonObject;
-import org.cactoos.func.FuncWithCallback;
-import org.cactoos.func.ProcAsFunc;
+import org.cactoos.Func;
+import org.cactoos.Proc;
+import org.cactoos.func.FuncWithFallback;
 import org.cactoos.func.UncheckedFunc;
 import org.cactoos.io.BytesAsInput;
 import org.cactoos.text.BytesAsText;
-import org.cactoos.text.TextAsBytes;
 import org.cactoos.text.ThrowableAsBytes;
 
 /**
@@ -53,12 +53,7 @@ import org.cactoos.text.ThrowableAsBytes;
  * @since 1.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-final class Cycle implements Runnable {
-
-    /**
-     * Base.
-     */
-    private final transient Base base;
+final class Cycle implements Proc<Base> {
 
     /**
      * Pipes to process.
@@ -67,65 +62,57 @@ final class Cycle implements Runnable {
 
     /**
      * Ctor.
-     * @param bse Base
      * @param queue List of them
      */
-    Cycle(final Base bse, final Queue<Pipe> queue) {
-        this.base = bse;
+    Cycle(final Queue<Pipe> queue) {
         this.pipes = queue;
     }
 
     @Override
-    public void run() {
+    public void exec(final Base base) throws Exception {
         final Pipe pipe = this.pipes.poll();
         if (pipe != null) {
-            try {
-                this.process(pipe);
-            } catch (final IOException ex) {
-                throw new IllegalStateException(ex);
-            }
+            Cycle.process(base, pipe);
         }
     }
 
     /**
      * Process a single pipe.
+     * @param base The base
      * @param pipe The pipe
      * @throws IOException If fails
-     * @checkstyle IllegalCatchCheck (20 lines)
      */
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    private void process(final Pipe pipe) throws IOException {
+    private static void process(final Base base, final Pipe pipe)
+        throws IOException {
         final XePrint print = new XePrint(pipe.asXembly());
-        final Events events = this.base.user(
+        final Events events = base.user(
             print.text("{/pipe/urn/text()}")
         ).events();
         final String json = print.text("{/pipe/json/text()}");
         new UncheckedFunc<>(
-            new FuncWithCallback<String, JsonObject>(
-                str -> Json.createReader(
-                    new BytesAsInput(new TextAsBytes(str)).stream()
+            new FuncWithFallback<>(
+                (Func<String, JsonObject>) str -> Json.createReader(
+                    new BytesAsInput(str).stream()
                 ).readObject(),
-                new ProcAsFunc<>(
-                    error -> events.post(
-                        Cycle.class.getCanonicalName(),
-                        String.format(
-                            "Failed to parse JSON:\n%s\n\n%s",
-                            json,
-                            new BytesAsText(
-                                new ThrowableAsBytes(error)
-                            ).asString()
-                        )
+                (Proc<Throwable>) error -> events.post(
+                    Cycle.class.getCanonicalName(),
+                    String.format(
+                        "Failed to parse JSON:\n%s\n\n%s",
+                        json,
+                        new BytesAsText(
+                            new ThrowableAsBytes(error)
+                        ).asString()
                     )
                 ),
-                new ProcAsFunc<>(
-                    obj -> new Exec(
-                        new JsonAgent(this.base, obj),
+                obj -> {
+                    new Exec(
+                        new JsonAgent(base, obj),
                         new BoostEvents(
                             new IgnoreEvents(events, obj),
                             obj
                         )
-                    ).run()
-                )
+                    ).run();
+                }
             )
         ).apply(json);
     }

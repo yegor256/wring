@@ -6,3 +6,4 @@ Wring-DynamoSecret: ${failsafe.dynamo.secret}
 Wring-GithubId: ${failsafe.github.id}
 Wring-GithubSecret: ${failsafe.github.secret}
 Wring-SecurityKey: ${failsafe.security.key}
+Wring-SentryDsn: test

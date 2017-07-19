@@ -53,7 +53,7 @@ public final class CycleTest {
     public void processesSinglePipe() throws Exception {
         final Base base = new FkBase();
         final Pipe pipe = new FkPipe();
-        new Cycle(base, Lists.newLinkedList(Collections.singleton(pipe))).run();
+        new Cycle(Lists.newLinkedList(Collections.singleton(pipe))).exec(base);
     }
 
 }

@@ -102,9 +102,8 @@ public final class DyEvents implements Events {
     public void post(final String title, final String text)
         throws IOException {
         final Iterator<Item> items = this.items(title);
-        final Item item;
         if (items.hasNext()) {
-            item = items.next();
+            final Item item = items.next();
             item.put(
                 new AttributeUpdates()
                     .with(

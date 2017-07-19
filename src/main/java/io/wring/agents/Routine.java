@@ -33,6 +33,8 @@ import com.jcabi.aspects.Tv;
 import com.jcabi.log.Logger;
 import com.jcabi.log.VerboseRunnable;
 import com.jcabi.log.VerboseThreads;
+import com.jcabi.manifests.Manifests;
+import io.sentry.Sentry;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
 import java.util.Queue;
@@ -40,6 +42,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import org.cactoos.Proc;
+import org.cactoos.func.FuncOf;
+import org.cactoos.func.FuncWithFallback;
+import org.cactoos.func.RunnableOf;
 
 /**
  * Routine.
@@ -47,6 +53,7 @@ import java.util.concurrent.TimeUnit;
  * @author Yegor Bugayenko (yegor256@gmail.com)
  * @version $Id$
  * @since 1.0
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 public final class Routine implements Runnable, AutoCloseable {
 
@@ -94,8 +101,15 @@ public final class Routine implements Runnable, AutoCloseable {
 
     @Override
     public void run() {
+        Sentry.init(Manifests.read("Wring-SentryDsn"));
         final Runnable cycle = new VerboseRunnable(
-            new Cycle(this.base, this.pipes), true, true
+            new RunnableOf<>(
+                new FuncWithFallback<Base, Boolean>(
+                    new FuncOf<>(new Cycle(this.pipes)),
+                    new FuncOf<>((Proc<Throwable>) Sentry::capture)
+                ),
+                this.base
+            ), true, true
         );
         for (int thread = 0; thread < this.threads - 1; ++thread) {
             this.executor.scheduleWithFixedDelay(
