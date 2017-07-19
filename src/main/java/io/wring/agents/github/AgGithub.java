@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import javax.json.JsonObject;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -101,7 +102,7 @@ public final class AgGithub implements Agent {
             RtPagination.COPYING
         );
         final Collection<String> done = new LinkedList<>();
-        for (final JsonObject event : list) {
+        for (final JsonObject event : AgGithub.safe(list)) {
             final String reason = event.getString("reason");
             if (!"mention".equals(reason)) {
                 continue;
@@ -122,6 +123,29 @@ public final class AgGithub implements Agent {
                 done.size(), github.users().self().login(), done
             );
         }
+    }
+
+    /**
+     * List events.
+     * @param list List of them
+     * @return Iterator
+     * @throws Agent.UserException If fails
+     */
+    private static Iterable<JsonObject> safe(final Iterable<JsonObject> list)
+        throws Agent.UserException {
+        final Iterator<JsonObject> objects;
+        try {
+            objects = list.iterator();
+        } catch (final AssertionError ex) {
+            throw new Agent.UserException(
+                String.format(
+                    "Can't login to GitHub: %s",
+                    ex.getLocalizedMessage()
+                ),
+                ex
+            );
+        }
+        return () -> objects;
     }
 
     /**

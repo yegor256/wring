@@ -67,8 +67,16 @@ public interface Agent {
          * Ctor.
          * @param cause The cause
          */
-        UserException(final String cause) {
+        public UserException(final String cause) {
             super(cause);
+        }
+        /**
+         * Ctor.
+         * @param cause The cause
+         * @param error Original exception
+         */
+        public UserException(final String cause, final Throwable error) {
+            super(cause, error);
         }
     }
 
