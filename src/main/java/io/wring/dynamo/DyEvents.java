@@ -127,7 +127,7 @@ public final class DyEvents implements Events {
                     )
             );
             Logger.info(
-                this, "event updated for %s: \"%s\"",
+                this, "Event updated for %s: \"%s\"",
                 this.urn, title
             );
         } else {
@@ -146,7 +146,7 @@ public final class DyEvents implements Events {
                     .with("time", System.currentTimeMillis())
             );
             Logger.info(
-                this, "new event created for %s: \"%s\"",
+                this, "Event created for %s: \"%s\"",
                 this.urn, title
             );
         }

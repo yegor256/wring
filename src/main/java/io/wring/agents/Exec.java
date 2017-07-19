@@ -92,7 +92,10 @@ final class Exec {
                 "Internal error (%s): \"%s\"",
                 ex.getClass().getCanonicalName(),
                 StringEscapeUtils.escapeHtml4(
-                    StringUtils.abbreviate(ex.getLocalizedMessage(), Tv.FIFTY)
+                    StringUtils.abbreviate(
+                        ex.getLocalizedMessage().replaceAll("\\s+", " "),
+                        Tv.FIFTY
+                    )
                 )
             );
             body = String.format(
