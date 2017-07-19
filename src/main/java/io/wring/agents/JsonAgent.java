@@ -91,10 +91,10 @@ final class JsonAgent implements Agent {
      * @return Agent
      */
     private Agent agent() {
-        final String name = this.json.getString("class");
-        if (name == null) {
+        final String name = this.json.getString("class", "");
+        if (name.isEmpty()) {
             throw new IllegalStateException(
-                "your JSON object must contain \"class\" attribute"
+                "Your JSON object must contain non-empty \"class\" attribute"
             );
         }
         final Class<?> type;
