@@ -107,8 +107,8 @@ final class Cycle implements Proc<Base> {
                 obj -> {
                     new Exec(
                         new JsonAgent(base, obj),
-                        new BoostEvents(
-                            new IgnoreEvents(events, obj),
+                        new IgnoreEvents(
+                            new BoostEvents(events, obj),
                             obj
                         )
                     ).run();
