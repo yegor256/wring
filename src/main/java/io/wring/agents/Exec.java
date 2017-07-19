@@ -32,6 +32,7 @@ package io.wring.agents;
 import com.jcabi.aspects.Tv;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
+import io.sentry.Sentry;
 import io.wring.model.Events;
 import java.io.IOException;
 import java.util.Date;
@@ -41,7 +42,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Appender;
 import org.apache.log4j.PatternLayout;
+import org.cactoos.Func;
+import org.cactoos.func.FuncWithFallback;
 import org.cactoos.func.Ternary;
+import org.cactoos.func.UncheckedFunc;
 import org.cactoos.func.UncheckedScalar;
 
 /**
@@ -77,43 +81,52 @@ final class Exec {
      * Run it.
      * @throws IOException If fails
      */
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     public void run() throws IOException {
-        String title;
-        String body;
-        try {
-            title = this.agent.toString();
-            body = this.body();
-            // @checkstyle IllegalCatchCheck (1 line)
-        } catch (final Throwable ex) {
-            Logger.warn(
-                this, "%s: %s", ex.getClass().getCanonicalName(),
-                StringUtils.abbreviate(ex.getLocalizedMessage(), Tv.FIFTY)
-            );
-            title = String.format(
-                "Internal error (%s): \"%s\"",
-                ex.getClass().getCanonicalName(),
-                StringEscapeUtils.escapeHtml4(
-                    StringUtils.abbreviate(
-                        new UncheckedScalar<>(
-                            new Ternary<String>(
-                                () -> ex.getLocalizedMessage() == null,
-                                () -> "null",
-                                () -> ex.getLocalizedMessage()
-                                    .replaceAll("\\s+", " ")
+        final StringBuilder title = new StringBuilder(this.agent.toString());
+        final String body = new UncheckedFunc<>(
+            new FuncWithFallback<>(
+                input -> this.body(),
+                new Func<Throwable, String>() {
+                    @Override
+                    public String apply(final Throwable err) throws Exception {
+                        Sentry.capture(err);
+                        final String msg = StringEscapeUtils.escapeHtml4(
+                            StringUtils.abbreviate(
+                                new UncheckedScalar<>(
+                                    new Ternary<>(
+                                        () -> err.getLocalizedMessage() == null,
+                                        () -> "null",
+                                        () -> err.getLocalizedMessage()
+                                            .replaceAll("\\s+", " ")
+                                    )
+                                ).value(),
+                                Tv.FIFTY
                             )
-                        ).value(),
-                        Tv.FIFTY
-                    )
-                )
-            );
-            body = String.format(
-                // @checkstyle LineLength (1 line)
-                "%tFT%<tRZ %s\n\nIf you see this message, please report it to https://github.com/yegor256/wring/issues",
-                new Date(),
-                StringEscapeUtils.escapeHtml4(ExceptionUtils.getStackTrace(ex))
-            );
-        }
+                        );
+                        Logger.warn(
+                            this, "%s: %s",
+                            err.getClass().getCanonicalName(), msg
+                        );
+                        title.setLength(9);
+                        title.append(
+                            String.format(
+                                "Internal error (%s): \"%s\"",
+                                err.getClass().getCanonicalName(),
+                                msg
+                            )
+                        );
+                        return String.format(
+                            // @checkstyle LineLength (1 line)
+                            "%tFT%<tRZ %s\n\nIf you see this message, please report it to https://github.com/yegor256/wring/issues",
+                            new Date(),
+                            StringEscapeUtils.escapeHtml4(
+                                ExceptionUtils.getStackTrace(err)
+                            )
+                        );
+                    }
+                }
+            )
+        ).apply(true);
         if (!body.isEmpty()) {
             this.events.post(
                 String.format(
