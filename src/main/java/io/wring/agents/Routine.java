@@ -106,7 +106,12 @@ public final class Routine implements Runnable, AutoCloseable {
             new RunnableOf<>(
                 new FuncWithFallback<Base, Boolean>(
                     new FuncOf<>(new Cycle(this.pipes)),
-                    new FuncOf<>((Proc<Throwable>) Sentry::capture)
+                    new FuncOf<>(
+                        (Proc<Throwable>) error -> {
+                            Sentry.capture(error);
+                            throw new IllegalStateException(error);
+                        }
+                    )
                 ),
                 this.base
             ), true, true
