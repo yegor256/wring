@@ -41,9 +41,9 @@ import org.cactoos.Func;
 import org.cactoos.Proc;
 import org.cactoos.func.FuncWithFallback;
 import org.cactoos.func.UncheckedFunc;
-import org.cactoos.io.BytesAsInput;
-import org.cactoos.text.BytesAsText;
-import org.cactoos.text.ThrowableAsBytes;
+import org.cactoos.io.BytesOf;
+import org.cactoos.io.InputOf;
+import org.cactoos.text.TextOf;
 
 /**
  * Single cycle.
@@ -92,15 +92,15 @@ final class Cycle implements Proc<Base> {
         new UncheckedFunc<>(
             new FuncWithFallback<>(
                 (Func<String, JsonObject>) str -> Json.createReader(
-                    new BytesAsInput(str).stream()
+                    new InputOf(str).stream()
                 ).readObject(),
                 (Proc<Throwable>) error -> events.post(
                     Cycle.class.getCanonicalName(),
                     String.format(
                         "Failed to parse JSON:\n%s\n\n%s",
                         json,
-                        new BytesAsText(
-                            new ThrowableAsBytes(error)
+                        new TextOf(
+                            new BytesOf(error)
                         ).asString()
                     )
                 ),

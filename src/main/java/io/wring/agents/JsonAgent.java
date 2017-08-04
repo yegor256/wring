@@ -36,7 +36,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import javax.json.Json;
 import javax.json.JsonObject;
-import org.apache.commons.io.IOUtils;
+import org.cactoos.io.ReaderOf;
 
 /**
  * Agent in JSON.
@@ -63,7 +63,7 @@ final class JsonAgent implements Agent {
      * @param cfg JSON config
      */
     JsonAgent(final Base bse, final String cfg) {
-        this(bse, Json.createReader(IOUtils.toInputStream(cfg)).readObject());
+        this(bse, Json.createReader(new ReaderOf(cfg)).readObject());
     }
 
     /**

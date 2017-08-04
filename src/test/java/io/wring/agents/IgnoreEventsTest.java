@@ -31,7 +31,7 @@ package io.wring.agents;
 
 import io.wring.model.Events;
 import javax.json.Json;
-import org.apache.commons.io.IOUtils;
+import org.cactoos.io.InputStreamOf;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -79,7 +79,7 @@ public final class IgnoreEventsTest {
         new IgnoreEvents(
             events,
             Json.createReader(
-                IOUtils.toInputStream("{\"ignore\":[\"/gamma.*/\"]}")
+                new InputStreamOf("{\"ignore\":[\"/gamma.*/\"]}")
             ).readObject()
         ).post("xx", "an\ngamma\nhere");
         Mockito.verify(events, Mockito.never()).post(

@@ -35,10 +35,10 @@ import com.jcabi.github.Issue;
 import com.jcabi.github.RepoCommit;
 import io.wring.model.Base;
 import io.wring.model.Events;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import javax.json.Json;
 import javax.json.JsonObject;
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
 
 /**

@@ -34,18 +34,18 @@ import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
 import io.sentry.Sentry;
 import io.wring.model.Events;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Appender;
 import org.apache.log4j.PatternLayout;
 import org.cactoos.func.FuncWithFallback;
-import org.cactoos.func.Ternary;
 import org.cactoos.func.UncheckedFunc;
-import org.cactoos.func.UncheckedScalar;
+import org.cactoos.scalar.Ternary;
+import org.cactoos.scalar.UncheckedScalar;
 
 /**
  * One execution.

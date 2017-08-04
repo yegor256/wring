@@ -35,7 +35,7 @@
     <parent>
         <groupId>com.jcabi</groupId>
         <artifactId>parent</artifactId>
-        <version>0.42</version>
+        <version>0.48.6</version>
     </parent>
     <groupId>io.wring</groupId>
     <artifactId>web</artifactId>
@@ -95,7 +95,7 @@
         <dependency>
             <groupId>org.cactoos</groupId>
             <artifactId>cactoos</artifactId>
-            <version>0.11.4</version>
+            <version>0.13</version>
         </dependency>
         <dependency>
             <groupId>io.sentry</groupId>
@@ -152,10 +152,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jcabi</groupId>
