@@ -69,7 +69,7 @@
         </p>
         <p>
             <code><xsl:text>token</xsl:text></code>
-            <xsl:text> is GitHub authentication token,</xsl:text>
+            <xsl:text> is your GitHub authentication token,</xsl:text>
             <xsl:text> you can get it </xsl:text>
             <a href="https://github.com/settings/tokens"><xsl:text>here</xsl:text></a>
             <xsl:text>.</xsl:text>
