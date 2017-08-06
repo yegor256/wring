@@ -124,7 +124,7 @@ public final class AgGithub implements Agent {
             );
         }
         return String.format(
-            "%d events seen for @%s at %s",
+            "%d events for @%s at %s",
             done.size(), github.users().self().login(),
             DateFormatUtils.formatUTC(new Date(), "yyyy-MM-ddTHH:mm:ss")
         );
