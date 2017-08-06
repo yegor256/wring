@@ -183,9 +183,12 @@ final class Exec {
             baos
         );
         root.addAppender(appender);
-        this.pipe.status(this.agent.push(this.events));
-        root.removeAppender(appender);
-        return baos.toString();
+        try {
+            this.pipe.status(this.agent.push(this.events));
+            return baos.toString();
+        } finally {
+            root.removeAppender(appender);
+        }
     }
 
 }
