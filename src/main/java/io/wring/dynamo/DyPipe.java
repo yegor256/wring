@@ -66,11 +66,15 @@ public final class DyPipe implements Pipe {
 
     @Override
     public Iterable<Directive> asXembly() throws IOException {
+        String status = "?";
+        if (this.item.has("status")) {
+            status = this.item.get("status").getS();
+        }
         return new Directives()
             .add("pipe")
             .add("urn").set(this.item.get("urn").getS()).up()
             .add("id").set(this.item.get("id").getN()).up()
-            .add("status").set(this.item.get("status").getS()).up()
+            .add("status").set(status).up()
             .add("json").set(Xembler.escape(this.item.get("json").getS())).up();
     }
 
