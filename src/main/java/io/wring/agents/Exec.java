@@ -34,6 +34,7 @@ import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
 import io.sentry.Sentry;
 import io.wring.model.Events;
+import io.wring.model.Pipe;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -68,13 +69,20 @@ final class Exec {
     private final transient Events events;
 
     /**
+     * Pipe.
+     */
+    private final transient Pipe pipe;
+
+    /**
      * Ctor.
      * @param agt Agent
      * @param evt Events
+     * @param ppe Pipe
      */
-    Exec(final Agent agt, final Events evt) {
+    Exec(final Agent agt, final Events evt, final Pipe ppe) {
         this.agent = agt;
         this.events = evt;
+        this.pipe = ppe;
     }
 
     /**
@@ -175,7 +183,7 @@ final class Exec {
             baos
         );
         root.addAppender(appender);
-        this.agent.push(this.events);
+        this.pipe.status(this.agent.push(this.events));
         root.removeAppender(appender);
         return baos.toString();
     }

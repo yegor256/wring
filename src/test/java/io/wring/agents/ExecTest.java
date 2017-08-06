@@ -29,6 +29,7 @@
  */
 package io.wring.agents;
 
+import io.wring.fake.FkPipe;
 import io.wring.model.Events;
 import java.io.IOException;
 import org.hamcrest.Matchers;
@@ -53,7 +54,7 @@ public final class ExecTest {
         final Agent agent = Mockito.mock(Agent.class);
         final Events events = Mockito.mock(Events.class);
         Mockito.doThrow(new IOException("<bug>")).when(agent).push(events);
-        new Exec(agent, events).run();
+        new Exec(agent, events, new FkPipe()).run();
         Mockito.verify(events).post(
             MockitoHamcrest.argThat(
                 Matchers.startsWith(

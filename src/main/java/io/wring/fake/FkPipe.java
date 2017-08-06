@@ -55,4 +55,9 @@ public final class FkPipe implements Pipe {
     public void delete() {
         // nothing
     }
+
+    @Override
+    public void status(final String text) {
+        // nothing
+    }
 }

@@ -92,11 +92,13 @@
         <p>
             <xsl:text>#</xsl:text>
             <xsl:value-of select="id"/>
-            <xsl:text> (</xsl:text>
+            <xsl:text> [</xsl:text>
+            <xsl:value-of select="status"/>
+            <xsl:text>] </xsl:text>
             <a href="{links/link[@rel='delete']/@href}">
                 <xsl:text>delete</xsl:text>
             </a>
-            <xsl:text>):</xsl:text>
+            <xsl:text>:</xsl:text>
         </p>
         <pre><xsl:value-of select="json"/></pre>
     </xsl:template>

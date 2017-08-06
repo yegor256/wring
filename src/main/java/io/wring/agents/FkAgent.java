@@ -69,10 +69,11 @@ public final class FkAgent implements Agent {
     }
 
     @Override
-    public void push(final Events events) throws IOException {
+    public String push(final Events events) throws IOException {
         assert this.base != null;
         assert this.json != null;
         events.post("fake title", "fake text");
+        return "done";
     }
 
 }

@@ -86,7 +86,7 @@ public final class AgGithub implements Agent {
     }
 
     @Override
-    public void push(final Events events) throws IOException {
+    public String push(final Events events) throws IOException {
         final Github github = new RtGithub(this.config.getString("token"));
         final String since = DateFormatUtils.formatUTC(
             DateUtils.addMinutes(new Date(), -Tv.THREE),
@@ -123,6 +123,10 @@ public final class AgGithub implements Agent {
                 done.size(), github.users().self().login(), done
             );
         }
+        return String.format(
+            "%d events seen for @%s at %s",
+            done.size(), github.users().self().login(), new Date()
+        );
     }
 
     /**

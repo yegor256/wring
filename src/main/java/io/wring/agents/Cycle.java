@@ -42,7 +42,7 @@ import org.cactoos.Proc;
 import org.cactoos.func.FuncWithFallback;
 import org.cactoos.func.UncheckedFunc;
 import org.cactoos.io.BytesOf;
-import org.cactoos.io.InputOf;
+import org.cactoos.io.ReaderOf;
 import org.cactoos.text.TextOf;
 
 /**
@@ -92,25 +92,20 @@ final class Cycle implements Proc<Base> {
         new UncheckedFunc<>(
             new FuncWithFallback<>(
                 (Func<String, JsonObject>) str -> Json.createReader(
-                    new InputOf(str).stream()
+                    new ReaderOf(str)
                 ).readObject(),
                 (Proc<Throwable>) error -> events.post(
                     Cycle.class.getCanonicalName(),
                     String.format(
                         "Failed to parse JSON:\n%s\n\n%s",
-                        json,
-                        new TextOf(
-                            new BytesOf(error)
-                        ).asString()
+                        json, new TextOf(new BytesOf(error)).asString()
                     )
                 ),
                 obj -> {
                     new Exec(
                         new JsonAgent(base, obj),
-                        new IgnoreEvents(
-                            new BoostEvents(events, obj),
-                            obj
-                        )
+                        new IgnoreEvents(new BoostEvents(events, obj), obj),
+                        pipe
                     ).run();
                 }
             )

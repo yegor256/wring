@@ -51,9 +51,10 @@ public interface Agent {
     /**
      * Push new events.
      * @param events Where to push
+     * @return Result
      * @throws IOException If fails
      */
-    void push(Events events) throws IOException;
+    String push(Events events) throws IOException;
 
     /**
      * User failure.

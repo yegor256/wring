@@ -29,6 +29,9 @@
  */
 package io.wring.dynamo;
 
+import com.amazonaws.services.dynamodbv2.model.AttributeAction;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.AttributeValueUpdate;
 import com.jcabi.dynamo.Attributes;
 import com.jcabi.dynamo.Item;
 import io.wring.model.Pipe;
@@ -67,6 +70,7 @@ public final class DyPipe implements Pipe {
             .add("pipe")
             .add("urn").set(this.item.get("urn").getS()).up()
             .add("id").set(this.item.get("id").getN()).up()
+            .add("status").set(this.item.get("status").getS()).up()
             .add("json").set(Xembler.escape(this.item.get("json").getS())).up();
     }
 
@@ -76,6 +80,16 @@ public final class DyPipe implements Pipe {
             new Attributes()
                 .with("urn", this.item.get("urn").getS())
                 .with("id", Long.parseLong(this.item.get("id").getN()))
+        );
+    }
+
+    @Override
+    public void status(final String text) throws IOException {
+        this.item.put(
+            "status",
+            new AttributeValueUpdate()
+                .withAction(AttributeAction.PUT)
+                .withValue(new AttributeValue().withS(text))
         );
     }
 

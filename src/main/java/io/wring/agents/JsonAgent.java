@@ -82,8 +82,8 @@ final class JsonAgent implements Agent {
     }
 
     @Override
-    public void push(final Events events) throws IOException {
-        this.agent().push(events);
+    public String push(final Events events) throws IOException {
+        return this.agent().push(events);
     }
 
     /**

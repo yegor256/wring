@@ -54,4 +54,12 @@ public interface Pipe {
      */
     void delete() throws IOException;
 
+    /**
+     * Set recent status.
+     * @param text Text of the status to set
+     * @throws IOException If fails
+     * @since 0.17
+     */
+    void status(String text) throws IOException;
+
 }

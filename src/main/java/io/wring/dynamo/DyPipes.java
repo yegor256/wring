@@ -41,6 +41,7 @@ import com.jcabi.log.Logger;
 import io.wring.model.Pipe;
 import io.wring.model.Pipes;
 import java.io.IOException;
+import java.util.Date;
 import javax.json.Json;
 import org.cactoos.io.InputOf;
 
@@ -100,6 +101,7 @@ public final class DyPipes implements Pipes {
                 .with("urn", this.urn)
                 .with("id", num)
                 .with("json", json)
+                .with("status", String.format("Created at %s", new Date()))
                 .with("time", System.currentTimeMillis())
         );
         Logger.info(
