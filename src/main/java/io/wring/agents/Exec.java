@@ -98,6 +98,7 @@ final class Exec {
                     return this.body();
                 },
                 err -> {
+                    this.pipe.status(err.getClass().getCanonicalName());
                     title.setLength(0);
                     final String text;
                     if (err instanceof Agent.UserException) {
