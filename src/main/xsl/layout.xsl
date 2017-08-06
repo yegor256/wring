@@ -93,9 +93,11 @@
                                         <a href="{links/link[@rel='home']/@href}">
                                             <xsl:text>inbox</xsl:text>
                                         </a>
-                                        <xsl:text> (</xsl:text>
-                                        <xsl:value-of select="events/@total"/>
-                                        <xsl:text>)</xsl:text>
+                                        <xsl:if test="events/@total">
+                                            <xsl:text> (</xsl:text>
+                                            <xsl:value-of select="events/@total"/>
+                                            <xsl:text>)</xsl:text>
+                                        </xsl:if>
                                     </li>
                                     <li>
                                         <a href="{links/link[@rel='pipes']/@href}">
