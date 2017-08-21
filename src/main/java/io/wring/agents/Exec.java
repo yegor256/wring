@@ -90,7 +90,7 @@ final class Exec {
      * @throws IOException If fails
      */
     public void run() throws IOException {
-        final StringBuilder title = new StringBuilder();
+        final StringBuilder title = new StringBuilder(0);
         final String body = new UncheckedFunc<>(
             new FuncWithFallback<Boolean, String>(
                 input -> {
@@ -180,7 +180,7 @@ final class Exec {
             org.apache.log4j.Logger.getRootLogger();
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final Appender appender = new ThreadAppender(
-            new PatternLayout("%p %m\n"),
+            new PatternLayout("%t %p %m\n"),
             baos
         );
         root.addAppender(appender);
