@@ -32,6 +32,8 @@ package io.wring.agents;
 import com.jcabi.aspects.Tv;
 import io.wring.model.Event;
 import io.wring.model.Events;
+import javax.json.Json;
+import org.cactoos.io.InputStreamOf;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -77,6 +79,24 @@ public final class BoostEventsTest {
         Mockito.doReturn(event).when(events).event(Mockito.anyString());
         new BoostEvents(events, "xyz.*").post("xyz", "some body");
         Mockito.verify(event).vote(Tv.FIVE);
+    }
+
+    /**
+     * IgnoreEvents can filter out events.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void passesEventsThroughByJsonConfig() throws Exception {
+        final Events events = Mockito.mock(Events.class);
+        final Event event = Mockito.mock(Event.class);
+        Mockito.doReturn(event).when(events).event(Mockito.anyString());
+        new BoostEvents(
+            events,
+            Json.createReader(
+                new InputStreamOf("{}")
+            ).readObject()
+        ).post("the title", "the body");
+        Mockito.verify(event, Mockito.never()).vote(Mockito.anyInt());
     }
 
 }
