@@ -87,4 +87,22 @@ public final class IgnoreEventsTest {
         );
     }
 
+    /**
+     * IgnoreEvents can filter out events.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void passesEventsThroughByJsonConfig() throws Exception {
+        final Events events = Mockito.mock(Events.class);
+        new IgnoreEvents(
+            events,
+            Json.createReader(
+                new InputStreamOf("{}")
+            ).readObject()
+        ).post("xx", "an\ngamma\nhere");
+        Mockito.verify(events).post(
+            Mockito.anyString(), Mockito.anyString()
+        );
+    }
+
 }

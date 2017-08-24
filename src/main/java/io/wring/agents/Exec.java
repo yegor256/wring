@@ -161,7 +161,7 @@ final class Exec {
         String log = this.log();
         if (!log.isEmpty()) {
             log = Logger.format(
-                "%s\ndone. %tFT%<tRZ. %[ms]s spent.",
+                "%s\nDone. %tFT%<tRZ. %[ms]s spent.",
                 log.trim(),
                 new Date(),
                 System.currentTimeMillis() - start
