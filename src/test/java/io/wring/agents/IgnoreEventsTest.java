@@ -99,7 +99,7 @@ public final class IgnoreEventsTest {
             Json.createReader(
                 new InputStreamOf("{}")
             ).readObject()
-        ).post("xx", "an\ngamma\nhere");
+        ).post("xxy", "a\nbeta\nhere");
         Mockito.verify(events).post(
             Mockito.anyString(), Mockito.anyString()
         );

@@ -143,7 +143,9 @@ final class IgnoreEvents implements Events {
     private static Pattern pattern(final JsonObject json) {
         final JsonArray ignore = json.getJsonArray("ignore");
         final Collection<Pattern> ptns = new LinkedList<>();
-        if (ignore != null) {
+        if (ignore == null) {
+            ptns.add(Pattern.compile("never^"));
+        } else {
             ptns.addAll(
                 ignore.getValuesAs(JsonString.class)
                     .stream()
