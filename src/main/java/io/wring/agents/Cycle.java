@@ -33,8 +33,6 @@ import io.wring.model.Base;
 import io.wring.model.Events;
 import io.wring.model.Pipe;
 import io.wring.model.XePrint;
-import java.io.IOException;
-import java.util.Queue;
 import javax.json.Json;
 import javax.json.JsonObject;
 import org.cactoos.Func;
@@ -53,39 +51,25 @@ import org.cactoos.text.TextOf;
  * @since 1.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-final class Cycle implements Proc<Base> {
+final class Cycle implements Proc<Pipe> {
 
     /**
-     * Pipes to process.
+     * Base to use.
      */
-    private final transient Queue<Pipe> pipes;
+    private final transient Base base;
 
     /**
      * Ctor.
-     * @param queue List of them
+     * @param bse Base
      */
-    Cycle(final Queue<Pipe> queue) {
-        this.pipes = queue;
+    Cycle(final Base bse) {
+        this.base = bse;
     }
 
     @Override
-    public void exec(final Base base) throws Exception {
-        final Pipe pipe = this.pipes.poll();
-        if (pipe != null) {
-            Cycle.process(base, pipe);
-        }
-    }
-
-    /**
-     * Process a single pipe.
-     * @param base The base
-     * @param pipe The pipe
-     * @throws IOException If fails
-     */
-    private static void process(final Base base, final Pipe pipe)
-        throws IOException {
+    public void exec(final Pipe pipe) throws Exception {
         final XePrint print = new XePrint(pipe.asXembly());
-        final Events events = base.user(
+        final Events events = this.base.user(
             print.text("{/pipe/urn/text()}")
         ).events();
         final String json = print.text("{/pipe/json/text()}");
@@ -103,7 +87,7 @@ final class Cycle implements Proc<Base> {
                 ),
                 obj -> {
                     new Exec(
-                        new JsonAgent(base, obj),
+                        new JsonAgent(this.base, obj),
                         new IgnoreEvents(new BoostEvents(events, obj), obj),
                         pipe
                     ).run();

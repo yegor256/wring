@@ -61,7 +61,7 @@ public final class Entrance {
     public static void main(final String... args) throws IOException {
         final Base base = new DyBase();
         try (final Routine routine = new Routine(base)) {
-            routine.run();
+            routine.start();
             new FtCli(new TkApp(base), args).start(Exit.NEVER);
         }
     }

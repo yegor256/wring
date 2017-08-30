@@ -29,12 +29,10 @@
  */
 package io.wring.agents;
 
-import com.google.common.collect.Lists;
 import io.wring.fake.FkBase;
 import io.wring.fake.FkPipe;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
-import java.util.Collections;
 import org.junit.Test;
 
 /**
@@ -53,7 +51,7 @@ public final class CycleTest {
     public void processesSinglePipe() throws Exception {
         final Base base = new FkBase();
         final Pipe pipe = new FkPipe();
-        new Cycle(Lists.newLinkedList(Collections.singleton(pipe))).exec(base);
+        new Cycle(base).exec(pipe);
     }
 
 }

@@ -29,17 +29,18 @@
  */
 package io.wring.agents;
 
-import com.jcabi.aspects.Tv;
-import com.jcabi.log.Logger;
 import com.jcabi.log.VerboseRunnable;
 import com.jcabi.log.VerboseThreads;
 import com.jcabi.manifests.Manifests;
 import io.sentry.Sentry;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.cactoos.Proc;
@@ -68,11 +69,6 @@ public final class Routine implements Runnable, AutoCloseable {
     private final transient int threads;
 
     /**
-     * Pipes to process.
-     */
-    private final transient Queue<Pipe> pipes;
-
-    /**
      * Executor.
      */
     private final transient ScheduledExecutorService executor;
@@ -93,19 +89,66 @@ public final class Routine implements Runnable, AutoCloseable {
     public Routine(final Base bse, final int total) {
         this.base = bse;
         this.threads = total;
-        this.pipes = new ConcurrentLinkedQueue<>();
         this.executor = Executors.newScheduledThreadPool(
             total, new VerboseThreads(Routine.class)
         );
     }
 
+    /**
+     * Start it.
+     */
+    public void start() {
+        Sentry.init(Manifests.read("Wring-SentryDsn"));
+        this.executor.scheduleWithFixedDelay(
+            new VerboseRunnable(this, true, true),
+            1L, 1L, TimeUnit.MINUTES
+        );
+    }
+
     @Override
     public void run() {
-        Sentry.init(Manifests.read("Wring-SentryDsn"));
-        final Runnable cycle = new VerboseRunnable(
+        final ExecutorService svc = Executors.newFixedThreadPool(
+            this.threads, new VerboseThreads()
+        );
+        final Collection<Future<?>> futures = new LinkedList<>();
+        for (final Pipe pipe : this.base.pipes()) {
+            futures.add(svc.submit(this.job(pipe)));
+        }
+        for (final Future<?> future : futures) {
+            try {
+                future.get();
+            } catch (final InterruptedException ex) {
+                Thread.currentThread().interrupt();
+                throw new IllegalStateException(ex);
+            } catch (final ExecutionException ex) {
+                throw new IllegalStateException(ex);
+            }
+        }
+    }
+
+    @Override
+    public void close() {
+        this.executor.shutdown();
+        try {
+            if (!this.executor.awaitTermination(1L, TimeUnit.MINUTES)) {
+                throw new IllegalStateException("Failed to terminate");
+            }
+        } catch (final InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(ex);
+        }
+    }
+
+    /**
+     * Create one job for the pipe.
+     * @param pipe The pipe
+     * @return The job for this pipe
+     */
+    private Runnable job(final Pipe pipe) {
+        return new VerboseRunnable(
             new RunnableOf<>(
-                new FuncWithFallback<Base, Boolean>(
-                    new FuncOf<>(new Cycle(this.pipes)),
+                new FuncWithFallback<Pipe, Boolean>(
+                    new FuncOf<>(new Cycle(this.base)),
                     new FuncOf<>(
                         (Proc<Throwable>) error -> {
                             Sentry.capture(error);
@@ -113,36 +156,10 @@ public final class Routine implements Runnable, AutoCloseable {
                         }
                     )
                 ),
-                this.base
-            ), true, true
+                pipe
+            ),
+            true, true
         );
-        for (int thread = 0; thread < this.threads - 1; ++thread) {
-            this.executor.scheduleWithFixedDelay(
-                cycle,
-                (long) Tv.HUNDRED, (long) Tv.HUNDRED,
-                TimeUnit.MILLISECONDS
-            );
-        }
-        this.executor.scheduleWithFixedDelay(
-            new VerboseRunnable(new Refill(this.base, this.pipes), true, true),
-            1L, 1L, TimeUnit.MINUTES
-        );
-        Logger.info(this, "%d threads started", this.threads);
-    }
-
-    @Override
-    public void close() {
-        this.executor.shutdown();
-        this.pipes.clear();
-        try {
-            if (!this.executor.awaitTermination(1L, TimeUnit.MINUTES)) {
-                throw new IllegalStateException("failed to terminate");
-            }
-        } catch (final InterruptedException ex) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException(ex);
-        }
-        Logger.info(this, "%d threads stopped", this.threads);
     }
 
 }
