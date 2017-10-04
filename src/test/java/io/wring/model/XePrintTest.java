@@ -41,6 +41,7 @@ import org.xembly.Directives;
  * @since 0.15
  * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class XePrintTest {
 
     /**

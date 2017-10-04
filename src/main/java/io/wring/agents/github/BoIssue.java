@@ -42,7 +42,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 /**
  * Body of issue.

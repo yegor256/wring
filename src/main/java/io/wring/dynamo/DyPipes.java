@@ -53,6 +53,7 @@ import org.cactoos.io.InputOf;
  * @since 1.0
  * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class DyPipes implements Pipes {
 
     /**

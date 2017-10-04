@@ -49,6 +49,7 @@ import java.util.Optional;
  * @since 1.0
  * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class DyVault implements Vault {
 
     /**

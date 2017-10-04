@@ -64,6 +64,7 @@ import org.takes.tk.TkWrap;
  * @checkstyle MultipleStringLiteralsCheck (500 lines)
  * @checkstyle ClassFanOutComplexityCheck (500 lines)
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class TkApp extends TkWrap {
 
     /**

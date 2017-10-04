@@ -41,7 +41,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import javax.json.JsonObject;
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 /**
  * Body of commit.

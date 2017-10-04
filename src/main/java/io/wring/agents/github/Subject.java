@@ -85,6 +85,7 @@ final class Subject {
      * @param events Events
      * @throws IOException If fails
      */
+    @SuppressWarnings("PMD.AvoidDuplicateLiterals")
     public void push(final Github github, final Events events)
         throws IOException {
         final String type = this.json.getString("type");
