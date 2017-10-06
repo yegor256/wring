@@ -35,15 +35,10 @@ import com.jcabi.manifests.Manifests;
 import io.sentry.Sentry;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import org.cactoos.Proc;
 import org.cactoos.func.FuncOf;
 import org.cactoos.func.FuncWithFallback;
 import org.cactoos.func.RunnableOf;
@@ -110,24 +105,10 @@ public final class Routine implements Runnable, AutoCloseable {
         final ExecutorService svc = Executors.newFixedThreadPool(
             this.threads, new VerboseThreads()
         );
-        try {
-            final Collection<Future<?>> futures = new LinkedList<>();
-            for (final Pipe pipe : this.base.pipes()) {
-                futures.add(svc.submit(this.job(pipe)));
-            }
-            for (final Future<?> future : futures) {
-                try {
-                    future.get();
-                } catch (final InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                    throw new IllegalStateException(ex);
-                } catch (final ExecutionException ex) {
-                    throw new IllegalStateException(ex);
-                }
-            }
-        } finally {
-            svc.shutdown();
+        for (final Pipe pipe : this.base.pipes()) {
+            svc.submit(this.job(pipe));
         }
+        svc.shutdown();
     }
 
     @Override
@@ -154,7 +135,7 @@ public final class Routine implements Runnable, AutoCloseable {
                 new FuncWithFallback<Pipe, Boolean>(
                     new FuncOf<>(new Cycle(this.base)),
                     new FuncOf<>(
-                        (Proc<Throwable>) error -> {
+                        error -> {
                             Sentry.capture(error);
                             throw new IllegalStateException(error);
                         }
