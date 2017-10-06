@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonString;
+import javax.json.JsonValue;
 
 /**
  * Events that ignores by regular expression.
@@ -65,8 +66,10 @@ final class IgnoreEvents implements Events {
      * Ctor.
      * @param events Agent original
      * @param cfg JSON config
+     * @throws Agent.UserException If fails
      */
-    IgnoreEvents(final Events events, final JsonObject cfg) {
+    IgnoreEvents(final Events events, final JsonObject cfg)
+        throws Agent.UserException {
         this(events, IgnoreEvents.pattern(cfg));
     }
 
@@ -138,14 +141,22 @@ final class IgnoreEvents implements Events {
      * Make regex from a JSON config.
      * @param json JSON config
      * @return Pattern
+     * @throws Agent.UserException If fails
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    private static Pattern pattern(final JsonObject json) {
-        final JsonArray ignore = json.getJsonArray("ignore");
+    private static Pattern pattern(final JsonObject json)
+        throws Agent.UserException {
         final Collection<Pattern> ptns = new LinkedList<>();
-        if (ignore == null) {
+        final JsonValue value = json.get("ignore");
+        if (value == null) {
             ptns.add(Pattern.compile("never^"));
         } else {
+            if (!(value instanceof JsonArray)) {
+                throw new Agent.UserException(
+                    "Element 'ignore' must be an array"
+                );
+            }
+            final JsonArray ignore = value.asJsonArray();
             ptns.addAll(
                 ignore.getValuesAs(JsonString.class)
                     .stream()
