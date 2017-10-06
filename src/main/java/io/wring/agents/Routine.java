@@ -110,19 +110,23 @@ public final class Routine implements Runnable, AutoCloseable {
         final ExecutorService svc = Executors.newFixedThreadPool(
             this.threads, new VerboseThreads()
         );
-        final Collection<Future<?>> futures = new LinkedList<>();
-        for (final Pipe pipe : this.base.pipes()) {
-            futures.add(svc.submit(this.job(pipe)));
-        }
-        for (final Future<?> future : futures) {
-            try {
-                future.get();
-            } catch (final InterruptedException ex) {
-                Thread.currentThread().interrupt();
-                throw new IllegalStateException(ex);
-            } catch (final ExecutionException ex) {
-                throw new IllegalStateException(ex);
+        try {
+            final Collection<Future<?>> futures = new LinkedList<>();
+            for (final Pipe pipe : this.base.pipes()) {
+                futures.add(svc.submit(this.job(pipe)));
             }
+            for (final Future<?> future : futures) {
+                try {
+                    future.get();
+                } catch (final InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    throw new IllegalStateException(ex);
+                } catch (final ExecutionException ex) {
+                    throw new IllegalStateException(ex);
+                }
+            }
+        } finally {
+            svc.shutdown();
         }
     }
 
