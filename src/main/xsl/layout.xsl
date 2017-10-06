@@ -148,8 +148,8 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
             <nav>
               <ul>
                 <li>
-                  <a href="http://www.zerocracy.com">
-                    <img src="http://www.zerocracy.com/badge.svg"/>
+                  <a href="http://www.0crat.com/p/C7FCB1EQN">
+                    <img src="http://www.zerocracy.com/badge/C7FCB1EQN.svg"/>
                   </a>
                 </li>
               </ul>

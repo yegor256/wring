@@ -1,6 +1,6 @@
 <img src="http://www.wring.io/images/logo.svg" height="92" width="92"/>
 
-[![Managed by Zerocracy](http://www.zerocracy.com/badge.svg)](http://www.zerocracy.com)
+[![Managed by Zerocracy](http://www.0crat.com/badge/C7FCB1EQN.svg)](http://www.0crat.com/p/C7FCB1EQN)
 [![DevOps By Rultor.com](http://www.rultor.com/b/yegor256/wring)](http://www.rultor.com/p/yegor256/wring)
 
 [![Build Status](https://travis-ci.org/yegor256/wring.svg?branch=master)](https://travis-ci.org/yegor256/wring)
