@@ -1,6 +1,6 @@
 <img src="http://www.wring.io/images/logo.svg" height="92" width="92"/>
 
-[![EO principles respected here](https://cdn.rawgit.com/yegor256/elegantobjects.github.io/master/badge.svg)](http://www.elegantobjects.org)
+[![EO principles respected here](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org)
 [![Managed by Zerocracy](https://www.0crat.com/badge/C7FCB1EQN.svg)](https://www.0crat.com/p/C7FCB1EQN)
 [![DevOps By Rultor.com](http://www.rultor.com/b/yegor256/wring)](http://www.rultor.com/p/yegor256/wring)
 
