@@ -42,6 +42,8 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
+import org.cactoos.Scalar;
+import org.cactoos.scalar.IoCheckedScalar;
 
 /**
  * Events that boost by regular expression.
@@ -60,17 +62,15 @@ final class BoostEvents implements Events {
     /**
      * Regex to boost.
      */
-    private final transient Pattern regex;
+    private final transient IoCheckedScalar<Pattern> regex;
 
     /**
      * Ctor.
      * @param events Agent original
      * @param cfg JSON config
-     * @throws Agent.UserException If fails
      */
-    BoostEvents(final Events events, final JsonObject cfg)
-        throws Agent.UserException {
-        this(events, BoostEvents.pattern(cfg));
+    BoostEvents(final Events events, final JsonObject cfg) {
+        this(events, () -> BoostEvents.pattern(cfg));
     }
 
     /**
@@ -79,7 +79,7 @@ final class BoostEvents implements Events {
      * @param ptn Pattern
      */
     BoostEvents(final Events events, final String ptn) {
-        this(events, Pattern.compile(ptn));
+        this(events, () -> Pattern.compile(ptn));
     }
 
     /**
@@ -87,9 +87,9 @@ final class BoostEvents implements Events {
      * @param events Agent original
      * @param ptn Pattern
      */
-    BoostEvents(final Events events, final Pattern ptn) {
+    BoostEvents(final Events events, final Scalar<Pattern> ptn) {
         this.origin = events;
-        this.regex = ptn;
+        this.regex = new IoCheckedScalar<>(ptn);
     }
 
     @Override
@@ -100,8 +100,8 @@ final class BoostEvents implements Events {
     @Override
     public void post(final String title, final String text) throws IOException {
         this.origin.post(title, text);
-        if (this.regex.matcher(text).find()
-            || this.regex.matcher(title).find()) {
+        if (this.regex.value().matcher(text).find()
+            || this.regex.value().matcher(title).find()) {
             this.origin.event(title).vote(Tv.FIVE);
             Logger.info(
                 this, "Boosting \"%s\" because of %s",

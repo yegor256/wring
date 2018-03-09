@@ -42,6 +42,8 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
+import org.cactoos.Scalar;
+import org.cactoos.scalar.IoCheckedScalar;
 
 /**
  * Events that ignores by regular expression.
@@ -60,17 +62,15 @@ final class IgnoreEvents implements Events {
     /**
      * Regex to ignore.
      */
-    private final transient Pattern regex;
+    private final transient IoCheckedScalar<Pattern> regex;
 
     /**
      * Ctor.
      * @param events Agent original
      * @param cfg JSON config
-     * @throws Agent.UserException If fails
      */
-    IgnoreEvents(final Events events, final JsonObject cfg)
-        throws Agent.UserException {
-        this(events, IgnoreEvents.pattern(cfg));
+    IgnoreEvents(final Events events, final JsonObject cfg) {
+        this(events, () -> IgnoreEvents.pattern(cfg));
     }
 
     /**
@@ -79,7 +79,7 @@ final class IgnoreEvents implements Events {
      * @param ptn Pattern
      */
     IgnoreEvents(final Events events, final String ptn) {
-        this(events, IgnoreEvents.pattern(ptn));
+        this(events, () -> IgnoreEvents.pattern(ptn));
     }
 
     /**
@@ -87,9 +87,9 @@ final class IgnoreEvents implements Events {
      * @param events Agent original
      * @param ptn Pattern
      */
-    IgnoreEvents(final Events events, final Pattern ptn) {
+    IgnoreEvents(final Events events, final Scalar<Pattern> ptn) {
         this.origin = events;
-        this.regex = ptn;
+        this.regex = new IoCheckedScalar<>(ptn);
     }
 
     @Override
@@ -99,7 +99,7 @@ final class IgnoreEvents implements Events {
 
     @Override
     public void post(final String title, final String text) throws IOException {
-        if (this.regex.matcher(text).find()) {
+        if (this.regex.value().matcher(text).find()) {
             Logger.info(
                 this, "Ignoring \"%s\" because of %s",
                 new Printable(text),

@@ -44,17 +44,17 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
         <xsl:if test="identity">
           <link id="favicon" rel="shortcut icon" type="image/png" data-origin="{links/link[@rel='favicon']/@href}" href="{links/link[@rel='favicon']/@href}?{@date}{@sla}"/>
           <script type="text/javascript">
-                        setInterval(
-                          function() {
-                            var link = document.getElementById('favicon');
-                            link.setAttribute(
-                              'href',
-                              link.getAttribute('data-origin') + '?' + new Date().getTime()
-                            );
-                          },
-                          60 * 1000
-                        );
-                    </script>
+            setInterval(
+              function() {
+                var link = document.getElementById('favicon');
+                link.setAttribute(
+                  'href',
+                  link.getAttribute('data-origin') + '?' + new Date().getTime()
+                );
+              },
+              60 * 1000
+            );
+          </script>
         </xsl:if>
         <link rel="stylesheet" href="http://yegor256.github.io/tacit/tacit.min.css"/>
         <link rel="stylesheet" href="/css/main.css"/>
@@ -149,7 +149,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
               <ul>
                 <li>
                   <a href="http://www.0crat.com/p/C7FCB1EQN">
-                    <img src="http://www.zerocracy.com/badge/C7FCB1EQN.svg"/>
+                    <img src="https://www.0crat.com/badge/C7FCB1EQN.svg"/>
                   </a>
                 </li>
               </ul>
@@ -166,13 +166,13 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
           </footer>
         </section>
         <script>
-                    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-                    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-                    ga('create', 'UA-1963507-43', 'auto');
-                    ga('send', 'pageview');
-                </script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+          ga('create', 'UA-1963507-43', 'auto');
+          ga('send', 'pageview');
+        </script>
       </body>
     </html>
   </xsl:template>
