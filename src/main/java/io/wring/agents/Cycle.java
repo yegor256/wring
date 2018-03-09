@@ -35,8 +35,8 @@ import io.wring.model.Pipe;
 import io.wring.model.XePrint;
 import javax.json.Json;
 import javax.json.JsonObject;
-import org.cactoos.Func;
 import org.cactoos.Proc;
+import org.cactoos.func.FuncOf;
 import org.cactoos.func.FuncWithFallback;
 import org.cactoos.func.UncheckedFunc;
 import org.cactoos.io.BytesOf;
@@ -74,15 +74,17 @@ final class Cycle implements Proc<Pipe> {
         ).events();
         final String json = print.text("{/pipe/json/text()}");
         new UncheckedFunc<>(
-            new FuncWithFallback<>(
-                (Func<String, JsonObject>) str -> Json.createReader(
+            new FuncWithFallback<String, JsonObject>(
+                str -> Json.createReader(
                     new ReaderOf(str)
                 ).readObject(),
-                (Proc<Throwable>) error -> events.post(
-                    Cycle.class.getCanonicalName(),
-                    String.format(
-                        "Failed to parse JSON:\n%s\n\n%s",
-                        json, new TextOf(new BytesOf(error)).asString()
+                new FuncOf<>(
+                    error -> events.post(
+                        Cycle.class.getCanonicalName(),
+                        String.format(
+                            "Failed to parse JSON:\n%s\n\n%s",
+                            json, new TextOf(new BytesOf(error)).asString()
+                        )
                     )
                 ),
                 obj -> {
@@ -91,6 +93,7 @@ final class Cycle implements Proc<Pipe> {
                         new IgnoreEvents(new BoostEvents(events, obj), obj),
                         pipe
                     ).run();
+                    return null;
                 }
             )
         ).apply(json);

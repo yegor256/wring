@@ -49,6 +49,7 @@ import org.takes.tk.TkClasspath;
 import org.takes.tk.TkFiles;
 import org.takes.tk.TkGzip;
 import org.takes.tk.TkMeasured;
+import org.takes.tk.TkSslOnly;
 import org.takes.tk.TkVersioned;
 import org.takes.tk.TkWithHeaders;
 import org.takes.tk.TkWithType;
@@ -95,24 +96,26 @@ public final class TkApp extends TkWrap {
                 )
             );
         }
-        return new TkWithHeaders(
-            new TkVersioned(
-                new TkMeasured(
-                    new TkGzip(
-                        new TkFlash(
-                            new TkAppFallback(
-                                new TkAppAuth(
-                                    new TkForward(
-                                        TkApp.regex(base)
+        return new TkSslOnly(
+            new TkWithHeaders(
+                new TkVersioned(
+                    new TkMeasured(
+                        new TkGzip(
+                            new TkFlash(
+                                new TkAppFallback(
+                                    new TkAppAuth(
+                                        new TkForward(
+                                            TkApp.regex(base)
+                                        )
                                     )
                                 )
                             )
                         )
                     )
-                )
-            ),
-            String.format("X-Wring-Revision: %s", TkApp.REV),
-            "Vary: Cookie"
+                ),
+                String.format("X-Wring-Revision: %s", TkApp.REV),
+                "Vary: Cookie"
+            )
         );
     }
 

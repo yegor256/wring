@@ -44,6 +44,7 @@ import javax.json.JsonString;
 import javax.json.JsonValue;
 import org.cactoos.Scalar;
 import org.cactoos.scalar.IoCheckedScalar;
+import org.cactoos.scalar.SolidScalar;
 
 /**
  * Events that boost by regular expression.
@@ -89,7 +90,7 @@ final class BoostEvents implements Events {
      */
     BoostEvents(final Events events, final Scalar<Pattern> ptn) {
         this.origin = events;
-        this.regex = new IoCheckedScalar<>(ptn);
+        this.regex = new IoCheckedScalar<>(new SolidScalar<>(ptn));
     }
 
     @Override

@@ -56,7 +56,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
             );
           </script>
         </xsl:if>
-        <link rel="stylesheet" href="http://yegor256.github.io/tacit/tacit.min.css"/>
+        <link rel="stylesheet" href="//yegor256.github.io/tacit/tacit.min.css"/>
         <link rel="stylesheet" href="/css/main.css"/>
         <xsl:apply-templates select="." mode="head"/>
       </head>
@@ -148,8 +148,8 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
             <nav>
               <ul>
                 <li>
-                  <a href="http://www.0crat.com/p/C7FCB1EQN">
-                    <img src="https://www.0crat.com/badge/C7FCB1EQN.svg"/>
+                  <a href="//www.0crat.com/p/C7FCB1EQN">
+                    <img src="//www.0crat.com/badge/C7FCB1EQN.svg"/>
                   </a>
                 </li>
               </ul>
@@ -157,8 +157,8 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
             <nav>
               <ul>
                 <li>
-                  <a href="https://github.com/yegor256/wring/stargazers">
-                    <img src="https://img.shields.io/github/stars/yegor256/wring.svg?style=flat-square" alt="github stars"/>
+                  <a href="//github.com/yegor256/wring/stargazers">
+                    <img src="//img.shields.io/github/stars/yegor256/wring.svg?style=flat-square" alt="github stars"/>
                   </a>
                 </li>
               </ul>
