@@ -103,7 +103,7 @@ public final class Routine implements Runnable, AutoCloseable {
     @Override
     public void run() {
         final ExecutorService svc = Executors.newFixedThreadPool(
-            this.threads, new VerboseThreads(Routine.class)
+            this.threads, new VerboseThreads("routine-run")
         );
         for (final Pipe pipe : this.base.pipes()) {
             svc.submit(this.job(pipe));
