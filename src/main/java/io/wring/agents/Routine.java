@@ -103,12 +103,24 @@ public final class Routine implements Runnable, AutoCloseable {
     @Override
     public void run() {
         final ExecutorService svc = Executors.newFixedThreadPool(
-            this.threads, new VerboseThreads()
+            this.threads, new VerboseThreads(Routine.class)
         );
         for (final Pipe pipe : this.base.pipes()) {
             svc.submit(this.job(pipe));
         }
         svc.shutdown();
+        try {
+            if (!svc.awaitTermination(1L, TimeUnit.MINUTES)) {
+                svc.shutdownNow();
+                if (!svc.awaitTermination(1L, TimeUnit.MINUTES)) {
+                    throw new IllegalStateException(
+                        "Can't shutdown the service"
+                    );
+                }
+            }
+        } catch (final InterruptedException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     @Override
