@@ -35,10 +35,15 @@ import com.jcabi.manifests.Manifests;
 import io.sentry.Sentry;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.cactoos.func.FuncOf;
 import org.cactoos.func.FuncWithFallback;
 import org.cactoos.func.RunnableOf;
@@ -69,6 +74,11 @@ public final class Routine implements Runnable, AutoCloseable {
     private final transient ScheduledExecutorService executor;
 
     /**
+     * Executor.
+     */
+    private final transient ExecutorService runner;
+
+    /**
      * Ctor.
      * @param bse Base
      */
@@ -87,6 +97,9 @@ public final class Routine implements Runnable, AutoCloseable {
         this.executor = Executors.newScheduledThreadPool(
             total, new VerboseThreads(Routine.class)
         );
+        this.runner = Executors.newFixedThreadPool(
+            this.threads, new VerboseThreads("routine-run")
+        );
     }
 
     /**
@@ -102,24 +115,17 @@ public final class Routine implements Runnable, AutoCloseable {
 
     @Override
     public void run() {
-        final ExecutorService svc = Executors.newFixedThreadPool(
-            this.threads, new VerboseThreads("routine-run")
-        );
+        final Collection<Future<?>> futures = new ArrayList<>(this.threads);
         for (final Pipe pipe : this.base.pipes()) {
-            svc.submit(this.job(pipe));
+            futures.add(this.runner.submit(this.job(pipe)));
         }
-        svc.shutdown();
-        try {
-            if (!svc.awaitTermination(1L, TimeUnit.MINUTES)) {
-                svc.shutdownNow();
-                if (!svc.awaitTermination(1L, TimeUnit.MINUTES)) {
-                    throw new IllegalStateException(
-                        "Can't shutdown the service"
-                    );
-                }
+        for (final Future<?> future : futures) {
+            try {
+                future.get(1L, TimeUnit.MINUTES);
+            } catch (final InterruptedException | ExecutionException
+                | TimeoutException ex) {
+                throw new IllegalStateException(ex);
             }
-        } catch (final InterruptedException ex) {
-            throw new IllegalStateException(ex);
         }
     }
 
@@ -129,6 +135,15 @@ public final class Routine implements Runnable, AutoCloseable {
         try {
             if (!this.executor.awaitTermination(1L, TimeUnit.MINUTES)) {
                 throw new IllegalStateException("Failed to terminate");
+            }
+        } catch (final InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(ex);
+        }
+        this.runner.shutdown();
+        try {
+            if (!this.runner.awaitTermination(1L, TimeUnit.MINUTES)) {
+                throw new IllegalStateException("Failed to terminate runner");
             }
         } catch (final InterruptedException ex) {
             Thread.currentThread().interrupt();
