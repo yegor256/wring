@@ -34,11 +34,13 @@ import io.wring.model.Event;
 import io.wring.model.User;
 import io.wring.model.XePrint;
 import java.io.IOException;
+import java.util.logging.Level;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
 import org.takes.facets.flash.RsFlash;
 import org.takes.facets.forward.RsForward;
+import org.takes.misc.Href;
 import org.takes.rq.RqHref;
 
 /**
@@ -66,14 +68,29 @@ final class TkEventDelete implements Take {
     @Override
     public Response act(final Request req) throws IOException {
         final User user = this.base.user(new RqUser(req).urn());
+        final Href href = new RqHref.Base(req).href();
         final Event event = user.events().event(
-            new RqHref.Base(req).href().param("title").iterator().next()
+            href.param("title").iterator().next()
         );
-        final String msg = new XePrint(event.asXembly()).text(
-            "event \"{/event/title/text()}\" deleted"
+        final String hash = new XePrint(event.asXembly()).text(
+            "{/event/md5/text()}"
         );
+        if (!hash.equals(href.param("hash").iterator().next())) {
+            throw new RsForward(
+                new RsFlash(
+                    "Reload the page, the event has changed",
+                    Level.WARNING
+                )
+            );
+        }
         event.delete();
-        return new RsForward(new RsFlash(msg));
+        return new RsForward(
+            new RsFlash(
+                new XePrint(event.asXembly()).text(
+                    "event \"{/event/title/text()}\" deleted"
+                )
+            )
+        );
     }
 
 }

@@ -45,7 +45,8 @@ public final class FkEvent implements Event {
     @Override
     public Iterable<Directive> asXembly() {
         return new Directives().add("event")
-            .add("title").set("test").up();
+            .add("title").set("test").up()
+            .add("md5").set("abcd").up();
     }
 
     @Override

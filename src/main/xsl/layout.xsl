@@ -81,14 +81,14 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
                   </xsl:if>
                   <xsl:if test="not(identity)">
                     <a href="{links/link[@rel='takes:github']/@href}">
-                      <xsl:text>login</xsl:text>
+                      <xsl:text>Login</xsl:text>
                     </a>
                   </xsl:if>
                 </li>
                 <xsl:if test="identity">
                   <li>
                     <a href="{links/link[@rel='home']/@href}">
-                      <xsl:text>inbox</xsl:text>
+                      <xsl:text>Inbox</xsl:text>
                     </a>
                     <xsl:if test="events/@total">
                       <xsl:text> (</xsl:text>
@@ -98,14 +98,14 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
                   </li>
                   <li>
                     <a href="{links/link[@rel='pipes']/@href}">
-                      <xsl:text>pipes</xsl:text>
+                      <xsl:text>Pipes</xsl:text>
                     </a>
                   </li>
                 </xsl:if>
                 <xsl:if test="identity">
                   <li>
                     <a href="{links/link[@rel='takes:logout']/@href}">
-                      <xsl:text>exit</xsl:text>
+                      <xsl:text>Exit</xsl:text>
                     </a>
                   </li>
                 </xsl:if>

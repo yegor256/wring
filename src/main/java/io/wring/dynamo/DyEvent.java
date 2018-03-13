@@ -36,8 +36,11 @@ import com.jcabi.dynamo.Attributes;
 import com.jcabi.dynamo.Item;
 import io.wring.model.Event;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.xml.bind.DatatypeConverter;
 import org.xembly.Directive;
 import org.xembly.Directives;
 import org.xembly.Xembler;
@@ -77,6 +80,8 @@ public final class DyEvent implements Event {
             .set(Xembler.escape(this.item.get("title").getS())).up()
             .add("text")
             .set(Xembler.escape(text)).up()
+            .add("md5")
+            .set(DyEvent.hash(text)).up()
             .add("html")
             .set(Xembler.escape(DyEvent.html(text))).up();
     }
@@ -97,6 +102,24 @@ public final class DyEvent implements Event {
             new AttributeValueUpdate()
                 .withAction(AttributeAction.ADD)
                 .withValue(new AttributeValue().withN(Integer.toString(points)))
+        );
+    }
+
+    /**
+     * To md5 hash.
+     * @param text The text
+     * @return The hash
+     */
+    private static String hash(final String text) {
+        final MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance("MD5");
+        } catch (final NoSuchAlgorithmException ex) {
+            throw new IllegalStateException(ex);
+        }
+        digest.update(text.getBytes());
+        return DatatypeConverter.printHexBinary(
+            digest.digest()
         );
     }
 

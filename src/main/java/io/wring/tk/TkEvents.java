@@ -105,13 +105,16 @@ final class TkEvents implements Take {
     private static XeSource source(final Event event) throws IOException {
         final Iterable<Directive> dirs = event.asXembly();
         final String title = new XePrint(dirs).text("{/event/title/text()}");
+        final String hash = new XePrint(dirs).text("{/event/md5/text()}");
         return new XeDirectives(
             new Directives()
                 .append(dirs)
                 .append(
                     new XeLink(
                         "delete",
-                        new Href("/event-delete").with("title", title)
+                        new Href("/event-delete")
+                            .with("title", title)
+                            .with("hash", hash)
                     ).toXembly()
                 )
                 .append(
