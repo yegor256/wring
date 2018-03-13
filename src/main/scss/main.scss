@@ -3,11 +3,20 @@
 }
 
 .flash {
-  &.SEVERE { color: red; }
+  color: white;
+  padding: 0.5em;
+}
 
-  &.INFO { color: green; }
+.flash-SEVERE {
+  background-color: darkred;
+}
 
-  &.WARNING { color: orange; }
+.flash-INFO {
+  background-color: darkgreen;
+}
+
+.flash-WARNING {
+  background-color: darkorange;
 }
 
 .bottom {
