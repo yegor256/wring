@@ -74,4 +74,23 @@ public final class JsonAgentTest {
         );
     }
 
+    /**
+     * JsonAgent can parse complex JSON.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void parsesJsonWithBackslashes() throws Exception {
+        MatcherAssert.assertThat(
+            new JsonAgent(
+                new FkBase(),
+                String.join(
+                    "",
+                    "{\"class\":\"io.wring.agents.FkAgent\",",
+                    "\"x\":\"/@[a-z0-9\\\\-]\\\\s+\"}"
+                )
+            ).name(),
+            Matchers.equalTo(FkAgent.class.getCanonicalName())
+        );
+    }
+
 }

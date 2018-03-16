@@ -29,6 +29,7 @@
  */
 package io.wring.agents;
 
+import com.jcabi.log.Logger;
 import com.jcabi.log.VerboseRunnable;
 import com.jcabi.log.VerboseThreads;
 import com.jcabi.manifests.Manifests;
@@ -111,6 +112,7 @@ public final class Routine implements Runnable, AutoCloseable {
             new VerboseRunnable(this, true, true),
             1L, 1L, TimeUnit.MINUTES
         );
+        Logger.info(this, "Routine started with %d threads", this.threads);
     }
 
     @Override

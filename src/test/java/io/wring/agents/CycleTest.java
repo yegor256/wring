@@ -66,7 +66,7 @@ public final class CycleTest {
             new Directives()
                 .add("pipe")
                 .add("urn").set("urn:test:1").up()
-                .add("json").set("{").up()
+                .add("json").set("{\"a\":\"/@[a-z0-9\\\\-]\\\\s+\"}").up()
                 .up()
         );
         new Cycle(base).exec(pipe);

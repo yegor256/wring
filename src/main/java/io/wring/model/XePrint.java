@@ -71,7 +71,9 @@ public final class XePrint {
         final StringBuffer out = new StringBuffer(pattern.length());
         while (mtr.find()) {
             mtr.appendReplacement(
-                out, xml.xpath(mtr.group(1)).get(0).replace("$", "\\$")
+                out, xml.xpath(mtr.group(1)).get(0)
+                    .replace("\\", "\\\\")
+                    .replace("$", "\\$")
             );
         }
         mtr.appendTail(out);

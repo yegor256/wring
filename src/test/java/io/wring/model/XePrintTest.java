@@ -80,6 +80,22 @@ public final class XePrintTest {
     }
 
     /**
+     * Prints backslashes.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void printsBackslashes() throws Exception {
+        MatcherAssert.assertThat(
+            new XePrint(
+                new Directives().add("z1").add("z2").set(
+                    "Hey: \\1\\2"
+                )
+            ).text("{/z1/z2/text()}"),
+            Matchers.containsString("\\1\\2")
+        );
+    }
+
+    /**
      * Prints by missed XPath.
      * @throws Exception If some problem inside
      */
