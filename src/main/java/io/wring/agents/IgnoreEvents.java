@@ -147,6 +147,11 @@ final class IgnoreEvents implements Events {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private static Pattern pattern(final JsonObject json)
         throws Agent.UserException {
+        if (json == null) {
+            throw new IllegalArgumentException(
+                "JSON can't be NULL"
+            );
+        }
         final Collection<Pattern> ptns = new LinkedList<>();
         final JsonValue value = json.get("ignore");
         if (value == null) {
