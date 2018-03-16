@@ -42,13 +42,35 @@ import org.xembly.Directives;
  */
 public final class FkPipe implements Pipe {
 
+    /**
+     * Xembly to return.
+     */
+    private final Iterable<Directive> xembly;
+
+    /**
+     * Ctor.
+     */
+    public FkPipe() {
+        this(
+            new Directives()
+                .add("pipe")
+                .add("urn").set("urn:test:1").up()
+                .add("json").set("{}").up()
+                .up()
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param dirs The dirs
+     */
+    public FkPipe(final Iterable<Directive> dirs) {
+        this.xembly = dirs;
+    }
+
     @Override
     public Iterable<Directive> asXembly() {
-        return new Directives()
-            .add("pipe")
-            .add("urn").set("urn:test:1").up()
-            .add("json").set("{}").up()
-            .up();
+        return this.xembly;
     }
 
     @Override

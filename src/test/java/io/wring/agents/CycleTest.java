@@ -34,6 +34,7 @@ import io.wring.fake.FkPipe;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
 import org.junit.Test;
+import org.xembly.Directives;
 
 /**
  * Test case for {@link Cycle}.
@@ -51,6 +52,23 @@ public final class CycleTest {
     public void processesSinglePipe() throws Exception {
         final Base base = new FkBase();
         final Pipe pipe = new FkPipe();
+        new Cycle(base).exec(pipe);
+    }
+
+    /**
+     * Cycle can process a single pipe with broken JSOn.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void processesSinglePipeWithBrokenJson() throws Exception {
+        final Base base = new FkBase();
+        final Pipe pipe = new FkPipe(
+            new Directives()
+                .add("pipe")
+                .add("urn").set("urn:test:1").up()
+                .add("json").set("{").up()
+                .up()
+        );
         new Cycle(base).exec(pipe);
     }
 

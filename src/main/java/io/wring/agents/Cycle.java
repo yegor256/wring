@@ -88,12 +88,14 @@ final class Cycle implements Proc<Pipe> {
                     )
                 ),
                 obj -> {
-                    new Exec(
-                        new JsonAgent(this.base, obj),
-                        new IgnoreEvents(new BoostEvents(events, obj), obj),
-                        pipe
-                    ).run();
-                    return null;
+                    if (obj != null) {
+                        new Exec(
+                            new JsonAgent(this.base, obj),
+                            new IgnoreEvents(new BoostEvents(events, obj), obj),
+                            pipe
+                        ).run();
+                    }
+                    return obj;
                 }
             )
         ).apply(json);
