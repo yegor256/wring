@@ -36,7 +36,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import javax.json.Json;
 import javax.json.JsonObject;
+import org.cactoos.Scalar;
 import org.cactoos.io.ReaderOf;
+import org.cactoos.scalar.IoCheckedScalar;
 
 /**
  * Agent in JSON.
@@ -55,7 +57,7 @@ final class JsonAgent implements Agent {
     /**
      * JSON config.
      */
-    private final transient JsonObject json;
+    private final transient IoCheckedScalar<JsonObject> json;
 
     /**
      * Ctor.
@@ -63,7 +65,7 @@ final class JsonAgent implements Agent {
      * @param cfg JSON config
      */
     JsonAgent(final Base bse, final String cfg) {
-        this(bse, Json.createReader(new ReaderOf(cfg)).readObject());
+        this(bse, () -> Json.createReader(new ReaderOf(cfg)).readObject());
     }
 
     /**
@@ -72,8 +74,17 @@ final class JsonAgent implements Agent {
      * @param cfg JSON config
      */
     JsonAgent(final Base bse, final JsonObject cfg) {
+        this(bse, () -> cfg);
+    }
+
+    /**
+     * Ctor.
+     * @param bse Base
+     * @param cfg JSON config
+     */
+    JsonAgent(final Base bse, final Scalar<JsonObject> cfg) {
         this.base = bse;
-        this.json = cfg;
+        this.json = new IoCheckedScalar<>(new Scalar.NoNulls<>(cfg));
     }
 
     @Override
@@ -89,10 +100,10 @@ final class JsonAgent implements Agent {
     /**
      * Make an agent.
      * @return Agent
-     * @throws Agent.UserException If fails
+     * @throws IOException If fails
      */
-    private Agent agent() throws Agent.UserException {
-        final String name = this.json.getString("class", "");
+    private Agent agent() throws IOException {
+        final String name = this.json.value().getString("class", "");
         if (name.isEmpty()) {
             throw new Agent.UserException(
                 "Your JSON object must contain non-empty \"class\" attribute"
@@ -111,7 +122,9 @@ final class JsonAgent implements Agent {
             throw new IllegalStateException(ex);
         }
         try {
-            return Agent.class.cast(ctor.newInstance(this.base, this.json));
+            return Agent.class.cast(
+                ctor.newInstance(this.base, this.json.value())
+            );
         } catch (final InstantiationException
             | IllegalAccessException
             | InvocationTargetException ex) {
