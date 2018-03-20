@@ -66,7 +66,7 @@ final class TkPipeAdd implements Take {
             new RqFormBase(req).param("json").iterator().next().trim()
         );
         return new RsForward(
-            new RsFlash("pipe created"),
+            new RsFlash("Pipe created"),
             "/pipes"
         );
     }

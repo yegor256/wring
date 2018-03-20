@@ -64,7 +64,7 @@ public final class RqUser extends RqWrap {
         if (identity.equals(Identity.ANONYMOUS)) {
             throw new HttpException(
                 HttpURLConnection.HTTP_FORBIDDEN,
-                "you're not authorized"
+                "You're not authorized"
             );
         }
         return identity.urn();

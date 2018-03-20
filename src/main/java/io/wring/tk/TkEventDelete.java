@@ -84,7 +84,7 @@ final class TkEventDelete implements Take {
             );
         }
         final String msg = new XePrint(event.asXembly()).text(
-            "event \"{/event/title/text()}\" deleted"
+            "Event \"{/event/title/text()}\" deleted"
         );
         event.delete();
         return new RsForward(new RsFlash(msg));

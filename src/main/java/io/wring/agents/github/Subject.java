@@ -122,7 +122,7 @@ final class Subject {
                 Json.createWriter(baos).write(this.json);
                 throw new IOException(
                     String.format(
-                        "subject ignored: %s", baos.toString()
+                        "Subject ignored: %s", baos.toString()
                     )
                 );
             }

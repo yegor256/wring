@@ -70,7 +70,7 @@ final class TkEventDown implements Take {
             new RqHref.Base(req).href().param("title").iterator().next()
         );
         event.vote(-Tv.TEN);
-        return new RsForward(new RsFlash("event down-voted"));
+        return new RsForward(new RsFlash("Event down-voted"));
     }
 
 }

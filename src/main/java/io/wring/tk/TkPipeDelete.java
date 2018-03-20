@@ -70,7 +70,7 @@ final class TkPipeDelete implements Take {
             )
         );
         final String msg = new XePrint(pipe.asXembly()).text(
-            "pipe #{/pipe/id/text()} deleted"
+            "Pipe #{/pipe/id/text()} deleted"
         );
         pipe.delete();
         return new RsForward(new RsFlash(msg), "/pipes");

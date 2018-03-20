@@ -106,7 +106,7 @@ public final class DyPipes implements Pipes {
                 .with("time", System.currentTimeMillis())
         );
         Logger.info(
-            this, "new pipe #%d created by %s",
+            this, "New pipe #%d created by %s",
             num, this.urn
         );
     }

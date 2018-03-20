@@ -91,7 +91,7 @@ final class BoCommit implements Body {
                 body
             );
             Logger.info(
-                this, "new event in %s#%s",
+                this, "New event in %s#%s",
                 coords, this.commit.sha()
             );
         }
@@ -121,7 +121,7 @@ final class BoCommit implements Body {
         final String self = this.commit.repo().github().users().self().login();
         int seen = this.seen();
         Logger.info(
-            this, "last seen comment in %s is #%d",
+            this, "Last seen comment in %s is #%d",
             this.commit.sha(), seen
         );
         final Pattern ptn = Pattern.compile(
@@ -178,7 +178,7 @@ final class BoCommit implements Body {
             Optional.of(Integer.toString(seen))
         );
         Logger.info(
-            this, "seen comment set to %d for %s",
+            this, "Seen comment set to %d for %s",
             seen, this.commit.sha()
         );
         return body.toString();

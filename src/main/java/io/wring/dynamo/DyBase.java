@@ -78,7 +78,7 @@ public final class DyBase implements Base {
     public User user(final String name) {
         if (!DyBase.URN.matcher(name).matches()) {
             throw new IllegalArgumentException(
-                String.format("invalid user URN: \"%s\"", name)
+                String.format("Invalid user URN: \"%s\"", name)
             );
         }
         return new DyUser(this.region, name);

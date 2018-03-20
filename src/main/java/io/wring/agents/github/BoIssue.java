@@ -92,7 +92,7 @@ final class BoIssue implements Body {
                 body
             );
             Logger.info(
-                this, "new event in %s#%d",
+                this, "New event in %s#%d",
                 coords, this.issue.number()
             );
         }
@@ -119,7 +119,7 @@ final class BoIssue implements Body {
         );
         int seen = this.seen();
         Logger.info(
-            this, "last seen comment in %s#%d is #%d",
+            this, "Last seen comment in %s#%d is #%d",
             this.issue.repo().coordinates(), this.issue.number(), seen
         );
         final StringBuilder body = new StringBuilder();
@@ -181,7 +181,7 @@ final class BoIssue implements Body {
             Optional.of(Integer.toString(seen))
         );
         Logger.info(
-            this, "seen comment set to %d for %s#%d",
+            this, "Seen comment set to %d for %s#%d",
             seen, this.issue.repo().coordinates(), this.issue.number()
         );
         return body.toString();
