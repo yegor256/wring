@@ -116,7 +116,9 @@ public final class Routine implements Runnable, AutoCloseable {
     }
 
     @Override
+    @SuppressWarnings("PMD.PrematureDeclaration")
     public void run() {
+        final long start = System.currentTimeMillis();
         final Collection<Future<?>> futures = new ArrayList<>(this.threads);
         for (final Pipe pipe : this.base.pipes()) {
             futures.add(this.runner.submit(this.job(pipe)));
@@ -130,6 +132,10 @@ public final class Routine implements Runnable, AutoCloseable {
                 throw new IllegalStateException(ex);
             }
         }
+        Logger.info(
+            this, "%d pipes processed in %[ms]s",
+            futures.size(), System.currentTimeMillis() - start
+        );
     }
 
     @Override
