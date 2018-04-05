@@ -123,7 +123,8 @@ public final class Routine implements Runnable, AutoCloseable {
         }
         for (final Future<?> future : futures) {
             try {
-                future.get(1L, TimeUnit.MINUTES);
+                // @checkstyle MagicNumber (1 line)
+                future.get(10L, TimeUnit.MINUTES);
             } catch (final InterruptedException | ExecutionException
                 | TimeoutException ex) {
                 throw new IllegalStateException(ex);
