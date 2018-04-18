@@ -75,11 +75,6 @@ public final class Routine implements Runnable, AutoCloseable {
     private final transient ScheduledExecutorService executor;
 
     /**
-     * Executor.
-     */
-    private final transient ExecutorService runner;
-
-    /**
      * Ctor.
      * @param bse Base
      */
@@ -97,9 +92,6 @@ public final class Routine implements Runnable, AutoCloseable {
         this.threads = total;
         this.executor = Executors.newScheduledThreadPool(
             total, new VerboseThreads(Routine.class)
-        );
-        this.runner = Executors.newFixedThreadPool(
-            this.threads, new VerboseThreads("routine-run")
         );
     }
 
@@ -120,18 +112,23 @@ public final class Routine implements Runnable, AutoCloseable {
     public void run() {
         final long start = System.currentTimeMillis();
         final Collection<Future<?>> futures = new ArrayList<>(this.threads);
+        final ExecutorService runner = Executors.newFixedThreadPool(
+            this.threads, new VerboseThreads("routine-run")
+        );
         for (final Pipe pipe : this.base.pipes()) {
-            futures.add(this.runner.submit(this.job(pipe)));
+            futures.add(runner.submit(this.job(pipe)));
         }
         for (final Future<?> future : futures) {
             try {
-                // @checkstyle MagicNumber (1 line)
-                future.get(10L, TimeUnit.MINUTES);
-            } catch (final InterruptedException | ExecutionException
-                | TimeoutException ex) {
+                future.get(1L, TimeUnit.MINUTES);
+            } catch (final ExecutionException | TimeoutException ex) {
+                throw new IllegalStateException(ex);
+            } catch (final InterruptedException ex) {
+                Thread.currentThread().interrupt();
                 throw new IllegalStateException(ex);
             }
         }
+        Routine.close(runner);
         Logger.info(
             this, "%d pipes processed in %[ms]s",
             futures.size(), System.currentTimeMillis() - start
@@ -140,19 +137,21 @@ public final class Routine implements Runnable, AutoCloseable {
 
     @Override
     public void close() {
-        this.executor.shutdown();
+        Routine.close(this.executor);
+    }
+
+    /**
+     * Close it.
+     * @param svc The service
+     */
+    private static void close(final ExecutorService svc) {
+        svc.shutdown();
         try {
-            if (!this.executor.awaitTermination(1L, TimeUnit.MINUTES)) {
-                throw new IllegalStateException("Failed to terminate");
+            if (!svc.awaitTermination(1L, TimeUnit.MINUTES)) {
+                svc.shutdownNow();
             }
-        } catch (final InterruptedException ex) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException(ex);
-        }
-        this.runner.shutdown();
-        try {
-            if (!this.runner.awaitTermination(1L, TimeUnit.MINUTES)) {
-                throw new IllegalStateException("Failed to terminate runner");
+            if (!svc.awaitTermination(1L, TimeUnit.MINUTES)) {
+                throw new IllegalStateException("Failed to terminate");
             }
         } catch (final InterruptedException ex) {
             Thread.currentThread().interrupt();
