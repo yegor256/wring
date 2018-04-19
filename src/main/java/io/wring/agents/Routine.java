@@ -49,7 +49,6 @@ import org.cactoos.func.FuncOf;
 import org.cactoos.func.FuncWithFallback;
 import org.cactoos.func.RunnableOf;
 import org.cactoos.iterable.Mapped;
-import org.cactoos.text.JoinedText;
 
 /**
  * Routine.
@@ -141,7 +140,7 @@ public final class Routine implements Runnable, AutoCloseable {
             this, "%d pipes processed in %[ms]s, threads=%d: %s",
             futures.size(), System.currentTimeMillis() - start,
             Thread.getAllStackTraces().size(),
-            new JoinedText(
+            String.join(
                 ", ",
                 new Mapped<>(
                     Thread::getName, Thread.getAllStackTraces().keySet()
