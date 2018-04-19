@@ -60,6 +60,11 @@ import org.cactoos.func.RunnableOf;
 public final class Routine implements Runnable, AutoCloseable {
 
     /**
+     * Time to wait, in minutes.
+     */
+    private static final long LAG = 10L;
+
+    /**
      * Base.
      */
     private final transient Base base;
@@ -79,7 +84,7 @@ public final class Routine implements Runnable, AutoCloseable {
      * @param bse Base
      */
     public Routine(final Base bse) {
-        this(bse, Runtime.getRuntime().availableProcessors());
+        this(bse, Runtime.getRuntime().availableProcessors() << 2);
     }
 
     /**
@@ -118,17 +123,18 @@ public final class Routine implements Runnable, AutoCloseable {
         for (final Pipe pipe : this.base.pipes()) {
             futures.add(runner.submit(this.job(pipe)));
         }
-        for (final Future<?> future : futures) {
-            try {
-                future.get(1L, TimeUnit.MINUTES);
-            } catch (final ExecutionException | TimeoutException ex) {
-                throw new IllegalStateException(ex);
-            } catch (final InterruptedException ex) {
-                Thread.currentThread().interrupt();
-                throw new IllegalStateException(ex);
+        try {
+            for (final Future<?> future : futures) {
+                future.get(Routine.LAG, TimeUnit.MINUTES);
             }
+        } catch (final ExecutionException | TimeoutException ex) {
+            throw new IllegalStateException(ex);
+        } catch (final InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(ex);
+        } finally {
+            Routine.close(runner);
         }
-        Routine.close(runner);
         Logger.info(
             this, "%d pipes processed in %[ms]s, threads=%d",
             futures.size(), System.currentTimeMillis() - start,
@@ -148,14 +154,14 @@ public final class Routine implements Runnable, AutoCloseable {
     private static void close(final ExecutorService svc) {
         svc.shutdown();
         try {
-            if (!svc.awaitTermination(1L, TimeUnit.MINUTES)) {
+            if (!svc.awaitTermination(Routine.LAG, TimeUnit.MINUTES)) {
                 Logger.error(
                     Routine.class,
                     "Service has been terminated with %d jobs left",
                     svc.shutdownNow().size()
                 );
             }
-            if (!svc.awaitTermination(1L, TimeUnit.MINUTES)) {
+            if (!svc.awaitTermination(Routine.LAG, TimeUnit.MINUTES)) {
                 throw new IllegalStateException("Failed to terminate");
             }
         } catch (final InterruptedException ex) {
