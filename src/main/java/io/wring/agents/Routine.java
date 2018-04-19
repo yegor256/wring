@@ -149,7 +149,11 @@ public final class Routine implements Runnable, AutoCloseable {
         svc.shutdown();
         try {
             if (!svc.awaitTermination(1L, TimeUnit.MINUTES)) {
-                svc.shutdownNow();
+                Logger.error(
+                    Routine.class,
+                    "Service has been terminated with %d jobs left",
+                    svc.shutdownNow().size()
+                );
             }
             if (!svc.awaitTermination(1L, TimeUnit.MINUTES)) {
                 throw new IllegalStateException("Failed to terminate");
