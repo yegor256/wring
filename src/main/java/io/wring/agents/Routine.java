@@ -79,7 +79,7 @@ public final class Routine implements Runnable, AutoCloseable {
      * @param bse Base
      */
     public Routine(final Base bse) {
-        this(bse, Runtime.getRuntime().availableProcessors() << 2);
+        this(bse, Runtime.getRuntime().availableProcessors());
     }
 
     /**
@@ -130,8 +130,9 @@ public final class Routine implements Runnable, AutoCloseable {
         }
         Routine.close(runner);
         Logger.info(
-            this, "%d pipes processed in %[ms]s",
-            futures.size(), System.currentTimeMillis() - start
+            this, "%d pipes processed in %[ms]s, threads=%d",
+            futures.size(), System.currentTimeMillis() - start,
+            Thread.getAllStackTraces().size()
         );
     }
 
