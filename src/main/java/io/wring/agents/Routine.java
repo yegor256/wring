@@ -48,6 +48,7 @@ import java.util.concurrent.TimeoutException;
 import org.cactoos.func.FuncOf;
 import org.cactoos.func.FuncWithFallback;
 import org.cactoos.func.RunnableOf;
+import org.cactoos.iterable.Mapped;
 
 /**
  * Routine.
@@ -136,9 +137,10 @@ public final class Routine implements Runnable, AutoCloseable {
             Routine.close(runner);
         }
         Logger.info(
-            this, "%d pipes processed in %[ms]s, threads=%d",
+            this, "%d pipes processed in %[ms]s, threads=%d: %s",
             futures.size(), System.currentTimeMillis() - start,
-            Thread.getAllStackTraces().size()
+            Thread.getAllStackTraces().size(),
+            new Mapped<>(Thread::getName, Thread.getAllStackTraces().keySet())
         );
     }
 
