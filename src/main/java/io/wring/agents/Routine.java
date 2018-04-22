@@ -96,8 +96,8 @@ public final class Routine implements Runnable, AutoCloseable {
     public Routine(final Base bse, final int total) {
         this.base = bse;
         this.threads = total;
-        this.executor = Executors.newScheduledThreadPool(
-            total, new VerboseThreads(Routine.class)
+        this.executor = Executors.newSingleThreadScheduledExecutor(
+            new VerboseThreads(Routine.class)
         );
     }
 
