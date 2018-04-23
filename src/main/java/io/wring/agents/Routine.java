@@ -116,6 +116,20 @@ public final class Routine implements Runnable, AutoCloseable {
     @Override
     @SuppressWarnings("PMD.PrematureDeclaration")
     public void run() {
+        // @checkstyle MagicNumber (1 line)
+        if (Thread.getAllStackTraces().size() > 64) {
+            throw new IllegalStateException(
+                String.format(
+                    "Too many threads already, can't start: %s",
+                    String.join(
+                        "; ",
+                        new Mapped<>(
+                            Thread::getName, Thread.getAllStackTraces().keySet()
+                        )
+                    )
+                )
+            );
+        }
         final long start = System.currentTimeMillis();
         final Collection<Future<?>> futures = new ArrayList<>(this.threads);
         final ExecutorService runner = Executors.newFixedThreadPool(
