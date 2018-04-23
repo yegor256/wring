@@ -38,6 +38,7 @@ import io.wring.model.Base;
 import io.wring.model.Pipe;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -58,7 +59,7 @@ import org.cactoos.iterable.Mapped;
  * @since 1.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-public final class Routine implements Runnable, AutoCloseable {
+public final class Routine implements Callable<Integer>, AutoCloseable {
 
     /**
      * Time to wait, in minutes.
@@ -107,7 +108,18 @@ public final class Routine implements Runnable, AutoCloseable {
     public void start() {
         Sentry.init(Manifests.read("Wring-SentryDsn"));
         this.executor.scheduleWithFixedDelay(
-            new VerboseRunnable(this, true, true),
+            new VerboseRunnable(
+                () -> {
+                    try {
+                        this.call();
+                    } catch (final InterruptedException ex) {
+                        Sentry.capture(ex);
+                        Thread.currentThread().interrupt();
+                        throw new IllegalStateException(ex);
+                    }
+                },
+                true, true
+            ),
             1L, 1L, TimeUnit.MINUTES
         );
         Logger.info(this, "Routine started with %d threads", this.threads);
@@ -115,7 +127,7 @@ public final class Routine implements Runnable, AutoCloseable {
 
     @Override
     @SuppressWarnings("PMD.PrematureDeclaration")
-    public void run() {
+    public Integer call() throws InterruptedException {
         // @checkstyle MagicNumber (1 line)
         if (Thread.getAllStackTraces().size() > 64) {
             throw new IllegalStateException(
@@ -133,7 +145,14 @@ public final class Routine implements Runnable, AutoCloseable {
         final long start = System.currentTimeMillis();
         final Collection<Future<?>> futures = new ArrayList<>(this.threads);
         final ExecutorService runner = Executors.newFixedThreadPool(
-            this.threads, new VerboseThreads("routine-run")
+            this.threads,
+            new VerboseThreads(
+                String.format(
+                    "Routine-%04x",
+                    // @checkstyle MagicNumber (1 line)
+                    System.currentTimeMillis() % 0xffffL
+                )
+            )
         );
         for (final Pipe pipe : this.base.pipes()) {
             futures.add(runner.submit(this.job(pipe)));
@@ -143,9 +162,6 @@ public final class Routine implements Runnable, AutoCloseable {
                 future.get(Routine.LAG, TimeUnit.MINUTES);
             }
         } catch (final ExecutionException | TimeoutException ex) {
-            throw new IllegalStateException(ex);
-        } catch (final InterruptedException ex) {
-            Thread.currentThread().interrupt();
             throw new IllegalStateException(ex);
         } finally {
             Routine.close(runner);
@@ -161,33 +177,37 @@ public final class Routine implements Runnable, AutoCloseable {
                 )
             )
         );
+        return futures.size();
     }
 
     @Override
     public void close() {
-        Routine.close(this.executor);
+        try {
+            Routine.close(this.executor);
+        } catch (final InterruptedException ex) {
+            Sentry.capture(ex);
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(ex);
+        }
     }
 
     /**
      * Close it.
      * @param svc The service
+     * @throws InterruptedException If fails
      */
-    private static void close(final ExecutorService svc) {
+    private static void close(final ExecutorService svc)
+        throws InterruptedException {
         svc.shutdown();
-        try {
-            if (!svc.awaitTermination(Routine.LAG, TimeUnit.MINUTES)) {
-                Logger.error(
-                    Routine.class,
-                    "Service has been terminated with %d jobs left",
-                    svc.shutdownNow().size()
-                );
-            }
-            if (!svc.awaitTermination(Routine.LAG, TimeUnit.MINUTES)) {
-                throw new IllegalStateException("Failed to terminate");
-            }
-        } catch (final InterruptedException ex) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException(ex);
+        if (!svc.awaitTermination(Routine.LAG, TimeUnit.MINUTES)) {
+            Logger.error(
+                Routine.class,
+                "Service has been terminated with %d jobs left",
+                svc.shutdownNow().size()
+            );
+        }
+        if (!svc.awaitTermination(Routine.LAG, TimeUnit.MINUTES)) {
+            throw new IllegalStateException("Failed to terminate");
         }
     }
 
