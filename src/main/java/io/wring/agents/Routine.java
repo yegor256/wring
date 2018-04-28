@@ -136,7 +136,14 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
                     String.join(
                         "; ",
                         new Mapped<>(
-                            Thread::getName, Thread.getAllStackTraces().keySet()
+                            thread -> String.format(
+                                "%s/%s/%B/%B",
+                                thread.getName(),
+                                thread.getState(),
+                                thread.isAlive(),
+                                thread.isInterrupted()
+                            ),
+                            Thread.getAllStackTraces().keySet()
                         )
                     )
                 )
