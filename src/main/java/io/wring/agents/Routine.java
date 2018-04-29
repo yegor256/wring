@@ -237,7 +237,7 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
                 ),
                 pipe
             ),
-            true, true
+            false, true
         );
     }
 
