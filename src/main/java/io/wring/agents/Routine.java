@@ -224,20 +224,17 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
      * @return The job for this pipe
      */
     private Runnable job(final Pipe pipe) {
-        return new VerboseRunnable(
-            new RunnableOf<>(
-                new FuncWithFallback<Pipe, Boolean>(
-                    new FuncOf<>(new Cycle(this.base)),
-                    new FuncOf<>(
-                        error -> {
-                            Sentry.capture(error);
-                            throw new IllegalStateException(error);
-                        }
-                    )
-                ),
-                pipe
+        return new RunnableOf<>(
+            new FuncWithFallback<Pipe, Boolean>(
+                new FuncOf<>(new Cycle(this.base)),
+                new FuncOf<>(
+                    error -> {
+                        Sentry.capture(error);
+                        throw new IllegalStateException(error);
+                    }
+                )
             ),
-            false, true
+            pipe
         );
     }
 
