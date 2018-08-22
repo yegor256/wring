@@ -23,6 +23,8 @@ deploy:
     pdd --source=$(pwd) --verbose --file=wring.xml
     s3cmd --no-progress put wring.xml --config=../s3cfg s3://pdd.teamed.io/wring.xml
 release:
+  sensitive:
+    - settings.xml
   script: |
     mvn versions:set "-DnewVersion=${tag}"
     git commit -am "${tag}"
@@ -35,7 +37,10 @@ release:
     echo -e "Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
     git add settings.xml
     git fetch
-    git commit -m 'settings.xml' && git push -f heroku $(git symbolic-ref --short HEAD):master && git reset HEAD~1
+    git commit -m 'settings.xml'
+    git push -f heroku $(git symbolic-ref --short HEAD):master
+    git reset HEAD~1
+    rm -rf settings.xml
     curl -f --connect-timeout 15 --retry 5 --retry-delay 30 http://www.wring.io
     # mvn clean site-deploy -Psite --batch-mode --settings ../settings.xml
   commanders:
