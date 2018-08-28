@@ -53,5 +53,6 @@ merge:
     pdd --source=$(pwd) --verbose --file=/dev/null
   commanders: []
 architect:
+- carlosmiranda
 - yegor256
 - karato
