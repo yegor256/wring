@@ -63,7 +63,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
       <xsl:text> Adding a new pipe will cause all Github notifications </xsl:text>
       <xsl:text>that were pending prior to its creation to be cleared.</xsl:text>
       <xsl:text> This is a limitation of the Github API, which does not allow flagging </xsl:text>
-      \<xsl:text>individual messages as being read, forcing us to clear all prior notifications.</xsl:text>
+      <xsl:text>individual messages as being read, forcing us to clear all prior notifications.</xsl:text>
     </p>
     <p>
       <xsl:text>All supported JSON elements are listed below:</xsl:text>
