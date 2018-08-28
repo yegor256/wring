@@ -57,6 +57,9 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
       <xsl:text> If you want to make changes, just copy the existing one somewhere, delete it and then create a new one.</xsl:text>
     </p>
     <p>
+      <xsl:text>Pipe execution clear all older notifications from Github. This is a Github API limitation, which does not allow to set notifications as read individually.</xsl:text>
+    </p>
+    <p>
       <xsl:text>All supported JSON elements are listed below:</xsl:text>
     </p>
     <p>
