@@ -57,7 +57,13 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
       <xsl:text> If you want to make changes, just copy the existing one somewhere, delete it and then create a new one.</xsl:text>
     </p>
     <p>
-      <xsl:text>Pipe execution clear all older notifications from Github. This is a Github API limitation, which does not allow to set notifications as read individually.</xsl:text>
+      <span style="font-weight: bold">
+        <xsl:text>Warning:</xsl:text>
+      </span>
+      <xsl:text> Adding a new pipe will cause all Github notifications </xsl:text>
+      <xsl:text>that were pending prior to its creation to be cleared.</xsl:text>
+      <xsl:text> This is a limitation of the Github API, which does not allow flagging </xsl:text>
+      \<xsl:text>individual messages as being read, forcing us to clear all prior notifications.</xsl:text>
     </p>
     <p>
       <xsl:text>All supported JSON elements are listed below:</xsl:text>
