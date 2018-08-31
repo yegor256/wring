@@ -182,8 +182,6 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
             }
         } catch (final ExecutionException | TimeoutException ex) {
             throw new IllegalStateException(ex);
-        } finally {
-            Routine.close(this.executor);
         }
         Logger.info(
             this, "%d pipes processed in %[ms]s, threads=%d: %s",
@@ -203,6 +201,7 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
     public void close() {
         try {
             Routine.close(this.ticker);
+            Routine.close(this.executor);
         } catch (final InterruptedException ex) {
             Sentry.capture(ex);
             Thread.currentThread().interrupt();
