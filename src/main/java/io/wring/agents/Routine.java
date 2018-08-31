@@ -79,7 +79,12 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
     /**
      * Executor.
      */
-    private final transient ScheduledExecutorService executor;
+    private final transient ScheduledExecutorService ticker;
+
+    /**
+     * Executor.
+     */
+    private final transient ExecutorService executor;
 
     /**
      * Ctor.
@@ -97,8 +102,18 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
     public Routine(final Base bse, final int total) {
         this.base = bse;
         this.threads = total;
-        this.executor = Executors.newSingleThreadScheduledExecutor(
+        this.ticker = Executors.newSingleThreadScheduledExecutor(
             new VerboseThreads(Routine.class)
+        );
+        this.executor = Executors.newFixedThreadPool(
+            this.threads,
+            new VerboseThreads(
+                String.format(
+                    "Routine-%04x",
+                    // @checkstyle MagicNumber (1 line)
+                    System.currentTimeMillis() % 0xffffL
+                )
+            )
         );
     }
 
@@ -107,7 +122,7 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
      */
     public void start() {
         Sentry.init(Manifests.read("Wring-SentryDsn"));
-        this.executor.scheduleWithFixedDelay(
+        this.ticker.scheduleWithFixedDelay(
             new VerboseRunnable(
                 () -> {
                     try {
@@ -130,7 +145,8 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
     public Integer call() throws InterruptedException {
         Thread.getAllStackTraces().forEach(
             (thread, stack) -> {
-                if (thread.isInterrupted()) {
+                if (thread.getName().contains("Routine-")
+                    && thread.isInterrupted()) {
                     Logger.info(
                         this,
                         String.format(
@@ -157,18 +173,8 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
         );
         final long start = System.currentTimeMillis();
         final Collection<Future<?>> futures = new ArrayList<>(this.threads);
-        final ExecutorService runner = Executors.newFixedThreadPool(
-            this.threads,
-            new VerboseThreads(
-                String.format(
-                    "Routine-%04x",
-                    // @checkstyle MagicNumber (1 line)
-                    System.currentTimeMillis() % 0xffffL
-                )
-            )
-        );
         for (final Pipe pipe : this.base.pipes()) {
-            futures.add(runner.submit(this.job(pipe)));
+            futures.add(this.executor.submit(this.job(pipe)));
         }
         try {
             for (final Future<?> future : futures) {
@@ -177,7 +183,7 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
         } catch (final ExecutionException | TimeoutException ex) {
             throw new IllegalStateException(ex);
         } finally {
-            Routine.close(runner);
+            Routine.close(this.executor);
         }
         Logger.info(
             this, "%d pipes processed in %[ms]s, threads=%d: %s",
@@ -196,7 +202,7 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
     @Override
     public void close() {
         try {
-            Routine.close(this.executor);
+            Routine.close(this.ticker);
         } catch (final InterruptedException ex) {
             Sentry.capture(ex);
             Thread.currentThread().interrupt();
