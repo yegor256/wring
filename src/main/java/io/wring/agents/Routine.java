@@ -128,27 +128,33 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
     @Override
     @SuppressWarnings("PMD.PrematureDeclaration")
     public Integer call() throws InterruptedException {
-        // @checkstyle MagicNumber (1 line)
-        if (Thread.getAllStackTraces().size() > 64) {
-            throw new IllegalStateException(
-                String.format(
-                    "Too many threads already, can't start: %s",
-                    String.join(
-                        "; ",
-                        new Mapped<>(
-                            thread -> String.format(
-                                "%s/%s/%B/%B",
-                                thread.getName(),
-                                thread.getState(),
-                                thread.isAlive(),
-                                thread.isInterrupted()
-                            ),
-                            Thread.getAllStackTraces().keySet()
+        Thread.getAllStackTraces().forEach(
+            (thread, stack) -> {
+                if (thread.isInterrupted()) {
+                    Logger.info(
+                        this,
+                        String.format(
+                            "Interrupted thread, cleaning %s/%s/%B/%B",
+                            thread.getName(),
+                            thread.getState(),
+                            thread.isAlive(),
+                            thread.isInterrupted()
                         )
-                    )
-                )
-            );
-        }
+                    );
+                    try {
+                        thread.join();
+                    } catch (final InterruptedException err) {
+                        Logger.info(
+                            this,
+                            String.format(
+                                "Cleared thread %s",
+                                thread.getName()
+                            )
+                        );
+                    }
+                }
+            }
+        );
         final long start = System.currentTimeMillis();
         final Collection<Future<?>> futures = new ArrayList<>(this.threads);
         final ExecutorService runner = Executors.newFixedThreadPool(
