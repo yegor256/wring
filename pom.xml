@@ -241,7 +241,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
-            <argLine>-Duser.language=en -Duser.region=US -Djava.awt.headless=true</argLine>
+            <argLine>-Duser.language=en -Duser.region=US -Djava.awt.headless=true -Dfile.encoding=UTF-8</argLine>
           </configuration>
         </plugin>
       </plugins>
