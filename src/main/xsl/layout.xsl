@@ -101,6 +101,11 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
                       <xsl:text>Pipes</xsl:text>
                     </a>
                   </li>
+                  <li>
+                    <a href="{links/link[@rel='api']/@href}">
+                      <xsl:text>API</xsl:text>
+                    </a>
+                  </li>
                 </xsl:if>
                 <xsl:if test="identity">
                   <li>

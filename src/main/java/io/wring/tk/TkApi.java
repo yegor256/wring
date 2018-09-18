@@ -53,7 +53,9 @@ final class TkApi implements Take {
             req,
             new XeDirectives(
                 new Directives().add("key").set(
-                    new CcMain().encode(new RqAuth(req).identity())
+                    new String(
+                        new CcMain().encode(new RqAuth(req).identity())
+                    )
                 )
             )
         );

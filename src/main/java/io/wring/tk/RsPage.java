@@ -122,6 +122,7 @@ public final class RsPage extends RsWrap {
                 new XeFlash(req),
                 new XeGithubLink(req, Manifests.read("Wring-GithubId")),
                 new XeLogoutLink(req),
+                new XeLink("api", "/api"),
                 new XeLink("pipes", "/pipes"),
                 new XeLink("favicon", "/favicon"),
                 new XeAppend(
