@@ -67,12 +67,15 @@ final class TkApiTotal implements Take {
             this.base.user(new RqUser(req).urn()).events().iterate()
         );
         return new RsJson(
-            Json.createObjectBuilder()
-                .add("type", "integer")
-                .add("value", Integer.toString(total))
-                .add("label", "Wring Inbox")
-                .add("strategy", "continuous")
-                .build()
+            Json.createObjectBuilder().add(
+                "total",
+                Json.createObjectBuilder()
+                    .add("type", "integer")
+                    .add("value", Integer.toString(total))
+                    .add("label", "Wring Inbox")
+                    .add("strategy", "continuous")
+                    .build()
+            ).build()
         );
     }
 
