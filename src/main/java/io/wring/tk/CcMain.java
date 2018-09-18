@@ -30,77 +30,52 @@
 package io.wring.tk;
 
 import com.jcabi.manifests.Manifests;
-import java.util.regex.Pattern;
-import org.takes.Take;
-import org.takes.facets.auth.PsByFlag;
-import org.takes.facets.auth.PsChain;
-import org.takes.facets.auth.PsCookie;
-import org.takes.facets.auth.PsFake;
-import org.takes.facets.auth.PsLogout;
-import org.takes.facets.auth.TkAuth;
+import java.io.IOException;
+import org.takes.facets.auth.Identity;
+import org.takes.facets.auth.codecs.CcAes;
+import org.takes.facets.auth.codecs.CcCompact;
+import org.takes.facets.auth.codecs.CcHex;
+import org.takes.facets.auth.codecs.CcSafe;
+import org.takes.facets.auth.codecs.CcSalted;
 import org.takes.facets.auth.codecs.Codec;
-import org.takes.facets.auth.social.PsGithub;
-import org.takes.facets.fork.FkFixed;
-import org.takes.facets.fork.FkParams;
-import org.takes.facets.fork.TkFork;
-import org.takes.tk.TkRedirect;
-import org.takes.tk.TkWrap;
 
 /**
- * Authenticated app.
+ * Main codec.
  *
  * @author Yegor Bugayenko (yegor256@gmail.com)
  * @version $Id$
  * @since 1.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-final class TkAppAuth extends TkWrap {
+final class CcMain implements Codec {
+
+    /**
+     * The codec.
+     */
+    private final Codec codec;
 
     /**
      * Ctor.
-     * @param take Take
      */
-    TkAppAuth(final Take take) {
-        super(TkAppAuth.make(take));
-    }
-
-    /**
-     * Authenticated.
-     * @param take Takes
-     * @return Authenticated takes
-     */
-    private static Take make(final Take take) {
-        final Codec codec = new CcMain();
-        return new TkAuth(
-            new TkFork(
-                new FkParams(
-                    PsByFlag.class.getSimpleName(),
-                    Pattern.compile(".+"),
-                    new TkRedirect()
-                ),
-                new FkFixed(take)
-            ),
-            new PsChain(
-                new PsFake(
-                    Manifests.read("Wring-DynamoKey").startsWith("AAAA")
-                ),
-                new PsKey(codec),
-                new PsByFlag(
-                    new PsByFlag.Pair(
-                        PsGithub.class.getSimpleName(),
-                        new PsGithub(
-                            Manifests.read("Wring-GithubId"),
-                            Manifests.read("Wring-GithubSecret")
-                        )
-                    ),
-                    new PsByFlag.Pair(
-                        PsLogout.class.getSimpleName(),
-                        new PsLogout()
-                    )
-                ),
-                new PsCookie(codec)
+    CcMain() {
+        this.codec = new CcSafe(
+            new CcHex(
+                new CcAes(
+                    new CcSalted(new CcCompact()),
+                    Manifests.read("Wring-SecurityKey")
+                )
             )
         );
+    }
+
+    @Override
+    public byte[] encode(final Identity identity) throws IOException {
+        return this.codec.encode(identity);
+    }
+
+    @Override
+    public Identity decode(final byte[] bytes) throws IOException {
+        return this.codec.decode(bytes);
     }
 
 }
