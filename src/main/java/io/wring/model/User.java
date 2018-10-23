@@ -50,4 +50,10 @@ public interface User {
      */
     Events events();
 
+    /**
+     * Errors.
+     * @return Errors
+     */
+    Errors errors();
+
 }

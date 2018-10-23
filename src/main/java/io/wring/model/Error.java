@@ -27,56 +27,30 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.dynamo;
+package io.wring.model;
 
-import com.jcabi.dynamo.Region;
-import io.wring.model.Errors;
-import io.wring.model.Events;
-import io.wring.model.Pipes;
-import io.wring.model.User;
+import java.io.IOException;
+import org.xembly.Directive;
 
 /**
- * Dynamo user.
+ * Error occurred during pipe execution.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
+ * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
  */
-public final class DyUser implements User {
+public interface Error {
 
     /**
-     * The region to work with.
+     * Print it into xembly.
+     * @return Xembly directives
+     * @throws IOException If fails
      */
-    private final transient Region region;
+    Iterable<Directive> asXembly() throws IOException;
 
     /**
-     * The name of him.
+     * Delete it.
+     * @throws IOException If fails
      */
-    private final transient String urn;
-
-    /**
-     * Ctor.
-     * @param reg Region
-     * @param name Name of him
-     */
-    public DyUser(final Region reg, final String name) {
-        this.region = reg;
-        this.urn = name;
-    }
-
-    @Override
-    public Pipes pipes() {
-        return new DyPipes(this.region, this.urn);
-    }
-
-    @Override
-    public Events events() {
-        return new DyEvents(this.region, this.urn);
-    }
-
-    @Override
-    public Errors errors() {
-        return new DyErrors(this.region, this.urn);
-    }
-
+    void delete() throws IOException;
 }

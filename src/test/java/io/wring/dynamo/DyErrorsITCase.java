@@ -29,54 +29,58 @@
  */
 package io.wring.dynamo;
 
-import com.jcabi.dynamo.Region;
+import com.jcabi.aspects.Tv;
+import io.wring.model.Error;
 import io.wring.model.Errors;
-import io.wring.model.Events;
-import io.wring.model.Pipes;
 import io.wring.model.User;
+import org.cactoos.iterable.LengthOf;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.IsEqual;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
- * Dynamo user.
+ * IT cases for {@link DyErrors}.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
+ * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
  */
-public final class DyUser implements User {
+@Ignore
+public final class DyErrorsITCase {
 
     /**
-     * The region to work with.
+     * DyErrors can add many errors.
+     * @throws Exception If some problem inside
      */
-    private final transient Region region;
+    @Test
+    public void registerErrors() throws Exception {
+        final User user = new DyUser(new Dynamo(), "william");
+        final Errors errors = user.errors();
+        for (int idx = 0; idx < Tv.FIVE; ++idx) {
+            errors.register(String.format("error #%d", idx), "some text");
+        }
+        MatcherAssert.assertThat(
+            "Could not register errors",
+            new LengthOf(errors.iterate()),
+            new IsEqual<>(Tv.FIVE)
+        );
+    }
 
     /**
-     * The name of him.
+     * DyErrors can delete errors.
+     * @throws Exception If some problem inside
      */
-    private final transient String urn;
-
-    /**
-     * Ctor.
-     * @param reg Region
-     * @param name Name of him
-     */
-    public DyUser(final Region reg, final String name) {
-        this.region = reg;
-        this.urn = name;
+    @Test
+    public void deletesErrors() throws Exception {
+        final User user = new DyUser(new Dynamo(), "boris");
+        final Errors errors = user.errors();
+        errors.register("error", "message");
+        final Error error = errors.iterate().iterator().next();
+        error.delete();
+        MatcherAssert.assertThat(
+            new LengthOf(errors.iterate()),
+            new IsEqual<>(0)
+        );
     }
-
-    @Override
-    public Pipes pipes() {
-        return new DyPipes(this.region, this.urn);
-    }
-
-    @Override
-    public Events events() {
-        return new DyEvents(this.region, this.urn);
-    }
-
-    @Override
-    public Errors errors() {
-        return new DyErrors(this.region, this.urn);
-    }
-
 }

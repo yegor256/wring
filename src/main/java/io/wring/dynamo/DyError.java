@@ -29,54 +29,25 @@
  */
 package io.wring.dynamo;
 
-import com.jcabi.dynamo.Region;
-import io.wring.model.Errors;
-import io.wring.model.Events;
-import io.wring.model.Pipes;
-import io.wring.model.User;
+import io.wring.model.Error;
+import java.io.IOException;
+import org.xembly.Directive;
 
 /**
- * Dynamo user.
+ * Dynamo Db implementation for {@link Error}.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
+ * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
  */
-public final class DyUser implements User {
-
-    /**
-     * The region to work with.
-     */
-    private final transient Region region;
-
-    /**
-     * The name of him.
-     */
-    private final transient String urn;
-
-    /**
-     * Ctor.
-     * @param reg Region
-     * @param name Name of him
-     */
-    public DyUser(final Region reg, final String name) {
-        this.region = reg;
-        this.urn = name;
+public final class DyError implements Error {
+    @Override
+    public Iterable<Directive> asXembly() throws IOException {
+        throw new UnsupportedOperationException("asXembly not implemented");
     }
 
     @Override
-    public Pipes pipes() {
-        return new DyPipes(this.region, this.urn);
+    public void delete() throws IOException {
+        throw new UnsupportedOperationException("delete not implemented");
     }
-
-    @Override
-    public Events events() {
-        return new DyEvents(this.region, this.urn);
-    }
-
-    @Override
-    public Errors errors() {
-        return new DyErrors(this.region, this.urn);
-    }
-
 }

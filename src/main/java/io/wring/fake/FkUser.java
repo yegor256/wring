@@ -29,6 +29,7 @@
  */
 package io.wring.fake;
 
+import io.wring.model.Errors;
 import io.wring.model.Events;
 import io.wring.model.Pipes;
 import io.wring.model.User;
@@ -50,5 +51,10 @@ public final class FkUser implements User {
     @Override
     public Events events() {
         return new FkEvents();
+    }
+
+    @Override
+    public Errors errors() {
+        throw new UnsupportedOperationException("Not implemented");
     }
 }

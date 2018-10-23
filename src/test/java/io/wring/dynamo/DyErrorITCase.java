@@ -29,54 +29,38 @@
  */
 package io.wring.dynamo;
 
-import com.jcabi.dynamo.Region;
+import com.jcabi.matchers.XhtmlMatchers;
 import io.wring.model.Errors;
-import io.wring.model.Events;
-import io.wring.model.Pipes;
 import io.wring.model.User;
+import org.hamcrest.MatcherAssert;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.xembly.Xembler;
 
 /**
- * Dynamo user.
+ * IT cases for {@link DyError}.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
+ * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
  */
-public final class DyUser implements User {
+@Ignore
+public final class DyErrorITCase {
 
     /**
-     * The region to work with.
+     * DyError can  generate Xembly.
+     * @throws Exception If some problem inside
      */
-    private final transient Region region;
-
-    /**
-     * The name of him.
-     */
-    private final transient String urn;
-
-    /**
-     * Ctor.
-     * @param reg Region
-     * @param name Name of him
-     */
-    public DyUser(final Region reg, final String name) {
-        this.region = reg;
-        this.urn = name;
+    @Test
+    public void asXembly() throws Exception {
+        final User user = new DyUser(new Dynamo(), "nick");
+        final Errors errors = user.errors();
+        errors.register("Fresh error", "description and message");
+        MatcherAssert.assertThat(
+            new Xembler(errors.iterate().iterator().next().asXembly()).xml(),
+            XhtmlMatchers.hasXPath(
+                "/error[title='Fresh error']"
+            )
+        );
     }
-
-    @Override
-    public Pipes pipes() {
-        return new DyPipes(this.region, this.urn);
-    }
-
-    @Override
-    public Events events() {
-        return new DyEvents(this.region, this.urn);
-    }
-
-    @Override
-    public Errors errors() {
-        return new DyErrors(this.region, this.urn);
-    }
-
 }
