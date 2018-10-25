@@ -55,8 +55,9 @@ import org.cactoos.scalar.UncheckedScalar;
  * @version $Id$
  * @since 0.13
  * @todo #72:30min Errors occurred during execution must be saved and later
- *  showed to user. Wire Error and Errors implementations in Exec flow so these
- *  errors are properly logged once they happen. Cover this with tests.
+ *  listed to user in a page. User should be able to mark errors as `read`
+ *  in this page. Wire Error and Errors implementations in Exec flow so
+ *  these errors are properly saved once they happen. Cover this with tests.
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 final class Exec {

@@ -40,7 +40,7 @@ import java.io.IOException;
  * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
- * @todo #72:30min Implement DyError and DyErrors methods. These
+ * @todo #72:30min Implement DyError and DyErrors classes. These
  *  methods must use dynamo database as persistence similar to DyEvents and
  *  DyEvent implementations. The tests are already made in DyErrorsITCase, so
  *  just un-ignore them after implementing these methods and remove PMD
