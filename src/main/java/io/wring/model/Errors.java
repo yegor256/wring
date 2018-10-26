@@ -27,56 +27,34 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.dynamo;
+package io.wring.model;
 
-import com.jcabi.dynamo.Region;
-import io.wring.model.Errors;
-import io.wring.model.Events;
-import io.wring.model.Pipes;
-import io.wring.model.User;
+import java.io.IOException;
 
 /**
- * Dynamo user.
+ * Errors.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
+ * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
+ * @todo #72:30min Create a Errors page where we will show the errors in Errors
+ *  to the user. We should use Errors/Error implementations and build the page
+ *  in a similar manner that is done on TkEvents.
  */
-public final class DyUser implements User {
+public interface Errors {
 
     /**
-     * The region to work with.
+     * Iterate first errors.
+     * @return Events
+     * @throws IOException If fails
      */
-    private final transient Region region;
+    Iterable<Error> iterate() throws IOException;
 
     /**
-     * The name of him.
+     * Add a new error.
+     * @param title Title
+     * @param description Description
+     * @throws IOException If fails
      */
-    private final transient String urn;
-
-    /**
-     * Ctor.
-     * @param reg Region
-     * @param name Name of him
-     */
-    public DyUser(final Region reg, final String name) {
-        this.region = reg;
-        this.urn = name;
-    }
-
-    @Override
-    public Pipes pipes() {
-        return new DyPipes(this.region, this.urn);
-    }
-
-    @Override
-    public Events events() {
-        return new DyEvents(this.region, this.urn);
-    }
-
-    @Override
-    public Errors errors() {
-        return new DyErrors(this.region, this.urn);
-    }
-
+    void register(String title, String description);
 }

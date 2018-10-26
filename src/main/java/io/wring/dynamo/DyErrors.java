@@ -30,19 +30,24 @@
 package io.wring.dynamo;
 
 import com.jcabi.dynamo.Region;
+import io.wring.model.Error;
 import io.wring.model.Errors;
-import io.wring.model.Events;
-import io.wring.model.Pipes;
-import io.wring.model.User;
+import java.io.IOException;
 
 /**
- * Dynamo user.
+ * Errors stored in Dynamo database.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
+ * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
+ * @todo #72:30min Implement DyError and DyErrors classes. These
+ *  methods must use dynamo database as persistence similar to DyEvents and
+ *  DyEvent implementations. The tests are already made in DyErrorsITCase, so
+ *  just un-ignore them after implementing these methods and remove PMD
+ *  annotations below.
  */
-public final class DyUser implements User {
+@SuppressWarnings({"PMD.SingularField", "PMD.UnusedPrivateField"})
+public final class DyErrors implements Errors {
 
     /**
      * The region to work with.
@@ -50,33 +55,27 @@ public final class DyUser implements User {
     private final transient Region region;
 
     /**
-     * The name of him.
+     * URN.
      */
     private final transient String urn;
 
     /**
      * Ctor.
      * @param reg Region
-     * @param name Name of him
+     * @param user URN of the user
      */
-    public DyUser(final Region reg, final String name) {
+    public DyErrors(final Region reg, final String user) {
         this.region = reg;
-        this.urn = name;
+        this.urn = user;
     }
 
     @Override
-    public Pipes pipes() {
-        return new DyPipes(this.region, this.urn);
+    public Iterable<Error> iterate() throws IOException {
+        throw new UnsupportedOperationException("iterate not implemented");
     }
 
     @Override
-    public Events events() {
-        return new DyEvents(this.region, this.urn);
+    public void register(final String title, final String description) {
+        throw new UnsupportedOperationException("register not implemented");
     }
-
-    @Override
-    public Errors errors() {
-        return new DyErrors(this.region, this.urn);
-    }
-
 }
