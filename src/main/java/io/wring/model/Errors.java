@@ -56,5 +56,5 @@ public interface Errors {
      * @param description Description
      * @throws IOException If fails
      */
-    void register(String title, String description);
+    void register(String title, String description) throws IOException;
 }

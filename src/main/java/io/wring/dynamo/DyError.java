@@ -29,9 +29,15 @@
  */
 package io.wring.dynamo;
 
+import com.jcabi.dynamo.Attributes;
+import com.jcabi.dynamo.Item;
 import io.wring.model.Error;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.xembly.Directive;
+import org.xembly.Directives;
+import org.xembly.Xembler;
 
 /**
  * Dynamo Db implementation for {@link Error}.
@@ -40,14 +46,64 @@ import org.xembly.Directive;
  * @version $Id$
  * @since 1.0
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class DyError implements Error {
+    /**
+     * The item.
+     */
+    private final transient Item item;
+
+    /**
+     * Ctor.
+     * @param itm Item with pitch
+     */
+    public DyError(final Item itm) {
+        this.item = itm;
+    }
+
     @Override
     public Iterable<Directive> asXembly() throws IOException {
-        throw new UnsupportedOperationException("asXembly not implemented");
+        final String description = this.item.get("description").getS();
+        return new Directives()
+            .add("error")
+            .add("urn").set(this.item.get("urn").getS()).up()
+            .add("title")
+            .set(Xembler.escape(this.item.get("title").getS())).up()
+            .add("description")
+            .set(Xembler.escape(description)).up()
+            .add("html")
+            .set(Xembler.escape(DyError.html(description))).up();
     }
 
     @Override
     public void delete() throws IOException {
-        throw new UnsupportedOperationException("delete not implemented");
+        this.item.frame().table().delete(
+            new Attributes()
+                .with("urn", this.item.get("urn").getS())
+                .with("title", this.item.get("title").getS())
+                .with("time", this.item.get("time").getS())
+        );
+    }
+
+    /**
+     * To HTML.
+     * @param text Text in Markdown (simplified)
+     * @return HTML
+     */
+    private static String html(final CharSequence text) {
+        final Pattern ptn = Pattern.compile("\\[([^]]+)]\\(([^)]+)\\)");
+        final Matcher mtr = ptn.matcher(text);
+        final StringBuffer out = new StringBuffer(text.length());
+        while (mtr.find()) {
+            mtr.appendReplacement(
+                out,
+                String.format(
+                    "<a href='%s'>%s</a>",
+                    mtr.group(2), mtr.group(1)
+                ).replace("$", "\\$")
+            );
+        }
+        mtr.appendTail(out);
+        return out.toString();
     }
 }
