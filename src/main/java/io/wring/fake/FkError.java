@@ -27,31 +27,30 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.model;
+package io.wring.fake;
 
+import io.wring.model.Error;
 import java.io.IOException;
+import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
- * Errors.
+ * Fake error.
  *
  * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
  */
-public interface Errors {
+public final class FkError implements Error {
+    @Override
+    public Iterable<Directive> asXembly() throws IOException {
+        return new Directives().add("error")
+            .add("title").set("Error title").up()
+            .add("description").set("Error Description").up();
+    }
 
-    /**
-     * Iterate first errors.
-     * @return Events
-     * @throws IOException If fails
-     */
-    Iterable<Error> iterate() throws IOException;
-
-    /**
-     * Add a new error.
-     * @param title Title
-     * @param description Description
-     * @throws IOException If fails
-     */
-    void register(String title, String description);
+    @Override
+    public void delete() throws IOException {
+        //do nothing
+    }
 }

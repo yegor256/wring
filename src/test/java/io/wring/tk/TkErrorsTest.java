@@ -27,31 +27,49 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.model;
+package io.wring.tk;
 
-import java.io.IOException;
+import com.jcabi.matchers.XhtmlMatchers;
+import io.wring.fake.FkBase;
+import org.hamcrest.MatcherAssert;
+import org.junit.Test;
+import org.takes.Take;
+import org.takes.rq.RqFake;
+import org.takes.rq.RqWithHeader;
+import org.takes.rs.RsPrint;
 
 /**
- * Errors.
- *
+ * Test case for {@link TkErrors}.
  * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
  */
-public interface Errors {
+public final class TkErrorsTest {
 
     /**
-     * Iterate first errors.
-     * @return Events
-     * @throws IOException If fails
+     * TkErrors can render list of errors.
+     * @throws Exception If some problem inside
      */
-    Iterable<Error> iterate() throws IOException;
-
-    /**
-     * Add a new error.
-     * @param title Title
-     * @param description Description
-     * @throws IOException If fails
-     */
-    void register(String title, String description);
+    @Test
+    public void rendersListOfErrors() throws Exception {
+        final Take take = new TkAppAuth(new TkErrors(new FkBase()));
+        MatcherAssert.assertThat(
+            XhtmlMatchers.xhtml(
+                new RsPrint(
+                    take.act(
+                        new RqWithHeader(
+                            new RqFake("GET", "/"),
+                            "Accept",
+                            "text/xml"
+                        )
+                    )
+                ).printBody()
+            ),
+            XhtmlMatchers.hasXPaths(
+                "/page/millis",
+                "/page/errors/error",
+                "/page/errors/@total"
+            )
+        );
+    }
 }

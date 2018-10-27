@@ -55,6 +55,6 @@ public final class FkUser implements User {
 
     @Override
     public Errors errors() {
-        throw new UnsupportedOperationException("Not implemented");
+        return new FkErrors();
     }
 }

@@ -27,31 +27,28 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.model;
+package io.wring.fake;
 
+import io.wring.model.Error;
+import io.wring.model.Errors;
 import java.io.IOException;
+import java.util.Collections;
 
 /**
- * Errors.
+ * Fake errors.
  *
  * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
  */
-public interface Errors {
+public final class FkErrors implements Errors {
+    @Override
+    public Iterable<Error> iterate() throws IOException {
+        return Collections.singleton(new FkError());
+    }
 
-    /**
-     * Iterate first errors.
-     * @return Events
-     * @throws IOException If fails
-     */
-    Iterable<Error> iterate() throws IOException;
-
-    /**
-     * Add a new error.
-     * @param title Title
-     * @param description Description
-     * @throws IOException If fails
-     */
-    void register(String title, String description);
+    @Override
+    public void register(final String title, final String description) {
+        //do nothing
+    }
 }
