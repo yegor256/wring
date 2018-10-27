@@ -62,7 +62,7 @@ import org.cactoos.scalar.UncheckedScalar;
  *  these errors are properly saved once they happen and remove
  *  Exec(final Agent agt, final Events evt, final Pipe ppe) constructor so
  *  errors is injected in Exec every time. Then remove Singularfield and
- *  UnusedPrivateField check ignores and uncomment tests for error
+ *  UnusedPrivateField check ignores below and uncomment tests for error
  *  registering in ExecTest.registerErrors.
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
