@@ -30,6 +30,8 @@
 package io.wring.model;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Errors.
@@ -57,4 +59,32 @@ public interface Errors {
      * @throws IOException If fails
      */
     void register(String title, String description);
+
+    /**
+     * Simple implementation of Error repo.
+     */
+    final class Simple implements Errors {
+
+        /**
+         * Errors.
+         */
+        private final Collection<Error> errors;
+
+        /**
+         * Constructor.
+         */
+        public Simple() {
+            this.errors = new ArrayList<>(0);
+        }
+
+        @Override
+        public Iterable<Error> iterate() throws IOException {
+            return this.errors;
+        }
+
+        @Override
+        public void register(final String title, final String description) {
+            this.errors.add(new Error.Simple(title, description));
+        }
+    }
 }
