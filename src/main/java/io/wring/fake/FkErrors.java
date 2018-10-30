@@ -32,7 +32,8 @@ package io.wring.fake;
 import io.wring.model.Error;
 import io.wring.model.Errors;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Collection;
+import org.cactoos.collection.CollectionOf;
 
 /**
  * Fake errors.
@@ -42,9 +43,30 @@ import java.util.Collections;
  * @since 1.0
  */
 public final class FkErrors implements Errors {
+
+    /**
+     * Errors.
+     */
+    private final Collection<Error> errors;
+
+    /**
+     * Constructor.
+     * @param errors Predefined errors
+     */
+    public FkErrors(final Error...errors) {
+        this.errors = new CollectionOf<>(errors);
+    }
+
+    /**
+     * Constructor.
+     */
+    public FkErrors() {
+        this(new FkError());
+    }
+
     @Override
     public Iterable<Error> iterate() throws IOException {
-        return Collections.singleton(new FkError());
+        return this.errors;
     }
 
     @Override

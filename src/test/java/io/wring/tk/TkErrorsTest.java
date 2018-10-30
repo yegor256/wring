@@ -68,6 +68,8 @@ public final class TkErrorsTest {
             XhtmlMatchers.hasXPaths(
                 "/page/millis",
                 "/page/errors/error",
+                "/page/errors/error[title='Error title']",
+                "/page/errors/error[description='Error Description']",
                 "/page/errors/@total"
             )
         );

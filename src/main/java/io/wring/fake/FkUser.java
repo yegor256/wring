@@ -55,6 +55,6 @@ public final class FkUser implements User {
 
     @Override
     public Errors errors() {
-        return new FkErrors();
+        return new FkErrors(new FkError());
     }
 }
