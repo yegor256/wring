@@ -48,7 +48,7 @@ public interface Errors {
      * @return Events
      * @throws IOException If fails
      */
-    Iterable<Error> iterate() throws IOException;
+    Iterable<Error> iterate();
 
     /**
      * Add a new error.
@@ -56,5 +56,5 @@ public interface Errors {
      * @param description Description
      * @throws IOException If fails
      */
-    void register(String title, String description) throws IOException;
+    void register(String title, String description);
 }

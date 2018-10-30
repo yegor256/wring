@@ -77,7 +77,7 @@ public final class DyErrors implements Errors {
     }
 
     @Override
-    public Iterable<Error> iterate() throws IOException {
+    public Iterable<Error> iterate() {
         return () -> this.table()
             .frame()
             .through(
@@ -96,19 +96,23 @@ public final class DyErrors implements Errors {
     }
 
     @Override
-    public void register(final String title, final String description)
-    throws IOException {
-        this.table().put(
-            new Attributes()
-                .with("urn", this.urn)
-                .with("title", title)
-                .with("description", description)
-                .with("time", System.currentTimeMillis())
-        );
-        Logger.info(
-            this, "Error registered for %s: \"%s\"",
-            this.urn, title
-        );
+    @SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
+    public void register(final String title, final String description) {
+        try {
+            this.table().put(
+                new Attributes()
+                    .with("urn", this.urn)
+                    .with("title", title)
+                    .with("description", description)
+                    .with("time", System.currentTimeMillis())
+            );
+            Logger.info(
+                this, "Error registered for %s: \"%s\"",
+                this.urn, title
+            );
+        } catch (final IOException err) {
+            throw new RuntimeException(err);
+        }
     }
 
     /**
