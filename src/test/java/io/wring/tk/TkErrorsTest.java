@@ -27,34 +27,51 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.wring.fake;
+package io.wring.tk;
 
-import io.wring.model.Errors;
-import io.wring.model.Events;
-import io.wring.model.Pipes;
-import io.wring.model.User;
+import com.jcabi.matchers.XhtmlMatchers;
+import io.wring.fake.FkBase;
+import org.hamcrest.MatcherAssert;
+import org.junit.Test;
+import org.takes.Take;
+import org.takes.rq.RqFake;
+import org.takes.rq.RqWithHeader;
+import org.takes.rs.RsPrint;
 
 /**
- * Fake user.
- *
- * @author Yegor Bugayenko (yegor256@gmail.com)
+ * Test case for {@link TkErrors}.
+ * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
  */
-public final class FkUser implements User {
+public final class TkErrorsTest {
 
-    @Override
-    public Pipes pipes() {
-        return new FkPipes();
-    }
-
-    @Override
-    public Events events() {
-        return new FkEvents();
-    }
-
-    @Override
-    public Errors errors() {
-        return new FkErrors(new FkError());
+    /**
+     * TkErrors can render list of errors.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    public void rendersListOfErrors() throws Exception {
+        final Take take = new TkAppAuth(new TkErrors(new FkBase()));
+        MatcherAssert.assertThat(
+            XhtmlMatchers.xhtml(
+                new RsPrint(
+                    take.act(
+                        new RqWithHeader(
+                            new RqFake("GET", "/"),
+                            "Accept",
+                            "text/xml"
+                        )
+                    )
+                ).printBody()
+            ),
+            XhtmlMatchers.hasXPaths(
+                "/page/millis",
+                "/page/errors/error",
+                "/page/errors/error[title='Error title']",
+                "/page/errors/error[description='Error Description']",
+                "/page/errors/@total"
+            )
+        );
     }
 }

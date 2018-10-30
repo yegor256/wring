@@ -29,32 +29,48 @@
  */
 package io.wring.fake;
 
+import io.wring.model.Error;
 import io.wring.model.Errors;
-import io.wring.model.Events;
-import io.wring.model.Pipes;
-import io.wring.model.User;
+import java.io.IOException;
+import java.util.Collection;
+import org.cactoos.collection.CollectionOf;
 
 /**
- * Fake user.
+ * Fake errors.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
+ * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
  */
-public final class FkUser implements User {
+public final class FkErrors implements Errors {
 
-    @Override
-    public Pipes pipes() {
-        return new FkPipes();
+    /**
+     * Errors.
+     */
+    private final Collection<Error> errors;
+
+    /**
+     * Constructor.
+     * @param errors Predefined errors
+     */
+    public FkErrors(final Error...errors) {
+        this.errors = new CollectionOf<>(errors);
+    }
+
+    /**
+     * Constructor.
+     */
+    public FkErrors() {
+        this(new FkError());
     }
 
     @Override
-    public Events events() {
-        return new FkEvents();
+    public Iterable<Error> iterate() throws IOException {
+        return this.errors;
     }
 
     @Override
-    public Errors errors() {
-        return new FkErrors(new FkError());
+    public void register(final String title, final String description) {
+        //do nothing
     }
 }

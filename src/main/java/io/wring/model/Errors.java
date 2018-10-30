@@ -37,9 +37,6 @@ import java.io.IOException;
  * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
- * @todo #72:30min Create a Errors page where we will show the errors in Errors
- *  to the user. We should use Errors/Error implementations and build the page
- *  in a similar manner that is done on TkEvents.
  */
 public interface Errors {
 
