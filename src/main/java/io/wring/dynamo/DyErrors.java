@@ -96,7 +96,6 @@ public final class DyErrors implements Errors {
     }
 
     @Override
-    @SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
     public void register(final String title, final String description) {
         try {
             this.table().put(
@@ -111,7 +110,7 @@ public final class DyErrors implements Errors {
                 this.urn, title
             );
         } catch (final IOException err) {
-            throw new RuntimeException(err);
+            throw new IllegalStateException(err);
         }
     }
 
