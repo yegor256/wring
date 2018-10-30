@@ -56,6 +56,10 @@ public interface Error {
 
     /**
      * Simple Error implementation.
+     * @todo #76:30min Implement Error.Simple asXembly and delete method.
+     *  asXembly must return a xembly directive with element 'error' and
+     *  child elements 'title'
+     *  and 'description'.
      */
     final class Simple implements Error {
 
