@@ -63,7 +63,7 @@ public final class ExecTest {
             ),
             MockitoHamcrest.argThat(
                 Matchers.containsString(
-                    "java.io.IOException: &lt;bug&gt;\n"
+                    "java.io.IOException: &lt;bug&gt;"
                 )
             )
         );

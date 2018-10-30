@@ -31,6 +31,7 @@ package io.wring.fake;
 
 import io.wring.model.Error;
 import java.io.IOException;
+import java.util.Date;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -46,7 +47,8 @@ public final class FkError implements Error {
     public Iterable<Directive> asXembly() throws IOException {
         return new Directives().add("error")
             .add("title").set("Error title").up()
-            .add("description").set("Error Description").up();
+            .add("description").set("Error Description").up()
+            .add("time").set(new Date().getTime());
     }
 
     @Override

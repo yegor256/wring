@@ -30,7 +30,6 @@
 package io.wring.dynamo;
 
 import com.jcabi.aspects.Tv;
-import io.wring.model.Error;
 import io.wring.model.Errors;
 import io.wring.model.User;
 import org.cactoos.iterable.LengthOf;
@@ -64,23 +63,6 @@ public final class DyErrorsITCase {
             "Could not register errors",
             new LengthOf(errors.iterate()),
             new IsEqual<>(Tv.FIVE)
-        );
-    }
-
-    /**
-     * DyErrors can delete errors.
-     * @throws Exception If some problem inside
-     */
-    @Test
-    public void deletesErrors() throws Exception {
-        final User user = new DyUser(new Dynamo(), "boris");
-        final Errors errors = user.errors();
-        errors.register("error", "message");
-        final Error error = errors.iterate().iterator().next();
-        error.delete();
-        MatcherAssert.assertThat(
-            new LengthOf(errors.iterate()),
-            new IsEqual<>(0)
         );
     }
 }

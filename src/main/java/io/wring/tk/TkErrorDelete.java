@@ -29,35 +29,27 @@
  */
 package io.wring.tk;
 
-import com.google.common.collect.Iterables;
-import com.jcabi.aspects.Tv;
 import io.wring.model.Base;
 import io.wring.model.Error;
+import io.wring.model.User;
 import io.wring.model.XePrint;
 import java.io.IOException;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
+import org.takes.facets.flash.RsFlash;
+import org.takes.facets.forward.RsForward;
 import org.takes.misc.Href;
-import org.takes.rs.xe.XeAppend;
-import org.takes.rs.xe.XeChain;
-import org.takes.rs.xe.XeDirectives;
-import org.takes.rs.xe.XeLink;
-import org.takes.rs.xe.XeSource;
-import org.takes.rs.xe.XeTransform;
-import org.xembly.Directive;
-import org.xembly.Directives;
+import org.takes.rq.RqHref;
 
 /**
- * List of errors.
+ * Delete error.
  *
- * @author Paulo Lobo (pauloeduardolobo@gmail.com)
+ * @author Paulo Lobo (pauloedaurdolobo@gmail.com)
  * @version $Id$
  * @since 1.0
- * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class TkErrors implements Take {
+final class TkErrorDelete implements Take {
 
     /**
      * Base.
@@ -68,55 +60,23 @@ public final class TkErrors implements Take {
      * Ctor.
      * @param bse Base
      */
-    TkErrors(final Base bse) {
+    TkErrorDelete(final Base bse) {
         this.base = bse;
     }
 
     @Override
     public Response act(final Request req) throws IOException {
-        final Iterable<Error> errors = this.base.user(new RqUser(req).urn())
-            .errors()
-            .iterate();
-        return new RsPage(
-            "/xsl/errors.xsl",
-            req,
-            new XeAppend(
-                "errors",
-                new XeChain(
-                    new XeTransform<>(
-                        Iterables.limit(errors, Tv.TWENTY),
-                        TkErrors::source
-                    )
-                ),
-                new XeDirectives(
-                    new Directives().attr("total", Iterables.size(errors))
-                )
-            )
+        final User user = this.base.user(new RqUser(req).urn());
+        final Href href = new RqHref.Base(req).href();
+        final Error error = user.errors().error(
+            href.param("title").iterator().next(),
+            Long.parseLong(href.param("time").iterator().next())
         );
+        final String msg = new XePrint(error.asXembly()).text(
+            "\"{/event/title/text()}\" at \"{/event/title/time()}\" deleted"
+        );
+        error.delete();
+        return new RsForward(new RsFlash(msg));
     }
 
-    /**
-     * Convert error to Xembly.
-     * @param error The error
-     * @return Xembly
-     * @throws IOException If fails
-     */
-    private static XeSource source(final Error error) throws IOException {
-        final Iterable<Directive> dirs = error.asXembly();
-        final String title = new XePrint(dirs).text("{/error/title/text()}");
-        final String time =
-            new XePrint(dirs).text("{/error/time/text()}");
-        return new XeDirectives(
-            new Directives()
-                .append(dirs)
-                .append(
-                    new XeLink(
-                        "delete",
-                        new Href("/error-delete")
-                            .with("title", title)
-                            .with("time", time)
-                    ).toXembly()
-                )
-        );
-    }
 }

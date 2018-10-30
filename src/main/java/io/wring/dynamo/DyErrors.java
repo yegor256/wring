@@ -114,6 +114,23 @@ public final class DyErrors implements Errors {
         }
     }
 
+    @Override
+    public Error error(final String title, final long time) {
+        final Iterator<Item> items = this.table()
+            .frame()
+            .through(new QueryValve())
+            .where("urn", Conditions.equalTo(this.urn))
+            .where("title", Conditions.equalTo(title))
+            .where("time", Conditions.equalTo(time))
+            .iterator();
+        if (!items.hasNext()) {
+            throw new IllegalArgumentException(
+                String.format("Error \"%s\" at \"%s\" not found", title, time)
+            );
+        }
+        return new DyError(items.next());
+    }
+
     /**
      * Find items by title.
      * @param title Unique title of the event

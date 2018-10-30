@@ -72,4 +72,9 @@ public final class FkErrors implements Errors {
     public void register(final String title, final String description) {
         //do nothing
     }
+
+    @Override
+    public Error error(final String title, final long time) {
+        return new FkError();
+    }
 }

@@ -54,4 +54,13 @@ public interface Errors {
      * @throws IOException If fails
      */
     void register(String title, String description);
+
+    /**
+     * Retrieves the error with given title at given time.
+     *
+     * @param title Error title
+     * @param time Time of error
+     * @return Error
+     */
+    Error error(String title, long time);
 }
