@@ -29,9 +29,19 @@
  */
 package io.wring.dynamo;
 
+import com.amazonaws.services.dynamodbv2.model.Select;
+import com.jcabi.aspects.Tv;
+import com.jcabi.dynamo.Attributes;
+import com.jcabi.dynamo.Conditions;
+import com.jcabi.dynamo.Item;
+import com.jcabi.dynamo.QueryValve;
 import com.jcabi.dynamo.Region;
+import com.jcabi.dynamo.Table;
+import com.jcabi.log.Logger;
 import io.wring.model.Error;
 import io.wring.model.Errors;
+import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * Errors stored in Dynamo database.
@@ -39,13 +49,11 @@ import io.wring.model.Errors;
  * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
- * @todo #72:30min Implement DyError and DyErrors classes. These
- *  methods must use dynamo database as persistence similar to DyEvents and
- *  DyEvent implementations. The tests are already made in DyErrorsITCase, so
- *  just un-ignore them after implementing these methods and remove PMD
- *  annotations below.
+ * @todo #78:30min Add errors table to dynamo. This table must have the columns
+ *  'urn', 'title', 'description' and 'time' just like columns from events
+ *  table. Then remove ignore annotation from DyErrorsTest and DyError test.
  */
-@SuppressWarnings({"PMD.SingularField", "PMD.UnusedPrivateField"})
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class DyErrors implements Errors {
 
     /**
@@ -70,11 +78,61 @@ public final class DyErrors implements Errors {
 
     @Override
     public Iterable<Error> iterate() {
-        throw new UnsupportedOperationException("iterate not implemented");
+        return () -> this.table()
+            .frame()
+            .through(
+                new QueryValve()
+                    .withLimit(Tv.TWENTY)
+                    .withIndexName("top")
+                    .withSelect(Select.ALL_ATTRIBUTES)
+                    .withScanIndexForward(false)
+                    .withConsistentRead(false)
+            )
+            .where("urn", Conditions.equalTo(this.urn))
+            .stream()
+            .map(DyError::new)
+            .map(Error.class::cast)
+            .iterator();
     }
 
     @Override
     public void register(final String title, final String description) {
-        throw new UnsupportedOperationException("register not implemented");
+        try {
+            this.table().put(
+                new Attributes()
+                    .with("urn", this.urn)
+                    .with("title", title)
+                    .with("description", description)
+                    .with("time", System.currentTimeMillis())
+            );
+            Logger.info(
+                this, "Error registered for %s: \"%s\"",
+                this.urn, title
+            );
+        } catch (final IOException err) {
+            throw new IllegalStateException(err);
+        }
+    }
+
+    /**
+     * Find items by title.
+     * @param title Unique title of the event
+     * @return Items or empty
+     */
+    public Iterator<Item> items(final String title) {
+        return this.table()
+            .frame()
+            .through(new QueryValve())
+            .where("urn", Conditions.equalTo(this.urn))
+            .where("title", Conditions.equalTo(title))
+            .iterator();
+    }
+
+    /**
+     * Table to work with.
+     * @return Table
+     */
+    private Table table() {
+        return this.region.table("errors");
     }
 }
