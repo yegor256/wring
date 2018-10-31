@@ -31,7 +31,6 @@ package io.wring.fake;
 
 import io.wring.model.Error;
 import io.wring.model.Errors;
-import java.io.IOException;
 import java.util.Collection;
 import org.cactoos.collection.CollectionOf;
 
@@ -65,7 +64,7 @@ public final class FkErrors implements Errors {
     }
 
     @Override
-    public Iterable<Error> iterate() throws IOException {
+    public Iterable<Error> iterate() {
         return this.errors;
     }
 

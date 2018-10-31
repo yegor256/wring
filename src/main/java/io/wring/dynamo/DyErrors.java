@@ -32,7 +32,6 @@ package io.wring.dynamo;
 import com.jcabi.dynamo.Region;
 import io.wring.model.Error;
 import io.wring.model.Errors;
-import java.io.IOException;
 
 /**
  * Errors stored in Dynamo database.
@@ -70,7 +69,7 @@ public final class DyErrors implements Errors {
     }
 
     @Override
-    public Iterable<Error> iterate() throws IOException {
+    public Iterable<Error> iterate() {
         throw new UnsupportedOperationException("iterate not implemented");
     }
 

@@ -47,7 +47,7 @@ public interface Errors {
      * @return Events
      * @throws IOException If fails
      */
-    Iterable<Error> iterate() throws IOException;
+    Iterable<Error> iterate();
 
     /**
      * Add a new error.
@@ -75,7 +75,7 @@ public interface Errors {
         }
 
         @Override
-        public Iterable<Error> iterate() throws IOException {
+        public Iterable<Error> iterate() {
             return this.errors;
         }
 
