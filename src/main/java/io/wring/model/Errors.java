@@ -30,6 +30,8 @@
 package io.wring.model;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Errors.
@@ -43,7 +45,6 @@ public interface Errors {
     /**
      * Iterate first errors.
      * @return Events
-     * @throws IOException If fails
      */
     Iterable<Error> iterate();
 
@@ -63,4 +64,37 @@ public interface Errors {
      * @return Error
      */
     Error error(String title, long time);
+
+    /**
+     * Simple implementation of Error repo.
+     */
+    final class Simple implements Errors {
+
+        /**
+         * Errors.
+         */
+        private final Collection<Error> errors;
+
+        /**
+         * Constructor.
+         */
+        public Simple() {
+            this.errors = new ArrayList<>(0);
+        }
+
+        @Override
+        public Iterable<Error> iterate() {
+            return this.errors;
+        }
+
+        @Override
+        public Error error(final String title, final long time) {
+            throw new UnsupportedOperationException("error() not implemented");
+        }
+
+        @Override
+        public void register(final String title, final String description) {
+            this.errors.add(new Error.Simple(title, description));
+        }
+    }
 }

@@ -53,4 +53,44 @@ public interface Error {
      * @throws IOException If fails
      */
     void delete() throws IOException;
+
+    /**
+     * Simple Error implementation.
+     * @todo #76:30min Implement Error.Simple asXembly and delete method.
+     *  asXembly must return a xembly directive with element 'error' and
+     *  child elements 'title'
+     *  and 'description'.
+     */
+    final class Simple implements Error {
+
+        /**
+         * Error title.
+         */
+        private final String title;
+
+        /**
+         * Error description.
+         */
+        private final String description;
+
+        /**
+         * Constructor.
+         * @param title Title
+         * @param description Description
+         */
+        public Simple(final String title, final String description) {
+            this.title = title;
+            this.description = description;
+        }
+
+        @Override
+        public Iterable<Directive> asXembly() throws IOException {
+            throw new UnsupportedOperationException("not implemented");
+        }
+
+        @Override
+        public void delete() throws IOException {
+            throw new UnsupportedOperationException("delete() not implemented");
+        }
+    }
 }

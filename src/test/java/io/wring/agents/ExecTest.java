@@ -30,9 +30,14 @@
 package io.wring.agents;
 
 import io.wring.fake.FkPipe;
+import io.wring.model.Errors;
 import io.wring.model.Events;
 import java.io.IOException;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.hamcrest.collection.IsIterableWithSize;
+import org.hamcrest.core.IsEqual;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.hamcrest.MockitoHamcrest;
@@ -40,6 +45,7 @@ import org.mockito.hamcrest.MockitoHamcrest;
 /**
  * Test case for {@link Exec}.
  * @author Yegor Bugayenko (yegor256@gmail.com)
+ * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 0.13
  */
@@ -65,6 +71,27 @@ public final class ExecTest {
                 Matchers.containsString(
                     "java.io.IOException: &lt;bug&gt;"
                 )
+            )
+        );
+    }
+
+    /**
+     * Exec can register an error.
+     * @throws Exception If some problem inside
+     */
+    @Test
+    @Ignore
+    public void registerErrors() throws Exception {
+        final Agent agent = Mockito.mock(Agent.class);
+        final Events events = Mockito.mock(Events.class);
+        final Errors errors = new Errors.Simple();
+        Mockito.doThrow(new IOException("<error>")).when(agent).push(events);
+        new Exec(agent, events, new FkPipe(), errors).run();
+        MatcherAssert.assertThat(
+            "Could not register error",
+            errors.iterate(),
+            new IsIterableWithSize<>(
+                new IsEqual<>(1)
             )
         );
     }

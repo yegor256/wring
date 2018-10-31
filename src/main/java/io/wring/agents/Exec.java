@@ -33,6 +33,7 @@ import com.jcabi.aspects.Tv;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
 import io.sentry.Sentry;
+import io.wring.model.Errors;
 import io.wring.model.Events;
 import io.wring.model.Pipe;
 import java.io.ByteArrayOutputStream;
@@ -52,14 +53,20 @@ import org.cactoos.scalar.UncheckedScalar;
  * One execution.
  *
  * @author Yegor Bugayenko (yegor256@gmail.com)
+ * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 0.13
- * @todo #72:30min Errors occurred during execution must be saved and later
+ * @todo #76:30min Errors occurred during execution must be saved and later
  *  listed to user in a page. User should be able to mark errors as `read`
  *  in this page. Wire Error and Errors implementations in Exec flow so
- *  these errors are properly saved once they happen. Cover this with tests.
+ *  these errors are properly saved once they happen and remove
+ *  Exec(final Agent agt, final Events evt, final Pipe ppe) constructor so
+ *  errors is injected in Exec every time. Then remove Singularfield and
+ *  UnusedPrivateField check ignores below and uncomment tests for error
+ *  registering in ExecTest.registerErrors.
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
+@SuppressWarnings({"PMD.SingularField", "PMD.UnusedPrivateField"})
 final class Exec {
 
     /**
@@ -78,15 +85,33 @@ final class Exec {
     private final transient Pipe pipe;
 
     /**
+     * Errors.
+     */
+    private final Errors errors;
+
+    /**
      * Ctor.
      * @param agt Agent
      * @param evt Events
      * @param ppe Pipe
      */
     Exec(final Agent agt, final Events evt, final Pipe ppe) {
+        this(agt, evt, ppe, new Errors.Simple());
+    }
+
+    /**
+     * Ctor.
+     * @param agt Agent
+     * @param evt Events
+     * @param ppe Pipe
+     * @param err Errors
+     * @checkstyle ParameterNumberCheck (2 lines)
+     */
+    Exec(final Agent agt, final Events evt, final Pipe ppe, final Errors err) {
         this.agent = agt;
         this.events = evt;
         this.pipe = ppe;
+        this.errors = err;
     }
 
     /**
