@@ -29,32 +29,28 @@
  */
 package io.wring.fake;
 
-import io.wring.model.Errors;
-import io.wring.model.Events;
-import io.wring.model.Pipes;
-import io.wring.model.User;
+import io.wring.model.Error;
+import java.io.IOException;
+import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
- * Fake user.
+ * Fake error.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
+ * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
  */
-public final class FkUser implements User {
-
+public final class FkError implements Error {
     @Override
-    public Pipes pipes() {
-        return new FkPipes();
+    public Iterable<Directive> asXembly() throws IOException {
+        return new Directives().add("error")
+            .add("title").set("Error title").up()
+            .add("description").set("Error Description").up();
     }
 
     @Override
-    public Events events() {
-        return new FkEvents();
-    }
-
-    @Override
-    public Errors errors() {
-        return new FkErrors(new FkError());
+    public void delete() throws IOException {
+        //do nothing
     }
 }
