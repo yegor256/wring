@@ -33,9 +33,8 @@ import com.jcabi.matchers.XhtmlMatchers;
 import io.wring.model.Error;
 import io.wring.model.Errors;
 import io.wring.model.User;
-import org.cactoos.iterable.LengthOf;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.core.IsEqual;
+import org.hamcrest.collection.IsEmptyIterable;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xembly.Xembler;
@@ -79,8 +78,8 @@ public final class DyErrorITCase {
         final Error error = errors.iterate().iterator().next();
         error.delete();
         MatcherAssert.assertThat(
-            new LengthOf(errors.iterate()),
-            new IsEqual<>(0)
+            errors.iterate(),
+            new IsEmptyIterable<>()
         );
     }
 }
