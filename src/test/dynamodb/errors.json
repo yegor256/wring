@@ -1,0 +1,31 @@
+{
+    "AttributeDefinitions": [
+        {
+            "AttributeName": "urn",
+            "AttributeType": "S"
+        },
+        {
+            "AttributeName": "title",
+            "AttributeType": "S"
+        },
+        {
+            "AttributeName": "description",
+            "AttributeType": "S"
+        },
+        {
+            "AttributeName": "time",
+            "AttributeType": "N"
+        }
+    ],
+    "KeySchema": [
+        {
+            "AttributeName": "urn",
+            "KeyType": "HASH"
+        },
+        {
+            "AttributeName": "time",
+            "KeyType": "RANGE"
+        }
+    ],
+    "TableName": "errors"
+}
