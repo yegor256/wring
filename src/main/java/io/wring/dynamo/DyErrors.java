@@ -49,9 +49,6 @@ import java.util.Iterator;
  * @author Paulo Lobo (pauloeduardolobo@gmail.com)
  * @version $Id$
  * @since 1.0
- * @todo #78:30min Add errors table to dynamo. This table must have the columns
- *  'urn', 'title', 'description' and 'time' just like columns from events
- *  table. Then remove ignore annotation from DyErrorsTest and DyError test.
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class DyErrors implements Errors {
