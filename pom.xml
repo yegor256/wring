@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copyright (c) 2016, wring.io
+Copyright (c) 2016-2019, Wring.io
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
