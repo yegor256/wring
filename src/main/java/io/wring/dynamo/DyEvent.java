@@ -129,9 +129,9 @@ public final class DyEvent implements Event {
      * @param text Text in Markdown (simplified)
      * @return HTML
      */
-    private static String html(final CharSequence text) {
+    private static String html(final String text) {
         final Pattern ptn = Pattern.compile("\\[([^]]+)]\\(([^)]+)\\)");
-        final Matcher mtr = ptn.matcher(text);
+        final Matcher mtr = ptn.matcher(StringEscapeUtils.escapeHtml4(text));
         final StringBuffer out = new StringBuffer(text.length());
         while (mtr.find()) {
             mtr.appendReplacement(
@@ -143,7 +143,7 @@ public final class DyEvent implements Event {
             );
         }
         mtr.appendTail(out);
-        return StringEscapeUtils.escapeHtml4(out.toString());
+        return out.toString();
     }
 
 }
