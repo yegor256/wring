@@ -67,8 +67,7 @@ public final class TkEventsTest {
             ),
             XhtmlMatchers.hasXPaths(
                 "/page/millis",
-                "/page/events/event",
-                "/page/events/@total"
+                "/page/events/event"
             )
         );
     }

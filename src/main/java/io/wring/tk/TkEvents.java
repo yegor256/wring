@@ -88,9 +88,6 @@ final class TkEvents implements Take {
                         Iterables.limit(events, Tv.TWENTY),
                         TkEvents::source
                     )
-                ),
-                new XeDirectives(
-                    new Directives().attr("total", Iterables.size(events))
                 )
             )
         );
