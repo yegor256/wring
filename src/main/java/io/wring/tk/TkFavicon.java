@@ -56,6 +56,11 @@ import org.takes.rs.RsWithType;
 final class TkFavicon implements Take {
 
     /**
+     * Max to show.
+     */
+    private static final int MAX = 20;
+
+    /**
      * Base.
      */
     private final transient Base base;
@@ -80,12 +85,15 @@ final class TkFavicon implements Take {
         graph.setColor(new Color(0x36, 0x7a, 0xc3));
         graph.fillRect(0, 0, width, height);
         final int total = Iterables.size(
-            this.base.user(new RqUser(req).urn()).events().iterate()
+            Iterables.limit(
+                this.base.user(new RqUser(req).urn()).events().iterate(),
+                TkFavicon.MAX
+            )
         );
         if (total > 0) {
             final String text;
-            if (total >= Tv.HUNDRED) {
-                text = "99";
+            if (total >= TkFavicon.MAX) {
+                text = String.format("%d", TkFavicon.MAX);
             } else {
                 text = Integer.toString(total);
             }
