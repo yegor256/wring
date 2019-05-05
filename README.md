@@ -7,8 +7,30 @@
 
 [![Build Status](https://travis-ci.org/yegor256/wring.svg?branch=master)](https://travis-ci.org/yegor256/wring)
 [![PDD status](http://www.0pdd.com/svg?name=yegor256/wring)](http://www.0pdd.com/p?name=teamed/yegor256/wring)
+[![Hits-of-Code](https://hitsofcode.com/github/yegor256/wring)](https://hitsofcode.com/view/github/yegor256/wring)
 
-[www.wring.io](http://www.wring.io)
+[Wring.io](http://www.wring.io) is a fully automated collector of
+events you are getting from GitHub and some other systems where you
+actively participate in discussions. Instead of regularly checking
+your email and finding what's relevant to you, you configure Wring
+to pull those events for you and then you read them in one simple
+web page.
 
-Read about it here:
-[Wring.io, a Dispatcher of GitHub Notifications](http://www.yegor256.com/2016/03/15/wring-dispatcher-github-notifications.html)
+It is free.
+
+Read about it at this blog post:
+[_Wring.io, a Dispatcher of GitHub Notifications_](http://www.yegor256.com/2016/03/15/wring-dispatcher-github-notifications.html)
+
+## How to contribute
+
+Fork repository, make changes, send us a pull request. We will review
+your changes and apply them to the `master` branch shortly, provided
+they don't violate our quality standards. To avoid frustration, before
+sending us your pull request please run full Maven build:
+
+```
+$ mvn clean install -Pqulice
+```
+
+To avoid build errors use Maven 3.2+ and Java 8+.
+
