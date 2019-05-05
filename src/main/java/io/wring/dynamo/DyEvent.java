@@ -41,6 +41,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.bind.DatatypeConverter;
+import org.apache.commons.text.StringEscapeUtils;
 import org.xembly.Directive;
 import org.xembly.Directives;
 import org.xembly.Xembler;
@@ -142,7 +143,7 @@ public final class DyEvent implements Event {
             );
         }
         mtr.appendTail(out);
-        return out.toString();
+        return StringEscapeUtils.escapeHtml4(out.toString());
     }
 
 }
