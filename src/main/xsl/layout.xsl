@@ -127,7 +127,8 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
             <nav>
               <ul style="color:gray;" class="bottom">
                 <li title="Currently deployed version">
-                  <xsl:text>v</xsl:text>
+                  <xsl:value-of select="version/heroku"/>
+                  <xsl:text>/</xsl:text>
                   <xsl:value-of select="version/name"/>
                 </li>
                 <li title="Server time to generate this page">
