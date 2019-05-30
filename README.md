@@ -1,4 +1,4 @@
-<img src="http://www.wring.io/images/logo.svg" height="92" width="92"/>
+<img src="https://www.wring.io/images/logo.svg" height="92" width="92"/>
 
 [![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
 [![Managed by Zerocracy](https://www.0crat.com/badge/C7FCB1EQN.svg)](https://www.0crat.com/p/C7FCB1EQN)
@@ -8,6 +8,7 @@
 [![Build Status](https://travis-ci.org/yegor256/wring.svg?branch=master)](https://travis-ci.org/yegor256/wring)
 [![PDD status](http://www.0pdd.com/svg?name=yegor256/wring)](http://www.0pdd.com/p?name=teamed/yegor256/wring)
 [![Hits-of-Code](https://hitsofcode.com/github/yegor256/wring)](https://hitsofcode.com/view/github/yegor256/wring)
+[![Availability at SixNines](https://www.sixnines.io/b/f1810)](https://www.sixnines.io/h/f1810)
 
 [Wring.io](http://www.wring.io) is a fully automated collector of
 events you are getting from GitHub and some other systems where you
@@ -16,7 +17,7 @@ your email and finding what's relevant to you, you configure Wring
 to pull those events for you and then you read them in one simple
 web page.
 
-It is free.
+It is free for everybody.
 
 Read about it at this blog post:
 [_Wring.io, a Dispatcher of GitHub Notifications_](http://www.yegor256.com/2016/03/15/wring-dispatcher-github-notifications.html)

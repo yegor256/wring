@@ -166,6 +166,11 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
                     <img src="//img.shields.io/github/stars/yegor256/wring.svg?style=flat-square" alt="github stars"/>
                   </a>
                 </li>
+                <li>
+                  <a href="https://www.sixnines.io/h/f1810">
+                    <img src="https://www.sixnines.io/b/f1810?style=flat"/>
+                  </a>
+                </li>
               </ul>
             </nav>
           </footer>
