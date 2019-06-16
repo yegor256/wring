@@ -12,8 +12,8 @@ assets:
 env:
   MAVEN_OPTS: -XX:MaxPermSize=256m -Xmx1g
 install: |-
-  sudo gem install pdd
-  sudo gem install xcop
+  sudo gem install pdd -v 0.20.5
+  sudo gem install xcop -v 0.6
   java -version
   export LC_ALL=en_US.UTF-8
   export LANG=en_US.UTF-8
