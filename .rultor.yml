@@ -1,29 +1,16 @@
 readers:
   - "urn:github:526301"
-docker:
-  image: yegor256/java8
 assets:
   settings.xml: yegor256/home#assets/wring/settings.xml
   pubring.gpg: yegor256/home#assets/pubring.gpg
   secring.gpg: yegor256/home#assets/secring.gpg
   id_rsa: yegor256/home#assets/heroku-key
   id_rsa.pub: yegor256/home#assets/heroku-key.pub
-  s3cfg: yegor256/home#assets/s3cfg
-env:
-  MAVEN_OPTS: -XX:MaxPermSize=256m -Xmx1g
-install: |-
-  sudo gem install pdd -v 0.20.5
-  sudo gem install xcop -v 0.6
-  java -version
-  export LC_ALL=en_US.UTF-8
-  export LANG=en_US.UTF-8
-  export LANGUAGE=en_US.UTF-8
+install: |
+  pdd --file=/dev/null
 deploy:
   script: |
     mvn clean install -Prultor --settings ../settings.xml
-    mvn clean
-    pdd --source=$(pwd) --verbose --file=wring.xml
-    s3cmd --no-progress put wring.xml --config=../s3cfg s3://pdd.teamed.io/wring.xml
 release:
   sensitive:
     - settings.xml
@@ -45,16 +32,7 @@ release:
     rm -rf settings.xml
     curl -f --connect-timeout 15 --retry 5 --retry-delay 30 http://www.wring.io
     # mvn clean site-deploy -Psite --batch-mode --settings ../settings.xml
-  commanders:
-  - yegor256
 merge:
   script: |-
     mvn help:system clean install -Pqulice --settings ../settings.xml
-    mvn clean site -Psite --settings ../settings.xml
-    mvn clean
-    pdd --source=$(pwd) --verbose --file=/dev/null
-  commanders: []
-architect:
-- carlosmiranda
-- yegor256
-- karato
+    # mvn clean site -Psite --settings ../settings.xml
