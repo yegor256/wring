@@ -33,6 +33,10 @@ import com.jcabi.log.Logger;
 import com.jcabi.log.VerboseRunnable;
 import com.jcabi.log.VerboseThreads;
 import com.jcabi.manifests.Manifests;
+import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.SendMessage;
 import io.sentry.Sentry;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
@@ -87,6 +91,11 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
     private final transient ExecutorService executor;
 
     /**
+     * Telegram.
+     */
+    private final transient TelegramBot telegram;
+
+    /**
      * Ctor.
      * @param bse Base
      */
@@ -115,12 +124,25 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
                 )
             )
         );
+        this.telegram = new TelegramBot(Manifests.read("Wring-TelegramToken"));
     }
 
     /**
      * Start it.
      */
     public void start() {
+        this.telegram.setUpdatesListener(updates -> {
+            for (final Update update : updates) {
+                final long chat = update.message().chat().id();
+                this.telegram.execute(
+                    new SendMessage(
+                        chat,
+                        String.format("Your chat ID is %d", chat)
+                    )
+                );
+            }
+            return UpdatesListener.CONFIRMED_UPDATES_ALL;
+        });
         Sentry.init(Manifests.read("Wring-SentryDsn"));
         this.ticker.scheduleWithFixedDelay(
             new VerboseRunnable(
@@ -237,7 +259,7 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
     private Runnable job(final Pipe pipe) {
         return new RunnableOf<>(
             new FuncWithFallback<Pipe, Boolean>(
-                new FuncOf<>(new Cycle(this.base)),
+                new FuncOf<>(new Cycle(this.base, this.telegram)),
                 new FuncOf<>(
                     error -> {
                         Sentry.capture(error);

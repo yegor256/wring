@@ -33,7 +33,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
   <parent>
     <groupId>com.jcabi</groupId>
     <artifactId>parent</artifactId>
-    <version>0.50.6</version>
+    <version>0.50.7</version>
   </parent>
   <groupId>io.wring</groupId>
   <artifactId>wring</artifactId>
@@ -99,6 +99,11 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
       <groupId>io.sentry</groupId>
       <artifactId>sentry</artifactId>
       <version>1.3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.pengrad</groupId>
+      <artifactId>java-telegram-bot-api</artifactId>
+      <version>4.9.0</version>
     </dependency>
     <dependency>
       <groupId>jakarta.xml.bind</groupId>

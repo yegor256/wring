@@ -29,6 +29,7 @@
  */
 package io.wring.agents;
 
+import com.pengrad.telegrambot.TelegramBot;
 import io.wring.model.Base;
 import io.wring.model.Events;
 import io.wring.model.Pipe;
@@ -59,11 +60,25 @@ final class Cycle implements Proc<Pipe> {
     private final transient Base base;
 
     /**
+     * Telegram.
+     */
+    private final transient TelegramBot telegram;
+
+    /**
      * Ctor.
      * @param bse Base
      */
     Cycle(final Base bse) {
+        this(bse, new TelegramBot(""));
+    }
+
+    /**
+     * Ctor.
+     * @param bse Base
+     */
+    Cycle(final Base bse, final TelegramBot bot) {
         this.base = bse;
+        this.telegram = bot;
     }
 
     @Override
@@ -91,7 +106,14 @@ final class Cycle implements Proc<Pipe> {
                     if (obj != null) {
                         new Exec(
                             new JsonAgent(this.base, obj),
-                            new IgnoreEvents(new BoostEvents(events, obj), obj),
+                            new IgnoreEvents(
+                                new TelegramEvents(
+                                    new BoostEvents(events, obj),
+                                    this.telegram,
+                                    obj
+                                ),
+                                obj
+                            ),
                             pipe
                         ).run();
                     }

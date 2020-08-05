@@ -7,3 +7,4 @@ Wring-GithubId: ${failsafe.github.id}
 Wring-GithubSecret: ${failsafe.github.secret}
 Wring-SecurityKey: 0123456701234567
 Wring-SentryDsn: test
+Wring-TelegramToken: test

@@ -7,3 +7,4 @@ Wring-GithubId: ${github.id}
 Wring-GithubSecret: ${github.secret}
 Wring-SecurityKey: ${security.key}
 Wring-SentryDsn: ${sentry.dsn}
+Wring-TelegramToken: ${telegram.token}
