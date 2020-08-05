@@ -35,8 +35,8 @@ import io.wring.model.Errors;
 import io.wring.model.User;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.collection.IsEmptyIterable;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.xembly.Xembler;
 
 /**
@@ -46,7 +46,7 @@ import org.xembly.Xembler;
  * @version $Id$
  * @since 1.0
  */
-@Ignore
+@Disabled
 public final class DyErrorITCase {
 
     /**

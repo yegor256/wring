@@ -31,7 +31,8 @@ package io.wring.model;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.xembly.Directives;
 
 /**
@@ -97,13 +98,14 @@ public final class XePrintTest {
 
     /**
      * Prints by missed XPath.
-     * @throws Exception If some problem inside
      */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void printsByMissedXpath() throws Exception {
-        new XePrint(
-            new Directives().add("oops")
-        ).text("{/event/title/text()}");
+    public void printsByMissedXpath() {
+        Assertions.assertThrows(
+            IndexOutOfBoundsException.class,
+            () -> new XePrint(
+                new Directives().add("oops")
+            ).text("{/event/title/text()}")
+        );
     }
 
 }

@@ -33,7 +33,7 @@ import io.wring.fake.FkBase;
 import io.wring.fake.FkPipe;
 import io.wring.model.Base;
 import io.wring.model.Pipe;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xembly.Directives;
 
 /**

@@ -37,8 +37,8 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsIterableWithSize;
 import org.hamcrest.core.IsEqual;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.hamcrest.MockitoHamcrest;
 
@@ -80,7 +80,7 @@ public final class ExecTest {
      * @throws Exception If some problem inside
      */
     @Test
-    @Ignore
+    @Disabled
     public void registerErrors() throws Exception {
         final Agent agent = Mockito.mock(Agent.class);
         final Events events = Mockito.mock(Events.class);

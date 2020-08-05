@@ -32,7 +32,7 @@ package io.wring.agents;
 import io.wring.model.Events;
 import javax.json.Json;
 import org.cactoos.io.InputStreamOf;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 /**

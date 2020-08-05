@@ -38,7 +38,7 @@ import io.wring.fake.FkBase;
 import java.net.HttpURLConnection;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.takes.Take;
 import org.takes.facets.hamcrest.HmRsStatus;
 import org.takes.http.FtRemote;

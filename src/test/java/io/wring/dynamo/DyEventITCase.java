@@ -35,7 +35,7 @@ import io.wring.model.Event;
 import io.wring.model.Events;
 import io.wring.model.User;
 import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xembly.Xembler;
 
 /**

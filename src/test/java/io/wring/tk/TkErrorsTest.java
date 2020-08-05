@@ -32,7 +32,7 @@ package io.wring.tk;
 import com.jcabi.matchers.XhtmlMatchers;
 import io.wring.fake.FkBase;
 import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.takes.Take;
 import org.takes.rq.RqFake;
 import org.takes.rq.RqWithHeader;

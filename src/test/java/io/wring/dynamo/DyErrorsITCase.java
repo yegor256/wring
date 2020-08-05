@@ -35,8 +35,8 @@ import io.wring.model.User;
 import org.cactoos.iterable.LengthOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsEqual;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 /**
  * IT cases for {@link DyErrors}.
@@ -45,7 +45,7 @@ import org.junit.Test;
  * @version $Id$
  * @since 1.0
  */
-@Ignore
+@Disabled
 public final class DyErrorsITCase {
 
     /**
