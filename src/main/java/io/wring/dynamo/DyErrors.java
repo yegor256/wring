@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-2019, Wring.io
+ * Copyright (c) 2016-2020, Yegor Bugayenko
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -126,20 +126,6 @@ public final class DyErrors implements Errors {
             );
         }
         return new DyError(items.next());
-    }
-
-    /**
-     * Find items by title.
-     * @param title Unique title of the event
-     * @return Items or empty
-     */
-    public Iterator<Item> items(final String title) {
-        return this.table()
-            .frame()
-            .through(new QueryValve())
-            .where("urn", Conditions.equalTo(this.urn))
-            .where("title", Conditions.equalTo(title))
-            .iterator();
     }
 
     /**

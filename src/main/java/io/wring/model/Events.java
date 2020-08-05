@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-2019, Wring.io
+ * Copyright (c) 2016-2020, Yegor Bugayenko
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
