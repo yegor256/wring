@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2016-2020, Yegor Bugayenko
  * All rights reserved.
  *
@@ -72,6 +72,7 @@ final class TelegramEvents implements Events {
     /**
      * Ctor.
      * @param events Agent original
+     * @param bot The bot
      * @param cht Chat ID
      */
     TelegramEvents(final Events events, final TelegramBot bot,

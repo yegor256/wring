@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2016-2020, Yegor Bugayenko
  * All rights reserved.
  *
@@ -115,8 +115,7 @@ final class Subject {
                 )
             );
         } else {
-            try (final ByteArrayOutputStream baos =
-                new ByteArrayOutputStream()) {
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
                 Json.createWriter(baos).write(this.json);
                 throw new IOException(
                     String.format(

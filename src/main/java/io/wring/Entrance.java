@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2016-2020, Yegor Bugayenko
  * All rights reserved.
  *
@@ -58,7 +58,7 @@ public final class Entrance {
      */
     public static void main(final String... args) throws IOException {
         final Base base = new DyBase();
-        try (final Routine routine = new Routine(base)) {
+        try (Routine routine = new Routine(base)) {
             routine.start();
             new FtCli(new TkApp(base), args).start(Exit.NEVER);
         }

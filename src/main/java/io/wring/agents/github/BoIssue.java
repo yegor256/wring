@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2016-2020, Yegor Bugayenko
  * All rights reserved.
  *
@@ -127,7 +127,7 @@ final class BoIssue implements Body {
                 continue;
             }
             // @checkstyle MagicNumber (1 line)
-            if (comment.number() < 188060467) {
+            if (comment.number() < 188_060_467) {
                 Logger.info(
                     this,
                     "%s#%d/%d ignored since too old",

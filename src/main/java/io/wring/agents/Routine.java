@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2016-2020, Yegor Bugayenko
  * All rights reserved.
  *
@@ -129,18 +129,20 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
      * Start it.
      */
     public void start() {
-        this.telegram.setUpdatesListener(updates -> {
-            for (final Update update : updates) {
-                final long chat = update.message().chat().id();
-                this.telegram.execute(
-                    new SendMessage(
-                        chat,
-                        String.format("Your chat ID is %d", chat)
-                    )
-                );
+        this.telegram.setUpdatesListener(
+            updates -> {
+                for (final Update update : updates) {
+                    final long chat = update.message().chat().id();
+                    this.telegram.execute(
+                        new SendMessage(
+                            chat,
+                            String.format("Your chat ID is %d", chat)
+                        )
+                    );
+                }
+                return UpdatesListener.CONFIRMED_UPDATES_ALL;
             }
-            return UpdatesListener.CONFIRMED_UPDATES_ALL;
-        });
+        );
         Sentry.init(Manifests.read("Wring-SentryDsn"));
         this.ticker.scheduleWithFixedDelay(
             new VerboseRunnable(
@@ -203,17 +205,19 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
         } catch (final ExecutionException | TimeoutException ex) {
             throw new IllegalStateException(ex);
         }
-        Logger.info(
-            this, "%d pipes processed in %[ms]s, threads=%d: %s",
-            futures.size(), System.currentTimeMillis() - start,
-            Thread.getAllStackTraces().size(),
-            String.join(
-                ", ",
-                new Mapped<>(
-                    Thread::getName, Thread.getAllStackTraces().keySet()
+        if (Logger.isInfoEnabled(this)) {
+            Logger.info(
+                this, "%d pipes processed in %[ms]s, threads=%d: %s",
+                futures.size(), System.currentTimeMillis() - start,
+                Thread.getAllStackTraces().size(),
+                String.join(
+                    ", ",
+                    new Mapped<>(
+                        Thread::getName, Thread.getAllStackTraces().keySet()
+                    )
                 )
-            )
-        );
+            );
+        }
         return futures.size();
     }
 

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2016-2020, Yegor Bugayenko
  * All rights reserved.
  *
@@ -54,6 +54,8 @@ public interface Error {
 
     /**
      * Simple Error implementation.
+     *
+     * @since 0.1
      * @todo #76:30min Implement Error.Simple asXembly and delete method.
      *  asXembly must return a xembly directive with element 'error' and
      *  child elements 'title'

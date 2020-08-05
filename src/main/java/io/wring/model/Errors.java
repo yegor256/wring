@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2016-2020, Yegor Bugayenko
  * All rights reserved.
  *
@@ -65,6 +65,8 @@ public interface Errors {
 
     /**
      * Simple implementation of Error repo.
+     *
+     * @since 0.1
      */
     final class Simple implements Errors {
 

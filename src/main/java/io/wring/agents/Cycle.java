@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2016-2020, Yegor Bugayenko
  * All rights reserved.
  *
@@ -73,6 +73,7 @@ final class Cycle implements Proc<Pipe> {
     /**
      * Ctor.
      * @param bse Base
+     * @param bot The telegram bot
      */
     Cycle(final Base bse, final TelegramBot bot) {
         this.base = bse;

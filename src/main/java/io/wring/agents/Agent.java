@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2016-2020, Yegor Bugayenko
  * All rights reserved.
  *
@@ -56,12 +56,14 @@ public interface Agent {
 
     /**
      * User failure.
+     * @since 0.1
      */
     class UserException extends IOException {
         /**
          * Serialization marker.
          */
         private static final long serialVersionUID = -8371431530136279547L;
+
         /**
          * Ctor.
          * @param cause The cause
@@ -69,6 +71,7 @@ public interface Agent {
         public UserException(final String cause) {
             super(cause);
         }
+
         /**
          * Ctor.
          * @param cause The cause
