@@ -30,6 +30,7 @@
 package io.wring.agents;
 
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import io.wring.model.Event;
 import io.wring.model.Events;
@@ -94,7 +95,7 @@ final class TelegramEvents implements Events {
                 new SendMessage(
                     this.chat,
                     String.format("%s\n\n%s", title, text)
-                )
+                ).disableWebPagePreview(true).parseMode(ParseMode.Markdown)
             );
         }
         this.origin.post(title, text);
