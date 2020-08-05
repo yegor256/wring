@@ -38,8 +38,6 @@ import io.wring.model.User;
 /**
  * Dynamo user.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 public final class DyUser implements User {

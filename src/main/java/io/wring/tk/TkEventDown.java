@@ -44,8 +44,6 @@ import org.takes.rq.RqHref;
 /**
  * Down vote event.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.9
  */
 final class TkEventDown implements Take {

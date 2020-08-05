@@ -51,8 +51,6 @@ import org.xembly.Directives;
 /**
  * List of errors.
  *
- * @author Paulo Lobo (pauloeduardolobo@gmail.com)
- * @version $Id$
  * @since 1.0
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */

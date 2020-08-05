@@ -43,8 +43,6 @@ import org.takes.rq.RqHref;
 /**
  * Delete pipe.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 final class TkPipeDelete implements Take {

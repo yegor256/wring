@@ -37,8 +37,6 @@ import org.xembly.Directives;
 
 /**
  * Test case for {@link XePrint}.
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.15
  * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */

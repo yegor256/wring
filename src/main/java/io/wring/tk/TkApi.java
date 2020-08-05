@@ -40,8 +40,6 @@ import org.xembly.Directives;
 /**
  * API front.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.20
  */
 final class TkApi implements Take {

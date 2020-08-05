@@ -40,8 +40,6 @@ import org.xembly.Xembler;
 /**
  * Dynamo Db implementation for {@link Error}.
  *
- * @author Paulo Lobo (pauloeduardolobo@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")

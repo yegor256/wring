@@ -44,8 +44,6 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Subject of event.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.13
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  * @checkstyle MultipleStringLiteralsCheck (500 lines)

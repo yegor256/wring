@@ -45,8 +45,6 @@ import org.takes.rq.RqHref;
 /**
  * Delete error.
  *
- * @author Paulo Lobo (pauloedaurdolobo@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 final class TkErrorDelete implements Take {

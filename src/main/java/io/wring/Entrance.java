@@ -40,8 +40,6 @@ import org.takes.http.FtCli;
 /**
  * Command line entry.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 public final class Entrance {

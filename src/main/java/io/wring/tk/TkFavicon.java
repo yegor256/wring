@@ -49,8 +49,6 @@ import org.takes.rs.RsWithType;
 /**
  * List of events.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.5
  */
 final class TkFavicon implements Take {

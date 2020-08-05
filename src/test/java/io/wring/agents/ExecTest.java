@@ -44,9 +44,6 @@ import org.mockito.hamcrest.MockitoHamcrest;
 
 /**
  * Test case for {@link Exec}.
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @author Paulo Lobo (pauloeduardolobo@gmail.com)
- * @version $Id$
  * @since 0.13
  */
 public final class ExecTest {

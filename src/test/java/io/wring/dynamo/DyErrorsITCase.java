@@ -41,8 +41,6 @@ import org.junit.jupiter.api.Test;
 /**
  * IT cases for {@link DyErrors}.
  *
- * @author Paulo Lobo (pauloeduardolobo@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 @Disabled

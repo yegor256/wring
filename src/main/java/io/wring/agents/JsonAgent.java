@@ -43,8 +43,6 @@ import org.cactoos.scalar.IoCheckedScalar;
 /**
  * Agent in JSON.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 final class JsonAgent implements Agent {

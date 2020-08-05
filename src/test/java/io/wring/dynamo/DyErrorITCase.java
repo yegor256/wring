@@ -42,8 +42,6 @@ import org.xembly.Xembler;
 /**
  * IT cases for {@link DyError}.
  *
- * @author Paulo Lobo (pauloeduardolobo@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 @Disabled

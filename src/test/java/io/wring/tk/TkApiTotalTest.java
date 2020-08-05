@@ -39,8 +39,6 @@ import org.takes.rs.RsPrint;
 
 /**
  * Test case for {@link TkApiTotal}.
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.7
  */
 public final class TkApiTotalTest {

@@ -37,8 +37,6 @@ import org.mockito.Mockito;
 
 /**
  * Test case for {@link IgnoreEvents}.
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.4
  */
 public final class IgnoreEventsTest {

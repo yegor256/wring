@@ -39,8 +39,6 @@ import javax.json.JsonObject;
 /**
  * Events being duplicated into Telegram.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.20
  */
 final class TelegramEvents implements Events {

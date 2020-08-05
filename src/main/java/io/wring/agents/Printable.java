@@ -35,8 +35,6 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Printable string.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.6
  */
 public final class Printable {

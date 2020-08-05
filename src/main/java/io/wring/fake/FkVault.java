@@ -35,8 +35,6 @@ import java.util.Optional;
 /**
  * Fake Vault.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 public final class FkVault implements Vault {

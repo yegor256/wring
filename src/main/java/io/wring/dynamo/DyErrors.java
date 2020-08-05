@@ -46,8 +46,6 @@ import java.util.Iterator;
 /**
  * Errors stored in Dynamo database.
  *
- * @author Paulo Lobo (pauloeduardolobo@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")

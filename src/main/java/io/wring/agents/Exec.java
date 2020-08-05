@@ -52,9 +52,6 @@ import org.cactoos.scalar.UncheckedScalar;
 /**
  * One execution.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @author Paulo Lobo (pauloeduardolobo@gmail.com)
- * @version $Id$
  * @since 0.13
  * @todo #76:30min Errors occurred during execution must be saved and later
  *  listed to user in a page. User should be able to mark errors as `read`

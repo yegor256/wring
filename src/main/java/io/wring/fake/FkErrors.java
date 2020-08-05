@@ -37,8 +37,6 @@ import org.cactoos.collection.CollectionOf;
 /**
  * Fake errors.
  *
- * @author Paulo Lobo (pauloeduardolobo@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 public final class FkErrors implements Errors {

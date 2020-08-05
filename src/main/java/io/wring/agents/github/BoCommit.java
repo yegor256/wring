@@ -46,8 +46,6 @@ import org.apache.commons.text.StringEscapeUtils;
 /**
  * Body of commit.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.13
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */

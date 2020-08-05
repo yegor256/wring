@@ -40,8 +40,6 @@ import org.takes.rs.RsPrint;
 
 /**
  * Test case for {@link TkErrors}.
- * @author Paulo Lobo (pauloeduardolobo@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 public final class TkErrorsTest {

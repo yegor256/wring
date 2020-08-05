@@ -36,8 +36,6 @@ import java.util.Collections;
 /**
  * Fake events.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 public final class FkEvents implements Events {

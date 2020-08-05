@@ -35,8 +35,6 @@ import org.xembly.Directive;
 /**
  * Error occurred during pipe execution.
  *
- * @author Paulo Lobo (pauloeduardolobo@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 public interface Error {

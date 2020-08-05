@@ -38,8 +38,6 @@ import org.xembly.Directives;
 
 /**
  * Test case for {@link Cycle}.
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.4
  */
 public final class CycleTest {

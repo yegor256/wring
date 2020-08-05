@@ -38,8 +38,6 @@ import org.xembly.Directives;
 /**
  * Fake error.
  *
- * @author Paulo Lobo (pauloeduardolobo@gmail.com)
- * @version $Id$
  * @since 1.0
  */
 public final class FkError implements Error {

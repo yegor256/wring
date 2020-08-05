@@ -35,8 +35,6 @@ import java.util.Optional;
 /**
  * Vault.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.2
  */
 public interface Vault {
