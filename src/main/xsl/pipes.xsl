@@ -103,6 +103,17 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
       <xsl:text> may contain a list of regular expressions.</xsl:text>
       <xsl:text> An event will be boosted (+5 to the rating) if it matches.</xsl:text>
     </p>
+    <p>
+      <code>
+        <xsl:text>telegram</xsl:text>
+      </code>
+      <xsl:text> may contain your Telegram chat ID.</xsl:text>
+      <xsl:text> Talk to </xsl:text>
+      <a href="https://t.me/wring_bot">
+        <xsl:text>@wring_bot</xsl:text>
+      </a>
+      <xsl:text> to find it.</xsl:text>
+    </p>
   </xsl:template>
   <xsl:template match="pipes">
     <xsl:apply-templates select="pipe"/>
