@@ -208,7 +208,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
     <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-matchers</artifactId>
-      <version>1.3</version>
+      <version>1.7.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.velocity</groupId>
