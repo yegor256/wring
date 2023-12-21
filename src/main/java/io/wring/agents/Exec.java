@@ -44,10 +44,11 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.log4j.Appender;
 import org.apache.log4j.PatternLayout;
+import org.cactoos.Fallback;
 import org.cactoos.func.FuncWithFallback;
 import org.cactoos.func.UncheckedFunc;
 import org.cactoos.scalar.Ternary;
-import org.cactoos.scalar.UncheckedScalar;
+import org.cactoos.scalar.Unchecked;
 
 /**
  * One execution.
@@ -123,46 +124,49 @@ final class Exec {
                     title.append(this.agent.name());
                     return this.body();
                 },
-                err -> {
-                    this.pipe.status(err.getClass().getCanonicalName());
-                    title.setLength(0);
-                    final String text;
-                    if (err instanceof Agent.UserException) {
-                        title.append("It's your fault");
-                        text = err.getLocalizedMessage();
-                    } else {
-                        Sentry.capture(err);
-                        final String msg = StringEscapeUtils.escapeHtml4(
-                            StringUtils.abbreviate(
-                                new UncheckedScalar<>(
-                                    new Ternary<>(
-                                        () -> err.getLocalizedMessage() == null,
-                                        () -> "null",
-                                        () -> err.getLocalizedMessage()
-                                            .replaceAll("\\s+", " ")
-                                    )
-                                ).value(),
-                                Tv.FIFTY
-                            )
-                        );
-                        title.append(
-                            String.format(
-                                "Internal error (%s): \"%s\"",
-                                err.getClass().getCanonicalName(),
-                                msg
-                            )
-                        );
-                        text = String.format(
-                            // @checkstyle LineLength (1 line)
-                            "%tFT%<tRZ %s\n\nIf you see this message, please report it to https://github.com/yegor256/wring/issues",
-                            new Date(),
-                            StringEscapeUtils.escapeHtml4(
-                                ExceptionUtils.getStackTrace(err)
-                            )
-                        );
+                new Fallback.From<>(
+                    Exception.class,
+                    err -> {
+                        this.pipe.status(err.getClass().getCanonicalName());
+                        title.setLength(0);
+                        final String text;
+                        if (err instanceof Agent.UserException) {
+                            title.append("It's your fault");
+                            text = err.getLocalizedMessage();
+                        } else {
+                            Sentry.capture(err);
+                            final String msg = StringEscapeUtils.escapeHtml4(
+                                StringUtils.abbreviate(
+                                    new Unchecked<>(
+                                        new Ternary<>(
+                                            () -> err.getLocalizedMessage() == null,
+                                            () -> "null",
+                                            () -> err.getLocalizedMessage()
+                                                .replaceAll("\\s+", " ")
+                                        )
+                                    ).value(),
+                                    Tv.FIFTY
+                                )
+                            );
+                            title.append(
+                                String.format(
+                                    "Internal error (%s): \"%s\"",
+                                    err.getClass().getCanonicalName(),
+                                    msg
+                                )
+                            );
+                            text = String.format(
+                                // @checkstyle LineLength (1 line)
+                                "%tFT%<tRZ %s\n\nIf you see this message, please report it to https://github.com/yegor256/wring/issues",
+                                new Date(),
+                                StringEscapeUtils.escapeHtml4(
+                                    ExceptionUtils.getStackTrace(err)
+                                )
+                            );
+                        }
+                        return text;
                     }
-                    return text;
-                }
+                )
             )
         )
             .apply(true);

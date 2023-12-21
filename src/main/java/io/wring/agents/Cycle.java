@@ -36,11 +36,12 @@ import io.wring.model.Pipe;
 import io.wring.model.XePrint;
 import javax.json.Json;
 import javax.json.JsonObject;
+import org.cactoos.Fallback;
 import org.cactoos.Proc;
+import org.cactoos.bytes.BytesOf;
 import org.cactoos.func.FuncOf;
 import org.cactoos.func.FuncWithFallback;
 import org.cactoos.func.UncheckedFunc;
-import org.cactoos.io.BytesOf;
 import org.cactoos.io.ReaderOf;
 import org.cactoos.text.TextOf;
 
@@ -92,32 +93,39 @@ final class Cycle implements Proc<Pipe> {
                 str -> Json.createReader(
                     new ReaderOf(str)
                 ).readObject(),
-                new FuncOf<>(
-                    error -> events.post(
-                        Cycle.class.getCanonicalName(),
-                        String.format(
-                            "Failed to parse JSON:\n%s\n\n%s",
-                            json, new TextOf(new BytesOf(error)).asString()
-                        )
-                    )
+                new Fallback.From<>(
+                    Exception.class,
+                    error -> {
+                        events.post(
+                            Cycle.class.getCanonicalName(),
+                            String.format(
+                                "Failed to parse JSON:\n%s\n\n%s",
+                                json, new TextOf(new BytesOf(error)).asString()
+                            )
+                        );
+                        return null;
+                    }
                 ),
-                obj -> {
-                    if (obj != null) {
-                        new Exec(
-                            new JsonAgent(this.base, obj),
-                            new IgnoreEvents(
-                                new TelegramEvents(
-                                    new BoostEvents(events, obj),
-                                    this.telegram,
+                new Fallback.From<JsonObject>(
+                    Exception.class,
+                    obj -> {
+                        if (obj != null) {
+                            new Exec(
+                                new JsonAgent(this.base, obj),
+                                new IgnoreEvents(
+                                    new TelegramEvents(
+                                        new BoostEvents(events, obj),
+                                        this.telegram,
+                                        obj
+                                    ),
                                     obj
                                 ),
-                                obj
-                            ),
-                            pipe
-                        ).run();
+                                pipe
+                            ).run();
+                        }
+                        return obj;
                     }
-                    return obj;
-                }
+                )
             )
         ).apply(json);
     }

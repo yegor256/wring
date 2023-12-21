@@ -35,6 +35,7 @@ import com.jcabi.http.response.XmlResponse;
 import com.jcabi.http.wire.VerboseWire;
 import com.jcabi.matchers.XhtmlMatchers;
 import io.wring.fake.FkBase;
+import java.io.FileInputStream;
 import java.net.HttpURLConnection;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -88,6 +89,7 @@ public final class TkAppTest {
         new FtRemote(app).exec(
             home -> {
                 new JdkRequest(home)
+                    .header("Accept", "text/plain")
                     .fetch()
                     .as(RestResponse.class)
                     .assertStatus(HttpURLConnection.HTTP_OK)

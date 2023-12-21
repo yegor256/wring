@@ -43,8 +43,8 @@ import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
 import org.cactoos.Scalar;
-import org.cactoos.scalar.IoCheckedScalar;
-import org.cactoos.scalar.SolidScalar;
+import org.cactoos.scalar.IoChecked;
+import org.cactoos.scalar.Sticky;
 
 /**
  * Events that ignores by regular expression.
@@ -61,7 +61,7 @@ final class IgnoreEvents implements Events {
     /**
      * Regex to ignore.
      */
-    private final transient IoCheckedScalar<Pattern> regex;
+    private final transient IoChecked<Pattern> regex;
 
     /**
      * Ctor.
@@ -88,7 +88,7 @@ final class IgnoreEvents implements Events {
      */
     IgnoreEvents(final Events events, final Scalar<Pattern> ptn) {
         this.origin = events;
-        this.regex = new IoCheckedScalar<>(new SolidScalar<>(ptn));
+        this.regex = new IoChecked<>(new Sticky<>(ptn));
     }
 
     @Override

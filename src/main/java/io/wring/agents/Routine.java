@@ -50,10 +50,12 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import org.cactoos.Fallback;
 import org.cactoos.func.FuncOf;
 import org.cactoos.func.FuncWithFallback;
-import org.cactoos.func.RunnableOf;
 import org.cactoos.iterable.Mapped;
+import org.cactoos.proc.ProcOf;
+import org.cactoos.proc.RunnableOf;
 
 /**
  * Routine.
@@ -259,14 +261,17 @@ public final class Routine implements Callable<Integer>, AutoCloseable {
      * @return The job for this pipe
      */
     private Runnable job(final Pipe pipe) {
-        return new RunnableOf<>(
-            new FuncWithFallback<Pipe, Boolean>(
-                new FuncOf<>(new Cycle(this.base, this.telegram)),
-                new FuncOf<>(
-                    error -> {
-                        Sentry.capture(error);
-                        throw new IllegalStateException(error);
-                    }
+        return new RunnableOf(
+            new ProcOf<>(
+                new FuncWithFallback<>(
+                    new FuncOf<>(new Cycle(this.base, this.telegram), null),
+                    new Fallback.From<Object>(
+                        Exception.class,
+                        error -> {
+                            Sentry.capture(error);
+                            throw new IllegalStateException(error);
+                        }
+                    )
                 )
             ),
             pipe

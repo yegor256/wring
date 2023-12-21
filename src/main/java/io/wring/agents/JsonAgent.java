@@ -38,7 +38,8 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import org.cactoos.Scalar;
 import org.cactoos.io.ReaderOf;
-import org.cactoos.scalar.IoCheckedScalar;
+import org.cactoos.scalar.IoChecked;
+import org.cactoos.scalar.NoNulls;
 
 /**
  * Agent in JSON.
@@ -55,7 +56,7 @@ final class JsonAgent implements Agent {
     /**
      * JSON config.
      */
-    private final transient IoCheckedScalar<JsonObject> json;
+    private final transient IoChecked<JsonObject> json;
 
     /**
      * Ctor.
@@ -82,7 +83,7 @@ final class JsonAgent implements Agent {
      */
     JsonAgent(final Base bse, final Scalar<JsonObject> cfg) {
         this.base = bse;
-        this.json = new IoCheckedScalar<>(new Scalar.NoNulls<>(cfg));
+        this.json = new IoChecked<>(new NoNulls<>(cfg));
     }
 
     @Override

@@ -32,7 +32,7 @@ package io.wring.fake;
 import io.wring.model.Error;
 import io.wring.model.Errors;
 import java.util.Collection;
-import org.cactoos.collection.CollectionOf;
+import org.cactoos.list.ListOf;
 
 /**
  * Fake errors.
@@ -51,7 +51,7 @@ public final class FkErrors implements Errors {
      * @param errors Predefined errors
      */
     public FkErrors(final Error...errors) {
-        this.errors = new CollectionOf<>(errors);
+        this.errors = new ListOf<>(errors);
     }
 
     /**
